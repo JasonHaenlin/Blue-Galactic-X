@@ -1,0 +1,3 @@
+[submodule "team-j-weather-ws"]
+	path = team-j-weather-ws
+	url = https://github.com/pns-si5-soa/team-j-weather-ws.git
