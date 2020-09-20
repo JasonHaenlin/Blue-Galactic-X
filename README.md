@@ -136,7 +136,7 @@ Here we compare differents SOAP styling (except JSON-RPC but for the comparison 
 | Ease of implementation ?    | need a lot of configuration (WSDL or POJO) | make a json object                         | need a lot of configuration                           | need a lot of configuration    |
 | Testing tool available ?    | SoapUI                                     | Postman (make the body of the req)         | SoapUI                                                | SoapUI                         |
 
-If we want to access resources, we have one obvious choice which is REST. To request an Action XML is usually less readable than JSON or Proto so we gRPC looks like a nice choice.
+If we want to access resources, we have one obvious choice which is REST. To request an Action XML is usually less readable than JSON or Proto so the gRPC looks like a nice choice.
 Obviously the problem is that is unreadable because the payload is binary (maybe more secure). The HTTP/1.1 is not usuable without a proxy. it's only a problem if we want to exchange message between a browser without HTTP/2 because we cannot force the HTTP/2 protocol. Except that, the IDL is more readable and it makes easy to share the contract and create client and server object. We are dependent on gRPC framework.
 
 more info :
@@ -185,6 +185,6 @@ more info :
 
 **last update** : 19/09/2020
 
-Nodejs or Spring-boot look both like a good choices. Nodejs might offer a faster start then Spring but it is more easy to add database and testing to it. For a fast MVP, we might go on Nodejs.
+Nodejs or Spring-boot look both like a good choices. Nodejs might offer a faster start than Spring-boot but it is more easy to add database and testing to it. With Spring-boot we can maintain our code more easely because we are scoped by the framework.
 
 > NB : cannot use gRPC on the same port as REST or SOAP. We need an other endpoint because of the limitation of the library
