@@ -42,33 +42,35 @@ the **Pts** correspond to the story points
 
 | Points | Equivalent in days |
 | ------ | ------------------ |
-| 1      | 0.5 day            |
-| 2      | 1 day              |
-| 3      | 2 days             |
-| 5      | 4 days             |
-| 8      | 6 days             |
+| 1      | 3 hours            |
+| 2      | 5 hours            |
+| 3      | 8 hours            |
+| 5      | 10 hours           |
+| 8      | 15 hours           |
 
 It is set arbitrary for now and will be adapted throughout the project.
 
 #### Body :
 
-**User Story**
+*User Story*
 
-*AS* ...
+**AS** ...
 
-*I WANT* ...
+**I WANT** ...
 
-*SO THAT* ...
+**SO THAT** ...
 
-**Acceptance Criteria**
+*Acceptance Criteria*
 
-*GIVEN* ...
+**GIVEN** ...
 
-*WHEN* ...
+**WHEN** ...
 
-*THEN* ...
+**THEN** ...
 
 (others : *BUT*, *END*)
+
+also (Description, Scope)
 
 >Acceptance Criteria are here to validate the US with User Acceptance Test (e.g. Gherkin testing framework and maybe E2E test or integration test)
 
@@ -188,3 +190,24 @@ more info :
 Nodejs or Spring-boot look both like a good choices. Nodejs might offer a faster start than Spring-boot but it is more easy to add database and testing to it. With Spring-boot we can maintain our code more easely because we are scoped by the framework.
 
 > NB : cannot use gRPC on the same port as REST or SOAP. We need an other endpoint because of the limitation of the library
+
+### Serializer and Deserializer Format
+
+#### XML vs Json vs Protobuf
+
+| Format            | XML                                                                      | Json                                                           | Protobuf                                 |
+| ----------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------- | ---------------------------------------- |
+| Briefness         | Really verbose                                                           | concise syntax with key:value                                  | binary format, the most concise of all   |
+| Human Readability | Readable but a lot of tags                                               | easy to read                                                   | not human-readable                       |
+| language support  | Highly supported with build library                                      | Highly supported with build library                            | support most language with library       |
+| Data type support | flexible but need more information in the tag (see XML-RPC and Document) | support map, number, string, bool without any need of metadata | can define data structure like an entity |
+| Performance       | fast but typically slower than Json                                      | fastest human-readable format                                  | very very fast format                    |
+
+![benchmark format chart](assets/Benchmark-format.png)
+
+> regarding the result in Java, the best approach would be the Protocol Buffer to serialize and deserialize
+
+##### notes
+XML is readable but harder to write with contract-first approach
+JSON is easy to write but cannot make a strong contract and a way to generate code
+Protobuf is not readable but the proto file are the most easy and human friendly among all and make it possible to define a strong contract
