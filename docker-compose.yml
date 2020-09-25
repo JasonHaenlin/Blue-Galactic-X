@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+  weather:
+    build: ./team-j-weather-ws
+    container_name: team-j-blue-galactic-weather
+    ports:
+      - "8060:8060"
+  rocket:
+    build: ./team-j-rocket-ws
+    container_name: team-j-blue-galactic-rocket
+    ports:
+      - "8080:8080"
