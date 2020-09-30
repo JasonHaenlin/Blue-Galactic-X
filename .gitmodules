@@ -1,9 +1,0 @@
-[submodule "team-j-weather-ws"]
-	path = team-j-weather-ws
-	url = https://github.com/pns-si5-soa/team-j-weather-ws.git
-[submodule "team-j-rocket-ws"]
-	path = team-j-rocket-ws
-	url = https://github.com/pns-si5-soa/team-j-rocket-ws.git
-[submodule "team-j-client"]
-	path = team-j-client
-	url = https://github.com/pns-si5-soa/team-j-client.git
