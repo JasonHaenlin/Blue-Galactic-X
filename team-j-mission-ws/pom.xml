@@ -84,7 +84,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>weather-ws</finalName>
+		<finalName>mission-ws</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
