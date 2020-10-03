@@ -1,0 +1,8 @@
+{
+    "Irradiance" : 350,
+    "VelocityVariation" : 30,
+    "Temperature" : 300,
+    "GroundVibration" : 400,
+    "BoosterRGA" : 5,
+    "MidRocketRGA" : 9
+}

@@ -66,26 +66,26 @@ public class RocketStatus {
     @Override
     public String toString() {
         return addAsciiArt() +
-                "********** ROCKET STATUS REPORT **********" +
-                "\tIrradiance: " + this.irradiance + " nm" +
-                "\tVelocity variation: " + this.velocityVariation + " %" +
-                "\tTemperature: " + this.temperature + " °C" +
-                "\tGround vibration: " + this.groundVibration + " Hz" +
-                "\tBooster RGA : " + this.boosterRGA + " %" +
-                "\tMid-rocket RGA : " + this.midRocketRGA + " %j";
+                "********** ROCKET STATUS **********\n" +
+                "\tIrradiance: " + this.irradiance + " nm\n" +
+                "\tVelocity variation: " + this.velocityVariation + " mm/s\n" +
+                "\tTemperature: " + this.temperature + " °C\n" +
+                "\tGround vibration: " + this.groundVibration + " Hz\n" +
+                "\tBooster RGA : " + this.boosterRGA + " %\n" +
+                "\tMid-rocket RGA : " + this.midRocketRGA + " %\n";
     }
 
     private String addAsciiArt() {
         return 
-            "\t        |"+
-            "\t       / \\"+
-            "\t      / _ \\"+
-            "\t     |.o '.|"+
-            "\t     |'._.'|"+
-            "\t     |     |"+
-            "\t   ,'|  |  |`."+
-            "\t  /  |  |  |  \\"+
-            "\t  |,-'--|--'-.|\n";
+            "\t        |\n"+
+            "\t       / \\\n"+
+            "\t      / _ \\\n"+
+            "\t     |.o '.|\n"+
+            "\t     |'._.'|\n"+
+            "\t     |     |\n"+
+            "\t   ,'|  |  |`.\n"+
+            "\t  /  |  |  |  \\\n"+
+            "\t  |,-'--|--'-.|\n\n";
     }
 
 }
