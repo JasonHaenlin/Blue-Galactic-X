@@ -2,6 +2,10 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketRPC;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.models.RocketStatus;
@@ -11,7 +15,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import io.cucumber.java8.En;
 
 public class FirstDemoStepDef implements En{
-
+    Logger root = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
     //Endpoints
     WeatherREST weatherREST;
     RocketREST rocketREST;
@@ -25,7 +29,7 @@ public class FirstDemoStepDef implements En{
     LaunchOrderReply launchOrderReply;
 
     public FirstDemoStepDef() {
-
+        root.setLevel(Level.INFO);
         Given("a handshake with all services", () -> {
             weatherREST = new WeatherREST("http://localhost:8060/weather");
             rocketREST = new RocketREST("http://localhost:8080/rocket");

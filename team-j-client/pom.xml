@@ -110,7 +110,7 @@
             <encoding>UTF-8</encoding>
             <source>${java.version}</source>
             <target>${java.version}</target>
-        </configuration>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
