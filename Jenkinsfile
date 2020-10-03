@@ -1,5 +1,5 @@
 
-def modules = ["team-j-rocket-ws", "team-j-weather-ws"]
+def modules = ["team-j-rocket-ws", "team-j-weather-ws","team-j-mission-ws"]
 def gates = ""
 def results = ""
 

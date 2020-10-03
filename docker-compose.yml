@@ -12,3 +12,9 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
+  mission:
+    build: ./team-j-mission-ws
+    container_name: team-j-blue-galactic-mission
+    ports:
+      - "8070:8070"
+      - "8071:8071"
