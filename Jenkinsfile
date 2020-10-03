@@ -70,7 +70,11 @@ pipeline{
         stage("Verify the results") {
             steps {
                 script {
-                    if(results.contains("FAILURE")) {
+                    def isFailure = results.contains("FAILURE")
+                    if(env.JOB_NAME.contains("PR")) {
+                        results = isFailure ? "\n[PR] FAILURE" : "\n[PR] SUCCESS"
+                    }
+                    if(isFailure) {
                         exit 1
                     }
                 }
