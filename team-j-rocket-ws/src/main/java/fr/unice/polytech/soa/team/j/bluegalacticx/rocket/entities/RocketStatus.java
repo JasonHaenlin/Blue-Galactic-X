@@ -1,20 +1,91 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
 
-import org.springframework.data.mongodb.core.aggregation.ConvertOperators.ToString;
+public class RocketStatus { 
 
-public enum RocketStatus {
-    READY("ready"),
-    PROBLEM("problem");
+    private int irradiance = 0; //sun sensors in nm
+    private int velocityVariation = 0; //accelerometers value in mm/s
+    private int temperature = 0; //temperature in °C
+    private int groundVibration = 0; //ground vibration in Hz
+    private int boosterRGA = 0; //RGA of booster in %
+    private int midRocketRGA = 0; //RGA of the middle of the rocket in %
+        
+    public RocketStatus setIrradiance(int irradiance) {
+        this.irradiance = irradiance;
+        return this;
+    }
 
-    private final String status;
+    public int getIrradiance() {
+        return this.irradiance;
+    }
 
-    private RocketStatus(String status){
-        this.status = status;
+    public RocketStatus setVelocityVariation(int velocityVariation) {
+        this.velocityVariation = velocityVariation;
+        return this;
+    }
+
+    public int getVelocityVariation() {
+        return this.velocityVariation;
+    }
+
+    public RocketStatus setTemperature(int temperature) {
+        this.temperature = temperature;
+        return this;
+    }
+
+    public int getTemperature() {
+        return this.temperature;
+    }
+
+    public RocketStatus setGroundVibration(int groundVibration)  {
+        this.groundVibration = groundVibration;
+        return this;
+    }
+
+    public int getGroundVibration() {
+        return this.groundVibration;
+    }
+
+    public RocketStatus setBoosterRGA(int boosterRGA) {
+        this.boosterRGA = boosterRGA;
+        return this;
+    }
+
+    public int getBoosterRGA() {
+        return this.boosterRGA;
+    }
+
+    public RocketStatus setMidRocketRGA(int midRocketRGA) {
+        this.midRocketRGA = midRocketRGA;
+        return this;
+    }
+
+    public int getMidRocketRGA() {
+        return this.midRocketRGA;
     }
 
     @Override
-    public String toString(){
-        return status;
+    public String toString() {
+        return addAsciiArt() +
+                "********** ROCKET STATUS REPORT **********" +
+                "\tIrradiance: " + this.irradiance + " nm" +
+                "\tVelocity variation: " + this.velocityVariation + " %" +
+                "\tTemperature: " + this.temperature + " °C" +
+                "\tGround vibration: " + this.groundVibration + " Hz" +
+                "\tBooster RGA : " + this.boosterRGA + " %" +
+                "\tMid-rocket RGA : " + this.midRocketRGA + " %j";
     }
-    
+
+    private String addAsciiArt() {
+        return 
+            "\t        |"+
+            "\t       / \\"+
+            "\t      / _ \\"+
+            "\t     |.o '.|"+
+            "\t     |'._.'|"+
+            "\t     |     |"+
+            "\t   ,'|  |  |`."+
+            "\t  /  |  |  |  \\"+
+            "\t  |,-'--|--'-.|\n";
+    }
+
 }
