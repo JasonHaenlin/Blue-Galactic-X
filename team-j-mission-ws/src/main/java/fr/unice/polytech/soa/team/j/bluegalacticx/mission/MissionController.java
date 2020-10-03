@@ -1,11 +1,13 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.replies.MissionReply;
 
 @RestController
@@ -13,10 +15,19 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.replies.MissionReply;
 public class MissionController {
 
     @Autowired
-    private MissionService service;
+    private MissionService missionService;
 
-    @GetMapping
-    public MissionReply createNewMission(@RequestParam(value = "name", defaultValue = "testMission") String name) {
-        return service.createMission(name);
+    @PostMapping("/create")
+    public MissionReply createNewMission(@RequestBody Mission mission) throws InvalidMissionException {
+        if (invalidMission(mission)) {
+            throw new InvalidMissionException();
+        }
+
+        return missionService.createMission(mission);
+    }
+
+    private boolean invalidMission(Mission mission) {
+        return mission.getRocketId() <= 0 || mission.getDate() == null;
+
     }
 }
