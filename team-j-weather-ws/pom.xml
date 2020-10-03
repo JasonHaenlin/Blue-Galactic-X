@@ -21,6 +21,8 @@
 		<os-maven-plugin.version>1.6.2</os-maven-plugin.version>
 		<protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
 		<jacoco.version>0.8.6</jacoco.version>
+		<junit-platform.version>1.2.0</junit-platform.version>
+		<junit-jupiter.version>5.4.2</junit-jupiter.version>
 	</properties>
 
 	<dependencies>
@@ -59,6 +61,32 @@
 			</exclusions>
 		</dependency>
 
+		<!-- Testing -->
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-runner</artifactId>
+			<version>${junit-platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- gRPC -->
 		<dependency>
 			<groupId>io.github.lognet</groupId>
@@ -89,6 +117,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- <configuration>
+					<jvmArguments>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</jvmArguments>
+				</configuration> -->
 			</plugin>
 
 			<plugin>
