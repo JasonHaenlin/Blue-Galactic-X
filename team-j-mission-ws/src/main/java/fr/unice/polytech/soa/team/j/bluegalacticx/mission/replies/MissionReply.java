@@ -1,17 +1,23 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.mission.replies;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
+
 public class MissionReply {
 
-    private String name;
-    public MissionReply(String name){
-        this.name=name;
+    private Mission mission;
+
+    public MissionReply(){
+        
+    }
+    public MissionReply(Mission mission){
+        this.mission=mission;
     }
 
-    public String getName(){
-        return name;
+    public Mission getMission(){
+        return mission;
     }
 
-    public void setName(String name){
-        this.name=name;
+    public void setMission(Mission mission){
+        this.mission=mission;
     }
 }
