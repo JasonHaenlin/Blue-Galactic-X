@@ -10,8 +10,8 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketRPC;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.models.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.WeatherREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.models.WeatherStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherStatus;
 import io.cucumber.java8.En;
 
 public class FirstDemoStepDef implements En{
