@@ -11,5 +11,4 @@ Feature: Create a new mission
         And the rocket report is valid
         Then I can make a GO request
         Then Elon makes a launch request to rocket service
-        Then the launch order to the rocket is triggered if the rocket is ready to launch.
-        
+        Then the launch order to the rocket is triggered if the rocket is ready to launch

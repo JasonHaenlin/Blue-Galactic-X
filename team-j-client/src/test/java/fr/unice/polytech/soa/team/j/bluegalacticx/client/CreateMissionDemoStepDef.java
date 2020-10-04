@@ -1,23 +1,24 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
 
-import io.cucumber.java8.En;
-
 import org.slf4j.LoggerFactory;
+
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.MissionREST;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketRPC;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.WeatherREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.entities.WeatherReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.entities.WeatherType;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
-import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherReport;
-import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherType;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.MissionREST;
+import io.cucumber.java8.En;
 
 public class CreateMissionDemoStepDef implements En {
 
@@ -33,11 +34,10 @@ public class CreateMissionDemoStepDef implements En {
     private WeatherReport weatherReport;
     private RocketReport rocketReport;
 
-    
     private LaunchOrderReply launchOrderReply;
 
-    public CreateMissionDemoStepDef(){
-        
+    public CreateMissionDemoStepDef() {
+
         root.setLevel(Level.INFO);
 
         Given("a handshake with all department", () -> {
@@ -50,50 +50,46 @@ public class CreateMissionDemoStepDef implements En {
 
         And("weather department create a new report", () -> {
 
-            weatherReport = new WeatherReport().avgRainfall(50).avgHumidity(10).avgWind(20).avgVisibility(90).avgTemperature(25)
-                .weatherType(WeatherType.SUNNY).overallResult("Good");
+            weatherReport = new WeatherReport().avgRainfall(50).avgHumidity(10).avgWind(20).avgVisibility(90)
+                    .avgTemperature(25).weatherType(WeatherType.SUNNY).overallResult("Good");
             weatherREST.setReport(weatherReport);
-         });
+        });
 
         And("rocket department create a new report", () -> {
 
             rocketReport = new RocketReport().fuelLevel(10).overallResult("Good");
             rocketREST.setReport(rocketReport);
 
-
-         });
-       
+        });
 
         When("I add a new mission", () -> {
-            String response =  missionREST.createNewMission(new Mission(125, new Date()));
+            String response = missionREST.createNewMission(new Mission(125, new Date()));
             assertEquals(true, response.contains("200"));
         });
 
         And("the weather report is valid", () -> {
 
-           WeatherReport weatherReport = weatherREST.getReport();
-           assertEquals(true,weatherReport.getOverallResult().contains("Good"));
+            WeatherReport weatherReport = weatherREST.getReport();
+            assertEquals(true, weatherReport.getOverallResult().contains("Good"));
         });
 
         And("the rocket report is valid", () -> {
-            
-           RocketReport rocketReport = rocketREST.getReport();
-           assertEquals(true,rocketReport.getOverallResult().contains("Good"));
+
+            RocketReport rocketReport = rocketREST.getReport();
+            assertEquals(true, rocketReport.getOverallResult().contains("Good"));
         });
 
         Then("I can make a GO request", () -> {
-
-            rocketRPC.setReadyToLaunch(true);
-
+            rocketRPC.setReadyToLaunch(1);
         });
         Then("Elon makes a launch request to rocket service", () -> {
             launchOrderReply = rocketRPC.LaunchOrderRequest(true);
         });
-        Then("the launch order to the rocket is triggered if the rocket is ready to launch.", () -> {
-            assertEquals("Launch approved !", launchOrderReply.getReply());
+        Then("the launch order to the rocket is triggered if the rocket is ready to launch", () -> {
+            // need to check the boolean
+            assertNotNull(launchOrderReply.getReply());
         });
 
-
     }
-    
+
 }

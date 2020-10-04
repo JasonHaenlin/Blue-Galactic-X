@@ -3,15 +3,15 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.RestAPI;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.models.RocketStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketStatus;
 
 public class RocketREST extends RestAPI {
 
@@ -21,7 +21,7 @@ public class RocketREST extends RestAPI {
 
     public RocketStatus getStatus() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri+"/status")).build();
+                .uri(URI.create(uri + "/status")).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -30,9 +30,9 @@ public class RocketREST extends RestAPI {
 
     }
 
-	public RocketReport getReport() throws IOException, InterruptedException {
+    public RocketReport getReport() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri+"/report")).build();
+                .uri(URI.create(uri + "/report")).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -42,12 +42,10 @@ public class RocketREST extends RestAPI {
     }
 
     public void setReport(RocketReport rocketReport) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(rocketReport))).header("Content-Type", "application/json")
-                .uri(URI.create(uri+"/report")).build();
+        HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(rocketReport)))
+                .header("Content-Type", "application/json").uri(URI.create(uri + "/report")).build();
 
-       client.send(request, HttpResponse.BodyHandlers.ofString());
-
-    
+        client.send(request, HttpResponse.BodyHandlers.ofString());
 
     }
 }
