@@ -21,6 +21,13 @@ class RocketServiceTest {
     @Test
     void getStatus() {
         RocketStatusReply rsr = rocketService.getStatus();
-        assertEquals(RocketStatus.READY, rsr.getStatus());
+        assertNotNull(rsr);
+        RocketStatus s = rsr.getStatus();
+        assertNotNull(s);
+        assertTrue(s.toString().contains("Irradiance"));
+        assertTrue(s.toString().contains("Velocity variation"));
+        assertTrue(s.toString().contains("Temperature"));
+        assertTrue(s.toString().contains("Ground vibration"));
+        assertTrue(s.toString().contains("Booster RGA"));
     }
 }
