@@ -1,8 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions;
 
-import javax.servlet.ServletException;
 
-public class InvalidMissionException extends ServletException {
+public class InvalidMissionException extends Exception {
 
     /**
      *

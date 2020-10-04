@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils;
+package fr.unice.polytech.soa.team.j.bluegalacticx.springmission.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
