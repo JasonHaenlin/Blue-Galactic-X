@@ -7,9 +7,7 @@ import java.io.IOException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;

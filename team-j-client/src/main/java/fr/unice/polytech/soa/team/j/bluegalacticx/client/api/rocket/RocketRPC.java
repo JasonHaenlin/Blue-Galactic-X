@@ -2,7 +2,6 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.ReadyToLaunchRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketBlockingStub;
 import io.grpc.ManagedChannel;

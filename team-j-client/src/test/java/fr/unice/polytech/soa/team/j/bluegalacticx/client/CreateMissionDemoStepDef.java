@@ -13,6 +13,8 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketRPC;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.WeatherREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherType;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.MissionREST;
@@ -28,8 +30,11 @@ public class CreateMissionDemoStepDef implements En {
     private RocketRPC rocketRPC;
 
     // Report
-    WeatherReport weatherReport;
-    RocketReport rocketReport;
+    private WeatherReport weatherReport;
+    private RocketReport rocketReport;
+
+    
+    private LaunchOrderReply launchOrderReply;
 
     public CreateMissionDemoStepDef(){
         
@@ -42,16 +47,22 @@ public class CreateMissionDemoStepDef implements En {
             rocketRPC = new RocketRPC("localhost", 8081);
 
         });
-        And("rocket department create a new report", () -> {
 
-
-         });
         And("weather department create a new report", () -> {
 
             weatherReport = new WeatherReport().avgRainfall(50).avgHumidity(10).avgWind(20).avgVisibility(90).avgTemperature(25)
                 .weatherType(WeatherType.SUNNY).overallResult("Good");
             weatherREST.setReport(weatherReport);
          });
+
+        And("rocket department create a new report", () -> {
+
+            rocketReport = new RocketReport().fuelLevel(10).overallResult("Good");
+            rocketREST.setReport(rocketReport);
+
+
+         });
+       
 
         When("I add a new mission", () -> {
             String response =  missionREST.createNewMission(new Mission(125, new Date()));
@@ -60,20 +71,26 @@ public class CreateMissionDemoStepDef implements En {
 
         And("the weather report is valid", () -> {
 
-           String reportString = weatherREST.getReport();
-           assertEquals(true,reportString.contains("Good"));
+           WeatherReport weatherReport = weatherREST.getReport();
+           assertEquals(true,weatherReport.getOverallResult().contains("Good"));
         });
 
         And("the rocket report is valid", () -> {
             
-           String reportString = rocketREST.getReport();
-           assertEquals(true,reportString.contains("Good"));
+           RocketReport rocketReport = rocketREST.getReport();
+           assertEquals(true,rocketReport.getOverallResult().contains("Good"));
         });
 
         Then("I can make a GO request", () -> {
 
             rocketRPC.setReadyToLaunch(true);
 
+        });
+        Then("Elon makes a launch request to rocket service", () -> {
+            launchOrderReply = rocketRPC.LaunchOrderRequest(true);
+        });
+        Then("the launch order to the rocket is triggered if the rocket is ready to launch.", () -> {
+            assertEquals("Launch approved !", launchOrderReply.getReply());
         });
 
 

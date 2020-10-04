@@ -1,12 +1,14 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springmission.apiTest;
+package fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
+
+import fr.unice.polytech.soa.team.j.bluegalacticx.JsonUtils;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.springmission.utils.JsonUtils;
 
 public class MissionREST extends RestAPI {
 

@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpRequest.BodyPublishers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.models.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 
 public class RocketREST extends RestAPI {
 
@@ -28,13 +30,24 @@ public class RocketREST extends RestAPI {
 
     }
 
-    public String getReport() throws IOException, InterruptedException {
+	public RocketReport getReport() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
                 .uri(URI.create(uri+"/report")).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return JsonUtils.toJson(response);
+        return mapper.readValue(response.body(), new TypeReference<RocketReport>() {
+        });
+
+    }
+
+    public void setReport(RocketReport rocketReport) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(rocketReport))).header("Content-Type", "application/json")
+                .uri(URI.create(uri+"/report")).build();
+
+       client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    
 
     }
 }
