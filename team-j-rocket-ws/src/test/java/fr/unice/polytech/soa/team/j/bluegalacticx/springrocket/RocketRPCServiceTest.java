@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketRPCService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.ReadyToLaunchRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionId;
 import fr.unice.polytech.soa.team.j.bluegalacticx.springrocket.config.RocketRPCServiceTestConfig;
 import io.grpc.internal.testing.StreamRecorder;
 
@@ -31,7 +31,7 @@ class RocketRPCServiceTest {
 
 	@Test
 	public void setReadyToLaunchTest() throws Exception {
-		ReadyToLaunchRequest request = ReadyToLaunchRequest.newBuilder().setIsReady(true).build();
+		MissionId request = MissionId.newBuilder().setMissionId(1).build();
 
 		StreamRecorder<Empty> responseObserver = StreamRecorder.create();
 		rocketRpcService.setReadyToLaunch(request, responseObserver);
