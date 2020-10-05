@@ -1,5 +1,5 @@
-# team-j-weather-ws
-weather web service
+# team-j-telemetry-ws
+telemetry web service
 
 ## Start the project
 
