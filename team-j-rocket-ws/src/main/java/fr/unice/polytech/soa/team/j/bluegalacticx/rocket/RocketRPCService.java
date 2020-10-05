@@ -4,10 +4,9 @@ import com.google.protobuf.Empty;
 
 import org.lognet.springboot.grpc.GRpcService;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionId;
-
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionId;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketImplBase;
 import io.grpc.stub.StreamObserver;
 
