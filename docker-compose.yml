@@ -18,3 +18,9 @@ services:
     ports:
       - "8070:8070"
       - "8071:8071"
+  telemetry:
+    build: ./team-j-telemetry-ws
+    container_name: team-j-blue-galactic-telemetry
+    ports:
+      - "8090:8090"
+      - "8091:8091"    
