@@ -1,0 +1,16 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jmx:
+    enabled: false
+  application:
+    name: Demo
+
+server:
+  port: 8080
+  error: 
+    include-stacktrace: never
+
+grpc:
+  enable-reflection: true
+  port: 8081

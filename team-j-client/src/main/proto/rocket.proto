@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
+
+option java_multiple_files = true;
+option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
+
+service Rocket {
+  rpc setReadyToLaunch(MissionId) returns (google.protobuf.Empty) {}
+  rpc launchOrderRocket(LaunchOrderRequest) returns (LaunchOrderReply) {}
+}
+
+message MissionId { int32 missionId = 1; }
+
+message LaunchOrderRequest { bool launchRocket = 2; }
+
+message LaunchOrderReply { string reply = 3; }
