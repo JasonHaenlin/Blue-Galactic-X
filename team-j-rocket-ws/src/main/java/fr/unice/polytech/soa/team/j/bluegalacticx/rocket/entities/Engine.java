@@ -58,10 +58,7 @@ public class Engine {
 
     @Override
     public String toString() {
-        return "{" +
-            " left='" + getLeft() + "'" +
-            ", right='" + getRight() + "'" +
-            "}";
+        return "{" + " left='" + getLeft() + "'" + ", right='" + getRight() + "'" + "}";
     }
 
 }
