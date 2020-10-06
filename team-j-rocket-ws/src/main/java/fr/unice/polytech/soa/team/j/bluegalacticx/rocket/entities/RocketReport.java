@@ -8,7 +8,6 @@ public class RocketReport {
     private Engine engine;
     private String overallResult;
 
-
     public RocketReport() {
     }
 
@@ -79,7 +78,9 @@ public class RocketReport {
             return false;
         }
         RocketReport rocketReport = (RocketReport) o;
-        return fuelLevel == rocketReport.fuelLevel && remainingEstimatedTime == rocketReport.remainingEstimatedTime && Objects.equals(engine, rocketReport.engine) && Objects.equals(overallResult, rocketReport.overallResult);
+        return fuelLevel == rocketReport.fuelLevel && remainingEstimatedTime == rocketReport.remainingEstimatedTime
+                && Objects.equals(engine, rocketReport.engine)
+                && Objects.equals(overallResult, rocketReport.overallResult);
     }
 
     @Override
@@ -89,13 +90,8 @@ public class RocketReport {
 
     @Override
     public String toString() {
-        return "{" +
-            " fuelLevel='" + getFuelLevel() + "'" +
-            ", remainingEstimatedTime='" + getRemainingEstimatedTime() + "'" +
-            ", engine='" + getEngine() + "'" +
-            ", overallResult='" + getOverallResult() + "'" +
-            "}";
+        return "{" + " fuelLevel='" + getFuelLevel() + "'" + ", remainingEstimatedTime='" + getRemainingEstimatedTime()
+                + "'" + ", engine='" + getEngine() + "'" + ", overallResult='" + getOverallResult() + "'" + "}";
     }
 
 }
-

@@ -4,38 +4,80 @@ import com.google.protobuf.Empty;
 
 import org.lognet.springboot.grpc.GRpcService;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotAssignMissionException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionId;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketImplBase;
+import io.grpc.Status;
+import io.grpc.StatusException;
 import io.grpc.stub.StreamObserver;
 
 @GRpcService
 public class RocketRPCService extends RocketImplBase {
 
-    int missionId = -1;
-
-    private boolean launchRocket = false;
+    @Override
+    public void setReadyToLaunch(MissionRequest request, StreamObserver<Empty> responseObserver) {
+        String rId = request.getRocketId();
+        try {
+            Rocket r = RocketsMocked.find(rId).orElseThrow(() -> new RocketDoesNotExistException(rId));
+            r.assignMission(request.getMissionId());
+            responseObserver.onNext(null);
+            responseObserver.onCompleted();
+        } catch (RocketDoesNotExistException e) {
+            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        } catch (CannotAssignMissionException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
+        }
+    }
 
     @Override
-    public void setReadyToLaunch(MissionId request, StreamObserver<Empty> responseObserver) {
-        this.missionId = request.getMissionId();
-        responseObserver.onNext(null);
-        responseObserver.onCompleted();
+    public void destructionOrderOnRocket(DestructionOrderRequest request,
+            StreamObserver<DesctructionOrderReply> responseObserver) {
+        try {
+            Rocket r = findRocketOrThrow(request.getRocketId());
+            r.initiateTheSelfDestructSequence();
+            responseObserver
+                    .onNext(DesctructionOrderReply.newBuilder().setDestructionRocket("DESTROYED MOUHAHAH !!").build());
+            responseObserver.onCompleted();
+
+        } catch (RocketDoesNotExistException e) {
+            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        } catch (RocketDestroyedException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
+        }
     }
 
     @Override
     public void launchOrderRocket(LaunchOrderRequest request, StreamObserver<LaunchOrderReply> responseObserver) {
-        StringBuilder messageResponseAfterLaunch = new StringBuilder();
+        try {
+            Rocket r = findRocketOrThrow(request.getRocketId());
 
-        launchRocket = request.getLaunchRocket();
-        if (launchRocket) {
-            messageResponseAfterLaunch.append("Launch approved !");
+            String message = "";
+            if (request.getLaunchRocket()) {
+                message = "Launch approved !";
+                r.launchSequenceActivated();
+            }
+
+            LaunchOrderReply launchOrderReply = LaunchOrderReply.newBuilder().setReply(message).build();
+            responseObserver.onNext(launchOrderReply);
+            responseObserver.onCompleted();
+
+        } catch (RocketDoesNotExistException e) {
+            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        } catch (NoSameStatusException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         }
+    }
 
-        LaunchOrderReply launchOrderReply = LaunchOrderReply.newBuilder()
-                .setReply(messageResponseAfterLaunch.toString()).build();
-        responseObserver.onNext(launchOrderReply);
-        responseObserver.onCompleted();
+    private Rocket findRocketOrThrow(String id) throws RocketDoesNotExistException {
+        return RocketsMocked.find(id).orElseThrow(() -> new RocketDoesNotExistException(id));
     }
 }
