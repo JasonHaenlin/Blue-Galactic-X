@@ -53,15 +53,12 @@ class RocketRPCServiceTest {
 
 		if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
 			fail("The call did not terminate in time");
-        }
+		}
 		assertNull(responseObserver.getError());
 
-        
-        List<LaunchOrderReply> results = responseObserver.getValues();
-        LaunchOrderReply response = results.get(0);
-        assertEquals("Launch approved !", response.getReply());
+		List<LaunchOrderReply> results = responseObserver.getValues();
+		LaunchOrderReply response = results.get(0);
+		assertEquals("Launch approved !", response.getReply());
 	}
-
-	
 
 }
