@@ -8,12 +8,15 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotAssignMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketImplBase;
 import io.grpc.Status;
@@ -73,6 +76,26 @@ public class RocketRPCService extends RocketImplBase {
         } catch (RocketDoesNotExistException e) {
             responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
         } catch (NoSameStatusException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
+        } catch (BoosterDestroyedException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
+        }
+
+    }
+
+    @Override
+    public void nextStage(NextStageRequest request, StreamObserver<NextStageReply> responseObserver) {
+        try {
+            Rocket r = findRocketOrThrow(request.getRocketId());
+            r.goToNextStage();
+            
+            NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
+            responseObserver.onNext(nextStageReply);
+            responseObserver.onCompleted();
+
+        } catch (RocketDoesNotExistException e) {
+            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        } catch (BoosterDestroyedException e) {
             responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         }
     }

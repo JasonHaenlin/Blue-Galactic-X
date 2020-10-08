@@ -29,6 +29,8 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrder
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.springrocket.config.RocketRPCServiceTestConfig;
 import io.grpc.Status;
@@ -172,6 +174,23 @@ class RocketRPCServiceTest {
 
 		StatusException t = (StatusException) responseObserver.getError();
 		assertEquals(Status.ABORTED.getCode(), t.getStatus().getCode());
+	}
+
+	@Test
+	@Order(8)
+	public void goToNextStageTest() throws Exception {
+		NextStageRequest request = NextStageRequest.newBuilder().setRocketId("1").build();
+		StreamRecorder<NextStageReply> responseObserver = StreamRecorder.create();
+		rocketRpcService.nextStage(request, responseObserver);
+
+		if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
+			fail("The call did not terminate in time");
+		}
+		assertNull(responseObserver.getError());
+
+		List<NextStageReply> results = responseObserver.getValues();
+		NextStageReply response = results.get(0);
+		assertEquals(true, response.getMovedToNextStage());
 	}
 
 }

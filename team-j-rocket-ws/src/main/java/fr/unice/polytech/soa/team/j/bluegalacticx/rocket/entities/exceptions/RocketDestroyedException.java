@@ -5,7 +5,7 @@ public class RocketDestroyedException extends Exception {
     private static final long serialVersionUID = 1L;
 
     public RocketDestroyedException() {
-        super("Rocket has been recorded destroyed");
+        super("Rocket has already been recorded destroyed");
     }
 
     public RocketDestroyedException(String msg) {
