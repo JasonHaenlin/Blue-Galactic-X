@@ -4,24 +4,26 @@ import java.util.Objects;
 
 public class RocketMetrics {
 
-    private int irradiance = 0; // sun sensors in nm
-    private int velocityVariation = 0; // accelerometers value in mm/s
-    private int temperature = 0; // temperature in °C
-    private int groundVibration = 0; // ground vibration in Hz
-    private int boosterRGA = 0; // RGA of booster in %
-    private int midRocketRGA = 0; // RGA of the middle of the rocket in %
+    private int irradiance = 0;         // sun sensors in nm
+    private int velocityVariation = 0;  // accelerometers value in mm/s
+    private int temperature = 0;        // temperature in °C
+    private int groundVibration = 0;    // ground vibration in Hz
+    private int boosterRGA = 0;         // RGA of booster in %
+    private int midRocketRGA = 0;       // RGA of the middle of the rocket in %
+    private int fuelLevel = 100;        // Fuel Level in %
 
     public RocketMetrics() {
     }
 
     public RocketMetrics(int irradiance, int velocityVariation, int temperature, int groundVibration, int boosterRGA,
-            int midRocketRGA) {
+            int midRocketRGA, int fuelLevel) {
         this.irradiance = irradiance;
         this.velocityVariation = velocityVariation;
         this.temperature = temperature;
         this.groundVibration = groundVibration;
         this.boosterRGA = boosterRGA;
         this.midRocketRGA = midRocketRGA;
+        this.fuelLevel = fuelLevel;
     }
 
     public int getIrradiance() {
@@ -72,6 +74,14 @@ public class RocketMetrics {
         this.midRocketRGA = midRocketRGA;
     }
 
+    public int getFuelLevel() {
+        return this.fuelLevel;
+    }
+
+    public void setFuelLevel(int fuelLevel) {
+        this.fuelLevel = fuelLevel;
+    }
+
     public RocketMetrics irradiance(int irradiance) {
         this.irradiance = irradiance;
         return this;
@@ -102,6 +112,11 @@ public class RocketMetrics {
         return this;
     }
 
+    public RocketMetrics fuelLevel(int fuelLevel) {
+        this.fuelLevel = fuelLevel;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -112,19 +127,21 @@ public class RocketMetrics {
         RocketMetrics rocketMetrics = (RocketMetrics) o;
         return irradiance == rocketMetrics.irradiance && velocityVariation == rocketMetrics.velocityVariation
                 && temperature == rocketMetrics.temperature && groundVibration == rocketMetrics.groundVibration
-                && boosterRGA == rocketMetrics.boosterRGA && midRocketRGA == rocketMetrics.midRocketRGA;
+                && boosterRGA == rocketMetrics.boosterRGA && midRocketRGA == rocketMetrics.midRocketRGA
+                && fuelLevel == rocketMetrics.fuelLevel;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(irradiance, velocityVariation, temperature, groundVibration, boosterRGA, midRocketRGA);
+        return Objects.hash(irradiance, velocityVariation, temperature, groundVibration, boosterRGA, midRocketRGA, fuelLevel);
     }
 
     @Override
     public String toString() {
         return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
                 + ", temperature='" + getTemperature() + "'" + ", groundVibration='" + getGroundVibration() + "'"
-                + ", boosterRGA='" + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + "}";
+                + ", boosterRGA='" + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'"
+                + ", fuelLevel='" + getFuelLevel() + "'" + "}";
     }
 
     @Deprecated

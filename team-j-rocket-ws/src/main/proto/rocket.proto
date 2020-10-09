@@ -12,6 +12,7 @@ service Rocket {
   rpc launchOrderRocket(LaunchOrderRequest) returns (LaunchOrderReply) {}
   rpc destructionOrderOnRocket(DestructionOrderRequest)
       returns (DesctructionOrderReply) {}
+  rpc nextStage(NextStageRequest) returns (NextStageReply) {}
 }
 
 message MissionRequest {
@@ -24,8 +25,14 @@ message LaunchOrderRequest {
   bool launchRocket = 2;
 }
 
+message NextStageRequest {
+  string rocketId = 1;
+}
+
 message LaunchOrderReply { string reply = 1; }
 
 message DestructionOrderRequest { string rocketId = 1; }
 
 message DesctructionOrderReply { string destructionRocket = 1; }
+
+message NextStageReply { bool movedToNextStage = 1; }
