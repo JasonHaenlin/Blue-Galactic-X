@@ -9,23 +9,20 @@ public class Payload {
 
     private PayloadType type;
     private PayloadStatus status;
-    private SpaceCoordinate destination;
     private SpaceCoordinate position;
-    private int weight; //kg
+    private int weight; // kg
 
-    //TODO autogenerate id and date when using database based persistence
+    // TODO autogenerate id and date when using database based persistence
     private String id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
-
     public Payload() {
     }
 
-    public Payload(PayloadType type, PayloadStatus status, SpaceCoordinate destination, SpaceCoordinate position, int weight, String id, Date date) {
+    public Payload(PayloadType type, PayloadStatus status, SpaceCoordinate position, int weight, String id, Date date) {
         this.type = type;
         this.status = status;
-        this.destination = destination;
         this.position = position;
         this.weight = weight;
         this.id = id;
@@ -46,14 +43,6 @@ public class Payload {
 
     public void setStatus(PayloadStatus status) {
         this.status = status;
-    }
-
-    public SpaceCoordinate getDestination() {
-        return this.destination;
-    }
-
-    public void setDestination(SpaceCoordinate destination) {
-        this.destination = destination;
     }
 
     public SpaceCoordinate getPosition() {
@@ -98,11 +87,6 @@ public class Payload {
         return this;
     }
 
-    public Payload destination(SpaceCoordinate destination) {
-        this.destination = destination;
-        return this;
-    }
-
     public Payload position(SpaceCoordinate position) {
         this.position = position;
         return this;
@@ -131,25 +115,21 @@ public class Payload {
             return false;
         }
         Payload payload = (Payload) o;
-        return Objects.equals(type, payload.type) && Objects.equals(status, payload.status) && Objects.equals(destination, payload.destination) && Objects.equals(position, payload.position) && weight == payload.weight && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
+        return Objects.equals(type, payload.type) && Objects.equals(status, payload.status)
+                && Objects.equals(position, payload.position) && weight == payload.weight
+                && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, status, destination, position, weight, id, date);
+        return Objects.hash(type, status, position, weight, id, date);
     }
 
     @Override
     public String toString() {
-        return "{" +
-            " type='" + getType() + "'" +
-            ", status='" + getStatus() + "'" +
-            ", destination='" + getDestination() + "'" +
-            ", position='" + getPosition() + "'" +
-            ", weight='" + getWeight() + "'" +
-            ", id='" + getId() + "'" +
-            ", date='" + getDate() + "'" +
-            "}";
+        return "{" + " type='" + getType() + "'" + ", status='" + getStatus() + "'" + ", position='" + getPosition()
+                + "'" + ", weight='" + getWeight() + "'" + ", id='" + getId() + "'" + ", date='" + getDate() + "'"
+                + "}";
     }
-    
+
 }

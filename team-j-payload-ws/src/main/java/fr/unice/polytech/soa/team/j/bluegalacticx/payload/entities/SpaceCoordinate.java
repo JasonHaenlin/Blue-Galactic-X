@@ -3,56 +3,55 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities;
 import java.util.Objects;
 
 public class SpaceCoordinate {
-    int latitude;
-    int longitude;
-    int altitude;
-
+    int x;
+    int y;
+    int z;
 
     public SpaceCoordinate() {
     }
 
-    public SpaceCoordinate(int latitude, int longitude, int altitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.altitude = altitude;
+    public SpaceCoordinate(int x, int y, int z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
-    public int getLatitude() {
-        return this.latitude;
+    public int getX() {
+        return this.x;
     }
 
-    public void setLatitude(int latitude) {
-        this.latitude = latitude;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public int getLongitude() {
-        return this.longitude;
+    public int getY() {
+        return this.y;
     }
 
-    public void setLongitude(int longitude) {
-        this.longitude = longitude;
+    public void setY(int y) {
+        this.y = y;
     }
 
-    public int getAltitude() {
-        return this.altitude;
+    public int getZ() {
+        return this.z;
     }
 
-    public void setAltitude(int altitude) {
-        this.altitude = altitude;
+    public void setZ(int z) {
+        this.z = z;
     }
 
-    public SpaceCoordinate latitude(int latitude) {
-        this.latitude = latitude;
+    public SpaceCoordinate x(int x) {
+        this.x = x;
         return this;
     }
 
-    public SpaceCoordinate longitude(int longitude) {
-        this.longitude = longitude;
+    public SpaceCoordinate y(int y) {
+        this.y = y;
         return this;
     }
 
-    public SpaceCoordinate altitude(int altitude) {
-        this.altitude = altitude;
+    public SpaceCoordinate z(int z) {
+        this.z = z;
         return this;
     }
 
@@ -64,21 +63,17 @@ public class SpaceCoordinate {
             return false;
         }
         SpaceCoordinate spaceCoordinate = (SpaceCoordinate) o;
-        return latitude == spaceCoordinate.latitude && longitude == spaceCoordinate.longitude && altitude == spaceCoordinate.altitude;
+        return x == spaceCoordinate.x && y == spaceCoordinate.y && z == spaceCoordinate.z;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(latitude, longitude, altitude);
+        return Objects.hash(x, y, z);
     }
 
     @Override
     public String toString() {
-        return "{" +
-            " latitude='" + getLatitude() + "'" +
-            ", longitude='" + getLongitude() + "'" +
-            ", altitude='" + getAltitude() + "'" +
-            "}";
+        return "{" + " x='" + getX() + "'" + ", y='" + getY() + "'" + ", z='" + getZ() + "'" + "}";
     }
 
 }
