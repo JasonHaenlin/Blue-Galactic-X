@@ -16,7 +16,7 @@ public class PayloadService {
 
     Payload createPayload(Payload payload) throws InvalidPayloadException {
 
-        if (checkInput(payload)){
+        if (checkInput(payload)) {
             throw new InvalidPayloadException();
         }
 
@@ -31,11 +31,21 @@ public class PayloadService {
 
     Payload retrievePayload(String id) throws PayloadNotFoundException {
         return PayloadMock.payloads.stream().filter(p -> p.getId().equals(id)).findFirst()
-            .orElseThrow(() -> new PayloadNotFoundException());
+                .orElseThrow(() -> new PayloadNotFoundException());
+    }
+
+    Payload updateStatus(PayloadStatus status, String id) throws PayloadNotFoundException {
+        for (Payload p : PayloadMock.payloads) {
+            if (p.getId().equals(id)) {
+                p.setStatus(status);
+                return p;
+            }
+        }
+        throw new PayloadNotFoundException();
     }
 
     private boolean checkInput(Payload input) {
-        return input == null; 
+        return input == null;
     }
-    
+
 }
