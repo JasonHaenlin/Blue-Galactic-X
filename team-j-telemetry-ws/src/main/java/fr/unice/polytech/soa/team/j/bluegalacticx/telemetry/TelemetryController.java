@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryRocketDataException;
@@ -45,14 +44,14 @@ public class TelemetryController {
 
     @GetMapping("/rocket/{rocketId}")
     public TelemetryRocketData retrieveTelemetryData(@RequestParam String rocketId) {
-        try{
+        try {
             return telemetryService.retrieveRocketData(rocketId);
-        }catch (DataAccessResourceFailureException e) {
+        } catch (DataAccessResourceFailureException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
         } catch (NoTelemetryRocketDataException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-        
+
     }
 
 }

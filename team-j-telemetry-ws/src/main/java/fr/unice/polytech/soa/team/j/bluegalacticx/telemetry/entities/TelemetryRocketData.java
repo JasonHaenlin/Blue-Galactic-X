@@ -8,10 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "rocketTelemetry")
 public class TelemetryRocketData {
 
-
     @Id
     private String rocketId;
-    
     private int irradiance = 0; // sun sensors in nm
     private int velocityVariation = 0; // accelerometers value in mm/s
     private int temperature = 0; // temperature in °C
@@ -25,17 +23,16 @@ public class TelemetryRocketData {
     private int y;
     private int z;
 
-    public TelemetryRocketData(){
-        
+    public TelemetryRocketData() {
     }
 
-    public void setRocketId(String rocketId){
-        this.rocketId=rocketId;
+    public void setRocketId(String rocketId) {
+        this.rocketId = rocketId;
     }
-    public String getRocketId(){
+
+    public String getRocketId() {
         return rocketId;
     }
-
 
     public int getIrradiance() {
         return this.irradiance;
@@ -193,7 +190,6 @@ public class TelemetryRocketData {
         this.fuelLevel = fuelLevel;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -202,7 +198,7 @@ public class TelemetryRocketData {
             return false;
         }
         TelemetryRocketData telemetryData = (TelemetryRocketData) o;
-        return fuelLevel == telemetryData.fuelLevel ;
+        return fuelLevel == telemetryData.fuelLevel;
     }
 
     @Override
@@ -210,26 +206,13 @@ public class TelemetryRocketData {
         return Objects.hash(fuelLevel);
     }
 
-
- 
-
     @Override
     public String toString() {
-        return "{" +
-            " irradiance='" + getIrradiance() + "'" +
-            ", velocityVariation='" + getVelocityVariation() + "'" +
-            ", temperature='" + getTemperature() + "'" +
-            ", vibration='" + getVibration() + "'" +
-            ", boosterRGA='" + getBoosterRGA() + "'" +
-            ", midRocketRGA='" + getMidRocketRGA() + "'" +
-            ", fuelLevel='" + getFuelLevel() + "'" +
-            ", heatShield='" + getHeatShield() + "'" +
-            ", speed='" + getSpeed() + "'" +
-            ", x='" + getX() + "'" +
-            ", y='" + getY() + "'" +
-            ", z='" + getZ() + "'" +
-            "}";
+        return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
+                + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
+                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", fuelLevel='"
+                + getFuelLevel() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='" + getSpeed() + "'"
+                + ", x='" + getX() + "'" + ", y='" + getY() + "'" + ", z='" + getZ() + "'" + "}";
     }
-   
-    
+
 }

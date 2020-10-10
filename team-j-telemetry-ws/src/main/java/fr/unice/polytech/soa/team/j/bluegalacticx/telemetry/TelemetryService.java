@@ -36,7 +36,7 @@ public class TelemetryService {
     }
 
     public void createRocketData(TelemetryRocketData rocketData) throws TelemetryDataRocketIdException {
-        if(!checkRocketIdExist(rocketData)){
+        if (!checkRocketIdExist(rocketData)) {
             throw new TelemetryDataRocketIdException();
         }
         telemetryRocketDataRepository.save(rocketData);
@@ -44,21 +44,19 @@ public class TelemetryService {
 
     public TelemetryRocketData retrieveRocketData(String rocketId) throws NoTelemetryRocketDataException {
 
-        if(!(checkRocketTelemetryDataExist(rocketId))){
+        if (!(checkRocketTelemetryDataExist(rocketId))) {
             throw new NoTelemetryRocketDataException();
         }
 
-        
         return telemetryRocketDataRepository.findById(rocketId).get();
     }
 
-    private boolean checkRocketTelemetryDataExist(String rocketId){
+    private boolean checkRocketTelemetryDataExist(String rocketId) {
         return telemetryRocketDataRepository.findById(rocketId).get() == null;
     }
 
-    private boolean checkRocketIdExist(TelemetryRocketData rocketData){
-        return rocketData.getRocketId() != "" || rocketData.getRocketId() != null ;
+    private boolean checkRocketIdExist(TelemetryRocketData rocketData) {
+        return rocketData.getRocketId() != "" || rocketData.getRocketId() != null;
     }
-    
 
 }

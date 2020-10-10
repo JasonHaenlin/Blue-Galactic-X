@@ -7,8 +7,7 @@ public class NoTelemetryRocketDataException extends Exception {
      */
     private static final long serialVersionUID = 1L;
 
-    public NoTelemetryRocketDataException(){
+    public NoTelemetryRocketDataException() {
         super("There is no telemetry rocket data available now");
     }
-    
 }

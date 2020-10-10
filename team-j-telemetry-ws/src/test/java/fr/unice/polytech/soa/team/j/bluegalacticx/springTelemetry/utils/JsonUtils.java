@@ -3,13 +3,11 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.springTelemetry.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonUtils {
-    
-    private JsonUtils(){
-        
-    }
 
+	private JsonUtils() {
+	}
 
-    public static String toJson(final Object obj) {
+	public static String toJson(final Object obj) {
 		try {
 			final ObjectMapper mapper = new ObjectMapper();
 			final String jsonContent = mapper.writeValueAsString(obj);
@@ -17,6 +15,5 @@ public class JsonUtils {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	} 
-    
+	}
 }

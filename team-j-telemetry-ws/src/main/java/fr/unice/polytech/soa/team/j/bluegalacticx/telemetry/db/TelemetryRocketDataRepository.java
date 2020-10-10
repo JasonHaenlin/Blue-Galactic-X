@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
 
 @Repository
-public interface TelemetryRocketDataRepository extends MongoRepository<TelemetryRocketData, String>{
-    
+public interface TelemetryRocketDataRepository extends MongoRepository<TelemetryRocketData, String> {
+
 }
