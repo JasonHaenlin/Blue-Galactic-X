@@ -31,7 +31,7 @@ public class RocketsMocked {
                         .boosterRGA(5)
                         .irradiance(350)
                         .temperature(300)
-                        .groundVibration(400)
+                        .vibration(400)
                         .midRocketRGA(9))
                     );
 
@@ -46,7 +46,7 @@ public class RocketsMocked {
                         .boosterRGA(5)
                         .irradiance(10)
                         .temperature(25)
-                        .groundVibration(0)
+                        .vibration(0)
                         .midRocketRGA(9))
                     );
             // @formatter:on

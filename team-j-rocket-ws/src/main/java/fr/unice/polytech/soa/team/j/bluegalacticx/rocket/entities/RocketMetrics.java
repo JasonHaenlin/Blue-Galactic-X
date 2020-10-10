@@ -4,23 +4,23 @@ import java.util.Objects;
 
 public class RocketMetrics {
 
-    private int irradiance = 0;         // sun sensors in nm
-    private int velocityVariation = 0;  // accelerometers value in mm/s
-    private int temperature = 0;        // temperature in °C
-    private int groundVibration = 0;    // ground vibration in Hz
-    private int boosterRGA = 0;         // RGA of booster in %
-    private int midRocketRGA = 0;       // RGA of the middle of the rocket in %
-    private int fuelLevel = 100;        // Fuel Level in %
+    private int irradiance = 0; // sun sensors in nm
+    private int velocityVariation = 0; // accelerometers value in mm/s
+    private int temperature = 0; // temperature in °C
+    private int vibration = 0; // ground vibration in Hz
+    private int boosterRGA = 0; // RGA of booster in %
+    private int midRocketRGA = 0; // RGA of the middle of the rocket in %
+    private int fuelLevel = 100; // Fuel Level in %
 
     public RocketMetrics() {
     }
 
-    public RocketMetrics(int irradiance, int velocityVariation, int temperature, int groundVibration, int boosterRGA,
+    public RocketMetrics(int irradiance, int velocityVariation, int temperature, int vibration, int boosterRGA,
             int midRocketRGA, int fuelLevel) {
         this.irradiance = irradiance;
         this.velocityVariation = velocityVariation;
         this.temperature = temperature;
-        this.groundVibration = groundVibration;
+        this.vibration = vibration;
         this.boosterRGA = boosterRGA;
         this.midRocketRGA = midRocketRGA;
         this.fuelLevel = fuelLevel;
@@ -50,12 +50,12 @@ public class RocketMetrics {
         this.temperature = temperature;
     }
 
-    public int getGroundVibration() {
-        return this.groundVibration;
+    public int getVibration() {
+        return this.vibration;
     }
 
-    public void setGroundVibration(int groundVibration) {
-        this.groundVibration = groundVibration;
+    public void setVibration(int vibration) {
+        this.vibration = vibration;
     }
 
     public int getBoosterRGA() {
@@ -97,8 +97,8 @@ public class RocketMetrics {
         return this;
     }
 
-    public RocketMetrics groundVibration(int groundVibration) {
-        this.groundVibration = groundVibration;
+    public RocketMetrics vibration(int vibration) {
+        this.vibration = vibration;
         return this;
     }
 
@@ -126,22 +126,22 @@ public class RocketMetrics {
         }
         RocketMetrics rocketMetrics = (RocketMetrics) o;
         return irradiance == rocketMetrics.irradiance && velocityVariation == rocketMetrics.velocityVariation
-                && temperature == rocketMetrics.temperature && groundVibration == rocketMetrics.groundVibration
+                && temperature == rocketMetrics.temperature && vibration == rocketMetrics.vibration
                 && boosterRGA == rocketMetrics.boosterRGA && midRocketRGA == rocketMetrics.midRocketRGA
                 && fuelLevel == rocketMetrics.fuelLevel;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(irradiance, velocityVariation, temperature, groundVibration, boosterRGA, midRocketRGA, fuelLevel);
+        return Objects.hash(irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA, fuelLevel);
     }
 
     @Override
     public String toString() {
         return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
-                + ", temperature='" + getTemperature() + "'" + ", groundVibration='" + getGroundVibration() + "'"
-                + ", boosterRGA='" + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'"
-                + ", fuelLevel='" + getFuelLevel() + "'" + "}";
+                + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
+                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", fuelLevel='"
+                + getFuelLevel() + "'" + "}";
     }
 
     @Deprecated

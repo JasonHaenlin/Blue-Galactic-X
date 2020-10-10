@@ -2,6 +2,8 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryRocketDataException;
@@ -22,6 +25,8 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.Telemetry
 @RequestMapping("/telemetry")
 @EnableMongoRepositories(basePackages = { "fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db" })
 public class TelemetryController {
+
+    private final static Logger LOG = LoggerFactory.getLogger(TelemetryController.class);
 
     @Autowired
     private TelemetryService telemetryService;
@@ -34,6 +39,7 @@ public class TelemetryController {
     @PostMapping("/rocket")
     public void createTelemetryData(@RequestBody TelemetryRocketData rocketData) {
         try {
+            LOG.info(rocketData.toString());
             telemetryService.createRocketData(rocketData);
         } catch (DataAccessResourceFailureException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());

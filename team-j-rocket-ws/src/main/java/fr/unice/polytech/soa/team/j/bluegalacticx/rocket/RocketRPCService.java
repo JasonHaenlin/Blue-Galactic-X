@@ -3,21 +3,22 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 import com.google.protobuf.Empty;
 
 import org.lognet.springboot.grpc.GRpcService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotAssignMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketImplBase;
 import io.grpc.Status;
 import io.grpc.StatusException;
@@ -26,12 +27,19 @@ import io.grpc.stub.StreamObserver;
 @GRpcService
 public class RocketRPCService extends RocketImplBase {
 
+    @Autowired
+    private RestService service;
+
+    @Autowired
+    private RocketApi rocketApi;
+
     @Override
     public void setReadyToLaunch(MissionRequest request, StreamObserver<Empty> responseObserver) {
         String rId = request.getRocketId();
         try {
             Rocket r = RocketsMocked.find(rId).orElseThrow(() -> new RocketDoesNotExistException(rId));
             r.assignMission(request.getMissionId());
+            r.setMissionObjective(service.getCoordinatesFromMission(request.getMissionId()));
             responseObserver.onNext(null);
             responseObserver.onCompleted();
         } catch (RocketDoesNotExistException e) {
@@ -65,6 +73,7 @@ public class RocketRPCService extends RocketImplBase {
 
             String message = "";
             if (request.getLaunchRocket()) {
+                rocketApi.launchWhenReady(r.retrieveObjectiveCoordinates(), r.getId());
                 message = "Launch approved !";
                 r.launchSequenceActivated();
             }
@@ -88,7 +97,7 @@ public class RocketRPCService extends RocketImplBase {
         try {
             Rocket r = findRocketOrThrow(request.getRocketId());
             r.goToNextStage();
-            
+
             NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
             responseObserver.onNext(nextStageReply);
             responseObserver.onCompleted();

@@ -15,8 +15,7 @@ public class Rocket {
     private RocketStatus status;
     private Booster booster;
     private String missionId;
-
-    
+    private SpaceCoordinate objective;
 
     public Rocket() {
         this.booster = new Booster(BoosterStatus.READY);
@@ -94,8 +93,16 @@ public class Rocket {
         this.status = RocketStatus.DESTROYED;
     }
 
-    public void goToNextStage() throws BoosterDestroyedException{
+    public void goToNextStage() throws BoosterDestroyedException {
         this.booster.status(BoosterStatus.LANDING);
+    }
+
+    public void setMissionObjective(SpaceCoordinate coordinatesFromMission) {
+        this.objective = coordinatesFromMission;
+    }
+
+    public SpaceCoordinate retrieveObjectiveCoordinates() {
+        return objective;
     }
 
     public Rocket id(String id) {

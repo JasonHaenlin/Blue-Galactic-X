@@ -11,40 +11,60 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.protobuf.Empty;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.client.RestTemplate;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketRPCService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.springrocket.config.RocketRPCServiceTestConfig;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
 import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.internal.testing.StreamRecorder;
 
 @SpringBootTest
-@SpringJUnitConfig(classes = { RocketRPCServiceTestConfig.class })
+@ContextConfiguration(classes = { RocketRPCService.class, RestService.class, RocketApi.class, RestTemplate.class })
 @Tags(value = { @Tag("grpc"), @Tag("grpc-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
+@TestInstance(Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class RocketRPCServiceTest {
 
 	@Autowired
 	private RocketRPCService rocketRpcService;
+
+	@Mock
+	private RestService restService;
+
+	@BeforeAll
+	public void init() {
+		Mockito.lenient().when(restService.getCoordinatesFromMission("1")).thenReturn(new SpaceCoordinate(20, 20, 0));
+	}
 
 	@Test
 	@Order(1)
