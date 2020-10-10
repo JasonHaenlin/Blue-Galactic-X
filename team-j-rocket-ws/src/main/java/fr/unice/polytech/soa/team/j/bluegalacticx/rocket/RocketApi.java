@@ -13,7 +13,6 @@ public class RocketApi {
     private Double mockFuelStep = null;
     private Double mockDistStep = null;
     private SpaceCoordinate origin = new SpaceCoordinate(0, 0, 0);
-    private String rocketId;
 
     public RocketApi withOriginCoordinate(SpaceCoordinate origin) {
         this.origin = origin;
@@ -26,7 +25,6 @@ public class RocketApi {
     }
 
     public SpaceMetrics launchWhenReady(SpaceCoordinate objectiveCoordinates, String rocketId) {
-        this.rocketId = rocketId;
         double distance = computeDistance(origin, objectiveCoordinates);
         this.mockDistStep = distance / this.iteration;
         this.mockFuelStep = 100.0 / this.iteration;

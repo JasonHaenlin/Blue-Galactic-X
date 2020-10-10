@@ -39,7 +39,9 @@ public class RocketRPCService extends RocketImplBase {
         try {
             Rocket r = RocketsMocked.find(rId).orElseThrow(() -> new RocketDoesNotExistException(rId));
             r.assignMission(request.getMissionId());
-            r.setMissionObjective(service.getCoordinatesFromMission(request.getMissionId()));
+            service.getCoordinatesFromMission(request.getMissionId()).subscribe(coor -> {
+                r.setMissionObjective(coor);
+            });
             responseObserver.onNext(null);
             responseObserver.onCompleted();
         } catch (RocketDoesNotExistException e) {

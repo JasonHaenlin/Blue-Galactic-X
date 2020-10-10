@@ -30,7 +30,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.MissionService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.RestApiService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadRocketIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
@@ -38,7 +37,9 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoes
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.replies.MissionReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.springmission.utils.JsonUtils;
+
 @WebMvcTest(MissionController.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class MissionApplicationTests {

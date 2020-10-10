@@ -136,6 +136,11 @@ public class Rocket {
         return this;
     }
 
+    public Rocket spaceCoordinate(SpaceCoordinate objective) {
+        this.objective = objective;
+        return this;
+    }
+
     private void throwIfRocketIsDestroyed() throws RocketDestroyedException {
         if (status == RocketStatus.DESTROYED) {
             throw new RocketDestroyedException();

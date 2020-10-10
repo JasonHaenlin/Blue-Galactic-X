@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,11 +22,11 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,6 +47,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
 import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.internal.testing.StreamRecorder;
+import reactor.core.publisher.Mono;
 
 @SpringBootTest
 @ContextConfiguration(classes = { RocketRPCService.class, RestService.class, RocketApi.class, RestTemplate.class })
@@ -58,12 +60,15 @@ class RocketRPCServiceTest {
 	@Autowired
 	private RocketRPCService rocketRpcService;
 
-	@Mock
+	@MockBean
 	private RestService restService;
 
 	@BeforeAll
-	public void init() {
-		Mockito.lenient().when(restService.getCoordinatesFromMission("1")).thenReturn(new SpaceCoordinate(20, 20, 0));
+	public void init() throws IOException {
+		Mockito.lenient().when(restService.getCoordinatesFromMission("1"))
+				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
+		Mockito.lenient().when(restService.getCoordinatesFromMission("2"))
+				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
 	}
 
 	@Test
@@ -125,7 +130,7 @@ class RocketRPCServiceTest {
 		Rocket r = RocketsMocked.find("1").orElse(null);
 		r.status(RocketStatus.AT_BASE);
 
-		MissionRequest request = MissionRequest.newBuilder().setMissionId("1").setRocketId("1").build();
+		MissionRequest request = MissionRequest.newBuilder().setMissionId("2").setRocketId("1").build();
 		StreamRecorder<Empty> responseObserver = StreamRecorder.create();
 		rocketRpcService.setReadyToLaunch(request, responseObserver);
 
@@ -134,7 +139,7 @@ class RocketRPCServiceTest {
 		}
 		assertNull(responseObserver.getError());
 
-		request = MissionRequest.newBuilder().setMissionId("2").setRocketId("1").build();
+		request = MissionRequest.newBuilder().setMissionId("1").setRocketId("1").build();
 		responseObserver = StreamRecorder.create();
 		rocketRpcService.setReadyToLaunch(request, responseObserver);
 
