@@ -33,6 +33,9 @@ public class RocketRPCService extends RocketImplBase {
     @Autowired
     private RocketApi rocketApi;
 
+    @Autowired
+    private MissionRPCClient missionRpcClient;
+
     @Override
     public void setReadyToLaunch(MissionRequest request, StreamObserver<Empty> responseObserver) {
         String rId = request.getRocketId();
@@ -59,6 +62,7 @@ public class RocketRPCService extends RocketImplBase {
             r.initiateTheSelfDestructSequence();
             responseObserver
                     .onNext(DesctructionOrderReply.newBuilder().setDestructionRocket("DESTROYED MOUHAHAH !!").build());
+            missionRpcClient.failedMission(r.getTheCurrentMissionId());
             responseObserver.onCompleted();
 
         } catch (RocketDoesNotExistException e) {
@@ -78,6 +82,7 @@ public class RocketRPCService extends RocketImplBase {
                 rocketApi.launchWhenReady(r.retrieveObjectiveCoordinates(), r.getId());
                 message = "Launch approved !";
                 r.launchSequenceActivated();
+                missionRpcClient.startMission(r.getTheCurrentMissionId());
             }
 
             LaunchOrderReply launchOrderReply = LaunchOrderReply.newBuilder().setReply(message).build();
@@ -97,15 +102,12 @@ public class RocketRPCService extends RocketImplBase {
     @Override
     public void nextStage(NextStageRequest request, StreamObserver<NextStageReply> responseObserver) {
         try {
-            Rocket r = findRocketOrThrow(request.getRocketId());
-            r.goToNextStage();
+            rocketApi.dettachStage();
 
             NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
             responseObserver.onNext(nextStageReply);
             responseObserver.onCompleted();
 
-        } catch (RocketDoesNotExistException e) {
-            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
         } catch (BoosterDestroyedException e) {
             responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         }

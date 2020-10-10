@@ -1,10 +1,11 @@
 
-package fr.unice.polytech.soa.team.j.bluegalacticx.springrocket;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,9 +31,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketRPCService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
@@ -63,11 +61,12 @@ class RocketRPCServiceTest {
 	@MockBean
 	private RestService restService;
 
+	@MockBean
+	private MissionRPCClient missionRpcClient;
+
 	@BeforeAll
 	public void init() throws IOException {
-		Mockito.lenient().when(restService.getCoordinatesFromMission("1"))
-				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
-		Mockito.lenient().when(restService.getCoordinatesFromMission("2"))
+		Mockito.lenient().when(restService.getCoordinatesFromMission(any(String.class)))
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
 	}
 
@@ -126,31 +125,6 @@ class RocketRPCServiceTest {
 
 	@Test
 	@Order(4)
-	public void setSameRocketWithMultipleMissionShouldBeOkayIfAtBaseTest() throws Exception {
-		Rocket r = RocketsMocked.find("1").orElse(null);
-		r.status(RocketStatus.AT_BASE);
-
-		MissionRequest request = MissionRequest.newBuilder().setMissionId("2").setRocketId("1").build();
-		StreamRecorder<Empty> responseObserver = StreamRecorder.create();
-		rocketRpcService.setReadyToLaunch(request, responseObserver);
-
-		if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
-			fail("The call did not terminate in time");
-		}
-		assertNull(responseObserver.getError());
-
-		request = MissionRequest.newBuilder().setMissionId("1").setRocketId("1").build();
-		responseObserver = StreamRecorder.create();
-		rocketRpcService.setReadyToLaunch(request, responseObserver);
-
-		if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
-			fail("The call did not terminate in time");
-		}
-		assertNull(responseObserver.getError());
-	}
-
-	@Test
-	@Order(5)
 	public void setSameRocketWithMultipleMissionErrorIfNotAtBaseTest() throws Exception {
 		Rocket r = RocketsMocked.find("1").orElse(null);
 		r.status(RocketStatus.IN_SERVICE);
@@ -169,7 +143,7 @@ class RocketRPCServiceTest {
 	}
 
 	@Test
-	@Order(6)
+	@Order(5)
 	public void destroyRocketNotDestroyedIsOkTest() throws Exception {
 		DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setRocketId("1").build();
 		StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
@@ -186,7 +160,7 @@ class RocketRPCServiceTest {
 	}
 
 	@Test
-	@Order(7)
+	@Order(6)
 	public void destroyRocketAlreadyDestroyedIsKoTest() throws Exception {
 		DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setRocketId("1").build();
 		StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
@@ -202,7 +176,7 @@ class RocketRPCServiceTest {
 	}
 
 	@Test
-	@Order(8)
+	@Order(7)
 	public void goToNextStageTest() throws Exception {
 		NextStageRequest request = NextStageRequest.newBuilder().setRocketId("1").build();
 		StreamRecorder<NextStageReply> responseObserver = StreamRecorder.create();

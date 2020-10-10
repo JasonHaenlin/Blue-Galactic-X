@@ -6,17 +6,29 @@ public class Booster {
     private BoosterStatus status;
     private int fuelLevel = 100;
 
-    public Booster(){}
+    public Booster() {
+    }
 
     public Booster(BoosterStatus status) {
         this.status = status;
     }
 
-    public int getFuelLevel(){
+    public int getFuelLevel() {
         return this.fuelLevel;
     }
 
-    public Booster fuelLevel(int fuelLevel){
+    public void reduceFuel(int fuel) {
+        this.fuelLevel -= fuel;
+        if (this.fuelLevel < 0) {
+            this.fuelLevel = 0;
+        }
+    }
+
+    public BoosterStatus getStatus() {
+        return status;
+    }
+
+    public Booster fuelLevel(int fuelLevel) {
         this.fuelLevel = fuelLevel;
         return this;
     }

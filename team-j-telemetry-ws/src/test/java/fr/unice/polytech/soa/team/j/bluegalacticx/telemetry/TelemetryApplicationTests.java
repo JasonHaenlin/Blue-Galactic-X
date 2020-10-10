@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springTelemetry;
+package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -18,14 +18,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.springTelemetry.utils.JsonUtils;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.TelemetryController;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.TelemetryService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.MongoTelemetryConfig;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryRocketDataRepository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryRocketDataException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataRocketIdException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.utils.JsonUtils;
 
 @AutoConfigureMockMvc
 @WebMvcTest(TelemetryController.class)

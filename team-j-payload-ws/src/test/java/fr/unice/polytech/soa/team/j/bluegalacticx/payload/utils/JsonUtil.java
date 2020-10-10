@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springPayload.utils;
+package fr.unice.polytech.soa.team.j.bluegalacticx.payload.utils;
 
 import java.io.IOException;
 

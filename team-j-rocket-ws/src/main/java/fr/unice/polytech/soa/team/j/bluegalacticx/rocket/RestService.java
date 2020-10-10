@@ -20,6 +20,10 @@ public class RestService {
         return webClientMission.get().uri(id + "/coordinates").retrieve().bodyToMono(SpaceCoordinate.class);
     }
 
+    public void postMissionStatus(SpaceMetrics telemetry) {
+        webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class);
+    }
+
     public void postTelemetry(SpaceMetrics telemetry) {
         webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class);
     }

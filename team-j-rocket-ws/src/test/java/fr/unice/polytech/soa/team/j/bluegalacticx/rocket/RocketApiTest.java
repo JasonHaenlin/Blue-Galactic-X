@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springrocket;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.SpaceMetricsMocked;
 
 @Tags(value = { @Tag("api"), @Tag("api-rocket") })
@@ -46,35 +46,45 @@ public class RocketApiTest {
 
         ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
         assertEquals(SpaceMetricsMocked.inAir.getDistance(), ms.getDistance());
-        assertEquals(SpaceMetricsMocked.inAir.getFuelLevel(), ms.getFuelLevel());
+        assertEquals(SpaceMetricsMocked.inAir.retrieveActiveBooster().getFuelLevel(),
+                ms.retrieveActiveBooster().getFuelLevel());
 
         double lDist;
         double lFuel;
 
         for (int i = 0; i < 5; i++) {
             lDist = SpaceMetricsMocked.inAir.getDistance();
-            lFuel = SpaceMetricsMocked.inAir.getFuelLevel();
+            lFuel = SpaceMetricsMocked.inAir.retrieveLastBooster().getFuelLevel();
             ms = api.retrieveLastMetrics();
             assertTrue(lDist > ms.getDistance());
-            assertTrue(lFuel > ms.getFuelLevel());
+            assertTrue(lFuel > ms.retrieveLastBooster().getFuelLevel());
         }
-        System.out.println("stop");
     }
 
     @Test
-    public void shouldBeZeroOfDistanceAfterIterationsTest() {
+    public void shouldBeZeroOfDistanceAfterIterationsTest() throws BoosterDestroyedException {
         SpaceMetrics ms;
         ms = api.retrieveLastMetrics();
         assertEquals(SpaceMetricsMocked.onGround, ms);
 
         ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "");
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             ms = api.retrieveLastMetrics();
         }
 
-        assertTrue(0.0 == ms.getDistance());
-        assertTrue(10.0 == ms.getFuelLevel());
+        assertEquals(7.0, ms.getDistance(), 0.1);
+        assertEquals(0, ms.retrieveLastBooster().getFuelLevel());
+
+        api.dettachStage();
+
+        for (int i = 0; i < 20; i++) {
+            ms = api.retrieveLastMetrics();
+        }
+
+        assertEquals(0.0, ms.getDistance(), 0.1);
+        assertEquals(0, ms.retrieveLastBooster().getFuelLevel());
+
     }
 
 }
