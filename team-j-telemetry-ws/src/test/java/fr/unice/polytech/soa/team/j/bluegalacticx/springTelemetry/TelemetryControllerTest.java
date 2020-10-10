@@ -20,10 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.TelemetryController;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.TelemetryService;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.MongoTelemetryConfig;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryRocketDataRepository;
 
 @WebMvcTest
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = { TelemetryController.class, TelemetryService.class })
+@ContextConfiguration(classes = { TelemetryController.class, TelemetryService.class,
+        TelemetryRocketDataRepository.class, MongoTelemetryConfig.class })
 @Tags(value = { @Tag("mvc"), @Tag("mvc-telemetry") })
 @TestMethodOrder(OrderAnnotation.class)
 public class TelemetryControllerTest {
