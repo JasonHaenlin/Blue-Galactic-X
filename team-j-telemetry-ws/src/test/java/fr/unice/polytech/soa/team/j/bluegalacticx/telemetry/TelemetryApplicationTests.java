@@ -42,7 +42,7 @@ class TelemetryApplicationTests {
 
         rocketData = new TelemetryRocketData();
         rocketData.setRocketId("125");
-        rocketData.fuelLevel(50);
+        rocketData.heatShield(50);
 
     }
 
@@ -78,7 +78,7 @@ class TelemetryApplicationTests {
     @Test
     public void createTelemetryDataRocketNoIdTest() throws Exception {
 
-        TelemetryRocketData telemetryRocketDataNoId = new TelemetryRocketData().fuelLevel(50);
+        TelemetryRocketData telemetryRocketDataNoId = new TelemetryRocketData().heatShield(50);
 
         // @formatter:off
         Mockito.doThrow(new TelemetryDataRocketIdException())
@@ -125,7 +125,7 @@ class TelemetryApplicationTests {
     public void retrieveTelemetryDataRocketExistTest() throws Exception {
 
         TelemetryRocketData telemetryRocketData = new TelemetryRocketData();
-        telemetryRocketData.fuelLevel(100);
+        telemetryRocketData.heatShield(95.0);
         telemetryRocketData.setRocketId("125");
 
         when(telemetryService.retrieveRocketData("125")).thenReturn(telemetryRocketData);
@@ -134,8 +134,8 @@ class TelemetryApplicationTests {
         mvc.perform(get("/telemetry/rocket/125").param("rocketId", "125")
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath(".fuelLevel").exists())
-                    .andExpect(jsonPath(".fuelLevel").value(100))
+                    .andExpect(jsonPath(".heatShield").exists())
+                    .andExpect(jsonPath(".heatShield").value(95.0))
                     .andExpect(jsonPath(".rocketId").exists())
                     .andExpect(jsonPath(".rocketId").value("125"));
          // @formatter:on
