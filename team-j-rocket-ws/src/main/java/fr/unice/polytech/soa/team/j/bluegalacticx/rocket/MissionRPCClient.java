@@ -41,7 +41,7 @@ public class MissionRPCClient {
 
             @Override
             public void onCompleted() {
-                LOG.info("Mission started");
+                LOG.error("Mission started");
             }
         };
 
