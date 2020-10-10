@@ -10,6 +10,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 
 public class RocketsMocked {
@@ -22,6 +23,7 @@ public class RocketsMocked {
             rockets.add(new Rocket()
                     .id("1")
                     .status(RocketStatus.AT_BASE)
+                    .spaceCoordinate(new SpaceCoordinate(10,10,10))
                     .report(new RocketReport()
                         .fuelLevel(50)
                         .remainingEstimatedTime(160)
@@ -31,13 +33,14 @@ public class RocketsMocked {
                         .boosterRGA(5)
                         .irradiance(350)
                         .temperature(300)
-                        .groundVibration(400)
+                        .vibration(400)
                         .midRocketRGA(9))
                     );
 
             rockets.add(new Rocket()
                     .id("2")
                     .status(RocketStatus.UNDER_CONSTRUCTION)
+                    .spaceCoordinate(new SpaceCoordinate(10,10,10))
                     .report(new RocketReport()
                         .fuelLevel(0)
                         .engine(new Engine(EngineState.INITIALIZATION, EngineState.INITIALIZATION))
@@ -46,7 +49,7 @@ public class RocketsMocked {
                         .boosterRGA(5)
                         .irradiance(10)
                         .temperature(25)
-                        .groundVibration(0)
+                        .vibration(0)
                         .midRocketRGA(9))
                     );
             // @formatter:on

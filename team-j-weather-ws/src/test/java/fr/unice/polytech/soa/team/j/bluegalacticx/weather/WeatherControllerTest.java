@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springweather;
+package fr.unice.polytech.soa.team.j.bluegalacticx.weather;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
@@ -20,11 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.springweather.utils.JsonUtil;
-import fr.unice.polytech.soa.team.j.bluegalacticx.weather.WeatherController;
-import fr.unice.polytech.soa.team.j.bluegalacticx.weather.WeatherService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.weather.utils.JsonUtil;
 
 @AutoConfigureMockMvc
 @WebMvcTest

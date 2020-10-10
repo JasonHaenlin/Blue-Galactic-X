@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springrocket;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,12 +19,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketController;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Engine;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.EngineState;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
-import fr.unice.polytech.soa.team.j.bluegalacticx.springrocket.utils.JsonUtil;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.utils.JsonUtil;
 
 @AutoConfigureMockMvc
 @WebMvcTest
@@ -43,7 +41,7 @@ public class RocketControllerTest {
     @Order(1)
     public void getRocketStatusShouldBeOkTest() throws Exception {
         mvc.perform(get("/rocket/status/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(6)));
+                .andExpect(jsonPath("$.*", hasSize(7)));
     }
 
     @Test

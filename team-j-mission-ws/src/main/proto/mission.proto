@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
+
+option java_multiple_files = true;
+option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto";
+
+service Mission {
+  rpc startMission(MissionRequest) returns (google.protobuf.Empty) {}
+  rpc failedMission(MissionRequest) returns (google.protobuf.Empty) {}
+}
+
+message MissionRequest { string missionId = 1; }

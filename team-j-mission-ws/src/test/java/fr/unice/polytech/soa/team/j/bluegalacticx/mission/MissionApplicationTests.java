@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springmission;
+package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,9 +29,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.MissionController;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.MissionService;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.RestApiService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
@@ -42,7 +39,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoes
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.replies.MissionReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.RocketStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.springmission.utils.JsonUtils;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils.JsonUtils;
 
 @AutoConfigureMockMvc
 @WebMvcTest(MissionController.class)

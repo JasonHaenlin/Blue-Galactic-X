@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springPayload;
+package fr.unice.polytech.soa.team.j.bluegalacticx.payload;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,13 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.PayloadController;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.PayloadService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.springPayload.utils.JsonUtil;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.utils.JsonUtil;
 
 @AutoConfigureMockMvc
 @WebMvcTest

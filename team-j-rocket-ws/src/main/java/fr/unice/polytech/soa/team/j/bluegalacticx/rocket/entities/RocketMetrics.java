@@ -1,29 +1,31 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class RocketMetrics {
 
-    private int irradiance = 0;         // sun sensors in nm
-    private int velocityVariation = 0;  // accelerometers value in mm/s
-    private int temperature = 0;        // temperature in °C
-    private int groundVibration = 0;    // ground vibration in Hz
-    private int boosterRGA = 0;         // RGA of booster in %
-    private int midRocketRGA = 0;       // RGA of the middle of the rocket in %
-    private int fuelLevel = 100;        // Fuel Level in %
+    private int irradiance = 0; // sun sensors in nm
+    private int velocityVariation = 0; // accelerometers value in mm/s
+    private int temperature = 0; // temperature in °C
+    private int vibration = 0; // ground vibration in Hz
+    private int boosterRGA = 0; // RGA of booster in %
+    private int midRocketRGA = 0; // RGA of the middle of the rocket in %mvn te
+    private List<Booster> boosters = new ArrayList<>();
 
     public RocketMetrics() {
     }
 
-    public RocketMetrics(int irradiance, int velocityVariation, int temperature, int groundVibration, int boosterRGA,
-            int midRocketRGA, int fuelLevel) {
+    public RocketMetrics(int irradiance, int velocityVariation, int temperature, int vibration, int boosterRGA,
+            int midRocketRGA, List<Booster> boosters) {
         this.irradiance = irradiance;
         this.velocityVariation = velocityVariation;
         this.temperature = temperature;
-        this.groundVibration = groundVibration;
+        this.vibration = vibration;
         this.boosterRGA = boosterRGA;
         this.midRocketRGA = midRocketRGA;
-        this.fuelLevel = fuelLevel;
+        this.boosters = boosters;
     }
 
     public int getIrradiance() {
@@ -50,12 +52,12 @@ public class RocketMetrics {
         this.temperature = temperature;
     }
 
-    public int getGroundVibration() {
-        return this.groundVibration;
+    public int getVibration() {
+        return this.vibration;
     }
 
-    public void setGroundVibration(int groundVibration) {
-        this.groundVibration = groundVibration;
+    public void setVibration(int vibration) {
+        this.vibration = vibration;
     }
 
     public int getBoosterRGA() {
@@ -74,12 +76,17 @@ public class RocketMetrics {
         this.midRocketRGA = midRocketRGA;
     }
 
-    public int getFuelLevel() {
-        return this.fuelLevel;
+    public List<Booster> getBoosters() {
+        return this.boosters;
     }
 
-    public void setFuelLevel(int fuelLevel) {
-        this.fuelLevel = fuelLevel;
+    public void setBoosters(List<Booster> boosters) {
+        this.boosters = boosters;
+    }
+
+    public RocketMetrics addBooster(Booster booster) {
+        this.boosters.add(booster);
+        return this;
     }
 
     public RocketMetrics irradiance(int irradiance) {
@@ -97,8 +104,8 @@ public class RocketMetrics {
         return this;
     }
 
-    public RocketMetrics groundVibration(int groundVibration) {
-        this.groundVibration = groundVibration;
+    public RocketMetrics vibration(int vibration) {
+        this.vibration = vibration;
         return this;
     }
 
@@ -112,9 +119,27 @@ public class RocketMetrics {
         return this;
     }
 
-    public RocketMetrics fuelLevel(int fuelLevel) {
-        this.fuelLevel = fuelLevel;
+    public RocketMetrics boosters(List<Booster> boosters) {
+        this.boosters = boosters;
         return this;
+    }
+
+    public Booster retrieveActiveBooster() {
+        for (Booster booster : boosters) {
+            if (booster.getFuelLevel() > 0 && booster.getStatus() == BoosterStatus.RUNNING) {
+                return booster;
+            }
+        }
+        return null;
+    }
+
+    public Booster retrieveLastBooster() {
+        for (Booster booster : boosters) {
+            if (booster.getStatus() == BoosterStatus.RUNNING) {
+                return booster;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -126,22 +151,22 @@ public class RocketMetrics {
         }
         RocketMetrics rocketMetrics = (RocketMetrics) o;
         return irradiance == rocketMetrics.irradiance && velocityVariation == rocketMetrics.velocityVariation
-                && temperature == rocketMetrics.temperature && groundVibration == rocketMetrics.groundVibration
+                && temperature == rocketMetrics.temperature && vibration == rocketMetrics.vibration
                 && boosterRGA == rocketMetrics.boosterRGA && midRocketRGA == rocketMetrics.midRocketRGA
-                && fuelLevel == rocketMetrics.fuelLevel;
+                && Objects.equals(boosters, rocketMetrics.boosters);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(irradiance, velocityVariation, temperature, groundVibration, boosterRGA, midRocketRGA, fuelLevel);
+        return Objects.hash(irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA, boosters);
     }
 
     @Override
     public String toString() {
         return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
-                + ", temperature='" + getTemperature() + "'" + ", groundVibration='" + getGroundVibration() + "'"
-                + ", boosterRGA='" + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'"
-                + ", fuelLevel='" + getFuelLevel() + "'" + "}";
+                + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
+                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", boosters='" + getBoosters()
+                + "'" + "}";
     }
 
     @Deprecated

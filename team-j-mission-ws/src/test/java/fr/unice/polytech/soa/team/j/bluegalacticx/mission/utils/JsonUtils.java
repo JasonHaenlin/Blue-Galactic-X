@@ -1,10 +1,11 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springTelemetry.utils;
+package fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonUtils {
 
 	private JsonUtils() {
+
 	}
 
 	public static String toJson(final Object obj) {

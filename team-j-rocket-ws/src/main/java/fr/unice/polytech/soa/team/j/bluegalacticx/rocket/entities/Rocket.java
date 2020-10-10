@@ -13,13 +13,10 @@ public class Rocket {
     private RocketMetrics metrics;
     private RocketReport report;
     private RocketStatus status;
-    private Booster booster;
     private String missionId;
-
-    
+    private SpaceCoordinate objective;
 
     public Rocket() {
-        this.booster = new Booster(BoosterStatus.READY);
     }
 
     public void setId(String id) {
@@ -36,7 +33,6 @@ public class Rocket {
         this.report = report;
         this.status = status;
         this.missionId = missionId;
-        this.booster = new Booster(BoosterStatus.READY);
     }
 
     public RocketMetrics retrieveLastMetrics() throws RocketDestroyedException {
@@ -80,6 +76,10 @@ public class Rocket {
         this.missionId = missionId;
     }
 
+    public String getTheCurrentMissionId() {
+        return missionId;
+    }
+
     public void launchSequenceActivated() throws NoSameStatusException, BoosterDestroyedException {
         if (status == RocketStatus.IN_SERVICE) {
             throw new NoSameStatusException(status.toString());
@@ -94,8 +94,12 @@ public class Rocket {
         this.status = RocketStatus.DESTROYED;
     }
 
-    public void goToNextStage() throws BoosterDestroyedException{
-        this.booster.status(BoosterStatus.LANDING);
+    public void setMissionObjective(SpaceCoordinate coordinatesFromMission) {
+        this.objective = coordinatesFromMission;
+    }
+
+    public SpaceCoordinate retrieveObjectiveCoordinates() {
+        return objective;
     }
 
     public Rocket id(String id) {
@@ -124,8 +128,8 @@ public class Rocket {
         return this;
     }
 
-    public Rocket booster(Booster booster) {
-        this.booster = booster;
+    public Rocket spaceCoordinate(SpaceCoordinate objective) {
+        this.objective = objective;
         return this;
     }
 

@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.springweather.utils;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.utils;
 
 import java.io.IOException;
 
