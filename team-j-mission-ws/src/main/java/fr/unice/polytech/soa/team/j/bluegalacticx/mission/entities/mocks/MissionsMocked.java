@@ -4,6 +4,7 @@ import java.util.*;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
 
 public class MissionsMocked {
     static public List<Mission> missions;
@@ -13,6 +14,7 @@ public class MissionsMocked {
         // @formatter:off
         missions.add(new Mission()
                 .id("1")
+                .destination(new SpaceCoordinate(1,2,3))
                 .status(MissionStatus.PENDING)
                 .rocketId("1")
                 .date(new Date())
@@ -20,6 +22,7 @@ public class MissionsMocked {
 
         missions.add(new Mission()
                 .id("2")
+                .destination(new SpaceCoordinate(3,2,1))
                 .status(MissionStatus.STARTED)
                 .rocketId("2")
                 .date(new Date())
