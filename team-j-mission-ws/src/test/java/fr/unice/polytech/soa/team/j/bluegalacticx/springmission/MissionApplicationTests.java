@@ -1,6 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.springmission;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,18 +41,21 @@ class MissionApplicationTests {
 	private Mission mission;
 	private MissionReply missionReply;
 	private Date date;
-	private int rocketId;
+	private String rocketId;
+	private String missionId;
 
 	@BeforeEach
 	public void setup() {
 		mission = new Mission();
 		date = new Date();
-		rocketId = 100;
-		mission = new Mission(rocketId, date);
+		rocketId = "100";
+		missionId = "1";
+		mission = new Mission(missionId, rocketId, date);
 		missionReply = new MissionReply(mission);
 	}
 
 	@Test
+	@Order(1)
 	void createMissionWithGoodParametersTest() throws Exception {
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
@@ -63,11 +69,12 @@ class MissionApplicationTests {
 	}
 
 	@Test
+	@Order(2)
 	void createMissionWithBadParametersTest() throws Exception {
 
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
-		mvc.perform(MockMvcRequestBuilders.post("/mission/create").content("Create a mission or I'll kick ur ass ")
+		mvc.perform(MockMvcRequestBuilders.post("/mission/create").content("Create a mission")
 				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest());
 
@@ -76,6 +83,7 @@ class MissionApplicationTests {
 	}
 
 	@Test
+	@Order(3)
 	void createMissionWithBadUrlTest() throws Exception {
 
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
@@ -89,6 +97,7 @@ class MissionApplicationTests {
 	}
 
 	@Test
+	@Order(4)
 	void createInvalidMissionTest() throws Exception {
 
 		Mission invalidMission = new Mission();
@@ -100,6 +109,20 @@ class MissionApplicationTests {
 				.andExpect(status().isBadRequest()).andExpect(status().reason("Invalid mission, give a correct date and an available rocket ID (positive and greather than 0)"));
 
 		verify(missionService, times(1)).createMission(any(Mission.class));
+
+	}
+
+	@Test
+	@Order(5)
+	void changeMissionStatusToSuccessFul() throws Exception {
+		mission.setMissionStatus(MissionStatus.SUCCESSFUL);
+		when(missionService.setMissionStatus(any(MissionStatus.class), any())).thenReturn(new MissionReply(mission));
+
+		mvc.perform(MockMvcRequestBuilders.post("/mission/status/"+missionId).content(JsonUtils.toJson(MissionStatus.SUCCESSFUL))
+				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath(".missionStatus").value("SUCCESSFUL"));
+
+		verify(missionService, times(1)).setMissionStatus(eq(MissionStatus.SUCCESSFUL), eq("1"));
 
 	}
 
