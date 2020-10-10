@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
@@ -16,22 +18,36 @@ public class TelemetryRocketData {
     private int vibration = 0; // ground vibration in Hz
     private int boosterRGA = 0; // RGA of booster in %
     private int midRocketRGA = 0; // RGA of the middle of the rocket in %
-    private int fuelLevel = 100; // Fuel Level in %
     private double heatShield; // %
     private double speed; // m/s
-    private int x;
-    private int y;
-    private int z;
+    private double distance;
+    private List<Booster> boosters = new ArrayList<>();
 
     public TelemetryRocketData() {
     }
 
-    public void setRocketId(String rocketId) {
+    public TelemetryRocketData(String rocketId, int irradiance, int velocityVariation, int temperature, int vibration,
+            int boosterRGA, int midRocketRGA, double heatShield, double speed, double distance,
+            List<Booster> boosters) {
         this.rocketId = rocketId;
+        this.irradiance = irradiance;
+        this.velocityVariation = velocityVariation;
+        this.temperature = temperature;
+        this.vibration = vibration;
+        this.boosterRGA = boosterRGA;
+        this.midRocketRGA = midRocketRGA;
+        this.heatShield = heatShield;
+        this.speed = speed;
+        this.distance = distance;
+        this.boosters = boosters;
     }
 
     public String getRocketId() {
-        return rocketId;
+        return this.rocketId;
+    }
+
+    public void setRocketId(String rocketId) {
+        this.rocketId = rocketId;
     }
 
     public int getIrradiance() {
@@ -98,28 +114,25 @@ public class TelemetryRocketData {
         this.speed = speed;
     }
 
-    public int getX() {
-        return this.x;
+    public double getDistance() {
+        return this.distance;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
-    public int getY() {
-        return this.y;
+    public List<Booster> getBoosters() {
+        return this.boosters;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setBoosters(List<Booster> boosters) {
+        this.boosters = boosters;
     }
 
-    public int getZ() {
-        return this.z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
+    public TelemetryRocketData rocketId(String rocketId) {
+        this.rocketId = rocketId;
+        return this;
     }
 
     public TelemetryRocketData irradiance(int irradiance) {
@@ -152,11 +165,6 @@ public class TelemetryRocketData {
         return this;
     }
 
-    public TelemetryRocketData fuelLevel(int fuelLevel) {
-        this.fuelLevel = fuelLevel;
-        return this;
-    }
-
     public TelemetryRocketData heatShield(double heatShield) {
         this.heatShield = heatShield;
         return this;
@@ -167,27 +175,14 @@ public class TelemetryRocketData {
         return this;
     }
 
-    public TelemetryRocketData x(int x) {
-        this.x = x;
+    public TelemetryRocketData distance(double distance) {
+        this.distance = distance;
         return this;
     }
 
-    public TelemetryRocketData y(int y) {
-        this.y = y;
+    public TelemetryRocketData boosters(List<Booster> boosters) {
+        this.boosters = boosters;
         return this;
-    }
-
-    public TelemetryRocketData z(int z) {
-        this.z = z;
-        return this;
-    }
-
-    public int getFuelLevel() {
-        return this.fuelLevel;
-    }
-
-    public void setFuelLevel(int fuelLevel) {
-        this.fuelLevel = fuelLevel;
     }
 
     @Override
@@ -197,22 +192,28 @@ public class TelemetryRocketData {
         if (!(o instanceof TelemetryRocketData)) {
             return false;
         }
-        TelemetryRocketData telemetryData = (TelemetryRocketData) o;
-        return fuelLevel == telemetryData.fuelLevel;
+        TelemetryRocketData telemetryRocketData = (TelemetryRocketData) o;
+        return Objects.equals(rocketId, telemetryRocketData.rocketId) && irradiance == telemetryRocketData.irradiance
+                && velocityVariation == telemetryRocketData.velocityVariation
+                && temperature == telemetryRocketData.temperature && vibration == telemetryRocketData.vibration
+                && boosterRGA == telemetryRocketData.boosterRGA && midRocketRGA == telemetryRocketData.midRocketRGA
+                && heatShield == telemetryRocketData.heatShield && speed == telemetryRocketData.speed
+                && distance == telemetryRocketData.distance && Objects.equals(boosters, telemetryRocketData.boosters);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fuelLevel);
+        return Objects.hash(rocketId, irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA,
+                heatShield, speed, distance, boosters);
     }
 
     @Override
     public String toString() {
-        return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
-                + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
-                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", fuelLevel='"
-                + getFuelLevel() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='" + getSpeed() + "'"
-                + ", x='" + getX() + "'" + ", y='" + getY() + "'" + ", z='" + getZ() + "'" + "}";
+        return "{" + " rocketId='" + getRocketId() + "'" + ", irradiance='" + getIrradiance() + "'"
+                + ", velocityVariation='" + getVelocityVariation() + "'" + ", temperature='" + getTemperature() + "'"
+                + ", vibration='" + getVibration() + "'" + ", boosterRGA='" + getBoosterRGA() + "'" + ", midRocketRGA='"
+                + getMidRocketRGA() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='" + getSpeed() + "'"
+                + ", distance='" + getDistance() + "'" + ", boosters='" + getBoosters() + "'" + "}";
     }
 
 }
