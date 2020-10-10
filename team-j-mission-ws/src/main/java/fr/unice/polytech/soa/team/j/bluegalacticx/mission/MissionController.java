@@ -24,6 +24,9 @@ public class MissionController {
     @Autowired
     private MissionService missionService;
 
+    @Autowired
+    private RestApiService restService;
+
     @PostMapping("/create")
     public MissionReply createNewMission(@RequestBody Mission mission) {
         try {
@@ -51,21 +54,25 @@ public class MissionController {
         }
     }
 
-    @PostMapping("/status/rocket/{id}")
-    public void postRocketStatus(@RequestBody RocketStatus status, @PathVariable String id) {
+    @PostMapping("/status/{missionId}/rocket")
+    public void postRocketStatus(@RequestBody RocketStatus status, @PathVariable String missionId) {
         try {
-            missionService.updateRocketStatus(id, status);
+            restService.updateRocketStatus(missionId, status);
         } catch (BadRocketIdException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (MissionDoesNotExistException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @PostMapping("/status/payload/{id}")
-    public void postPayloadStatus(@RequestBody PayloadStatus status, @PathVariable String id) {
+    @PostMapping("/status/{missionId}/payload")
+    public void postPayloadStatus(@RequestBody PayloadStatus status, @PathVariable String missionId) {
         try {
-            missionService.updatePayloadStatus(id, status);
+            restService.updatePayloadStatus(missionId, status);
         } catch (BadPayloadIdException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (MissionDoesNotExistException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
