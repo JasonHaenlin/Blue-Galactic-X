@@ -4,6 +4,7 @@ import com.google.protobuf.Empty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionGrpc;
@@ -16,14 +17,11 @@ import io.grpc.stub.StreamObserver;
 @Service
 public class MissionRPCClient {
     private final static Logger LOG = LoggerFactory.getLogger(MissionRPCClient.class);
-    private static final String source = "localhost";
-    private static final int port = 8071;
-
     private ManagedChannel channel;
     private MissionStub stub;
 
-    public MissionRPCClient() {
-        this.channel = ManagedChannelBuilder.forAddress(source,port).usePlaintext().build();
+    public MissionRPCClient(@Value("${api.mission.host}") String source, @Value("${api.mission.grpc}") int port) {
+        this.channel = ManagedChannelBuilder.forAddress(source, port).usePlaintext().build();
         this.stub = MissionGrpc.newStub(channel);
     }
 

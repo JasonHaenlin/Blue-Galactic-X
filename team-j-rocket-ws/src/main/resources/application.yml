@@ -22,3 +22,4 @@ api:
   mission:
     host: ${MISSION_HOST:localhost}
     port: ${MISSION_PORT:8070}
+    grpc: ${MISSION_GRPC:8071}
