@@ -28,10 +28,6 @@ public class RocketMetrics {
         this.boosters = boosters;
     }
 
-    public boolean isInMaxQ(){
-        return true;
-    }
-
     public int getIrradiance() {
         return this.irradiance;
     }
