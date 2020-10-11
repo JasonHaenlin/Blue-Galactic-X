@@ -53,7 +53,11 @@ public class CreateMissionDemoStepDef implements En {
 
     private LaunchOrderReply launchOrderReply;
     private NextStageReply nextStageReply;
+<<<<<<< HEAD
     private RocketMetrics rocketMetrics;
+=======
+    private SpaceMetrics rocketMetrics;
+>>>>>>> [#60] Demo UAT first part
     private TelemetryRocketData telemetryRocketData;
     private List<Anomaly> listAnomalies;
     private Payload payload;
@@ -90,8 +94,14 @@ public class CreateMissionDemoStepDef implements En {
 
 
         And("payload department create a new payload", () -> {
+<<<<<<< HEAD
             payload = new Payload().id("4f6911a8-437a-43fc-adad-a0ed6c6f69a7").type(PayloadType.SPACECRAFT).weight(10000);    
             payloadREST.createNewPayload(payload);
+=======
+            payload = new Payload().type(PayloadType.SPACECRAFT).weight(10000);
+            System.out.println(payload);        
+            //payloadREST.createNewPayload(payload);
+>>>>>>> [#60] Demo UAT first part
 
         });
 
@@ -122,6 +132,7 @@ public class CreateMissionDemoStepDef implements En {
             // need to check the boolean
             assertNotNull(launchOrderReply.getReply());
             missionREST.updateMissionStatus(MissionStatus.STARTED, "1");
+<<<<<<< HEAD
             
             telemetryREST.sendTelemetryRocketData(rocketMetrics,"1");
         });
@@ -145,10 +156,33 @@ public class CreateMissionDemoStepDef implements En {
         And("Jeff can consult the telemetry data", () -> {
             telemetryRocketData =  telemetryREST.retrieveTelemetryRocketData("1");
             assertEquals(true, telemetryRocketData!=null);
+=======
+        });
+        When("rocket first stage is empty in fuel", () -> {
+
+        });
+        Then("Elon split the rocket", () -> {
+            nextStageReply = rocketRPC.nextStage("1");
+            assertEquals(true, nextStageReply.getMovedToNextStage());
+        });
+        And("Elon send the telemetry rocket data to Jeff", () -> {
+
+            rocketMetrics = rocketREST.getMetrics("1");
+            rocketMetrics = rocketMetrics.heatShield(3.0).speed(2.0).distance(1.0);
+            rocketMetrics.setRocketId("1");
+
+            assertEquals(true, rocketMetrics!=null);
+
+            telemetryREST.sendTelemetryRocketData(rocketMetrics,"1");
+        });
+        And("Jeff can consult the telemetry data", () -> {
+            telemetryRocketData =  telemetryREST.retrieveTelemetryRocketData("1");
+>>>>>>> [#60] Demo UAT first part
 
         });
         And("Jeff can inform that there is no anomaly", () -> {
             listAnomalies = telemetryREST.checkForAnomalies();
+<<<<<<< HEAD
             assertEquals(true, listAnomalies.size()==0);
 
         });
@@ -168,6 +202,22 @@ public class CreateMissionDemoStepDef implements En {
             assertEquals(true, mission.getMissionStatus().equals(MissionStatus.SUCCESSFUL));
             payload = payloadREST.retrievePayload("4f6911a8-437a-43fc-adad-a0ed6c6f69a7");
             assertEquals(true, payload.getStatus().equals(PayloadStatus.DELIVERED));
+=======
+
+            assertEquals(true, listAnomalies.size()==0);
+
+        });
+        Then("the payload is delivered", () -> {
+            
+            //Payload payload = payloadREST.retrievePayloadStatus("1");
+            //assertEquals(true, payload.getStatus().equals(PayloadStatus.DELIVERED));
+
+        });
+        And("the mission is succesfull", () -> {
+            missionREST.updateMissionStatus(MissionStatus.SUCCESSFUL, "1");
+            //MissionReply missionReply = missionREST.retrieveMissionStatus("1");
+            //assertEquals(true, missionReply.getMission());
+>>>>>>> [#60] Demo UAT first part
 
         });
 

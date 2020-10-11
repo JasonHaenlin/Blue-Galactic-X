@@ -4,13 +4,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
-import java.util.List;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import java.net.http.HttpResponse;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.RestAPI;
@@ -36,10 +32,11 @@ public class PayloadREST extends RestAPI {
         });
     }
 
-    public Payload changePayloadStatus(PayloadStatus payload,String payloadId) throws IOException, InterruptedException {
+    public Payload changePayloadStatus(PayloadStatus payload, String payloadId)
+            throws IOException, InterruptedException {
         System.out.println(JsonUtils.toJson(payload));
         HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(payload)))
-                .header("Content-Type", "application/json").uri(URI.create(uri+"/"+payloadId)).build();
+                .header("Content-Type", "application/json").uri(URI.create(uri + "/" + payloadId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -49,18 +46,16 @@ public class PayloadREST extends RestAPI {
         });
     }
 
-    public Payload retrievePayload(String payloadId)
-            throws IOException, InterruptedException {
+    public Payload retrievePayload(String payloadId) throws IOException, InterruptedException {
 
-
-                HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri + "/"+payloadId)).build();
+        HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
+                .uri(URI.create(uri + "/" + payloadId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         return mapper.readValue(response.body(), new TypeReference<Payload>() {
         });
-        
+
     }
 
 }

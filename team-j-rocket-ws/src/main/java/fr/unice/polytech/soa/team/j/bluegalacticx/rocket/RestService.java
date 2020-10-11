@@ -34,7 +34,7 @@ public class RestService {
      // @formatter:on
 
     public Mono<SpaceCoordinate> getCoordinatesFromMission(String id) {
-        return webClientMission.get().uri("/destination/"+id).retrieve().bodyToMono(SpaceCoordinate.class);
+        return webClientMission.get().uri("/destination/" + id).retrieve().bodyToMono(SpaceCoordinate.class);
     }
 
     public void postMissionStatus(SpaceMetrics telemetry) {

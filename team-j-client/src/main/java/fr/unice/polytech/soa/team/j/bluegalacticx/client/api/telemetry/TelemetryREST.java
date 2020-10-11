@@ -4,19 +4,18 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import java.net.http.HttpResponse;
+import org.json.simple.parser.ParseException;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.entities.TelemetryRocketData;
-
-import org.json.simple.parser.ParseException;
 
 public class TelemetryREST extends RestAPI {
 
@@ -44,7 +43,7 @@ public class TelemetryREST extends RestAPI {
 
         return mapper.readValue(response.body(), new TypeReference<TelemetryRocketData>() {
         });
-        
+
     }
 
     public List<Anomaly> checkForAnomalies() throws IOException, InterruptedException {
@@ -58,5 +57,5 @@ public class TelemetryREST extends RestAPI {
         });
 
     }
-    
+
 }

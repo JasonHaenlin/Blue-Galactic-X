@@ -19,56 +19,54 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.payload.entities.Pa
 
 public class MissionREST extends RestAPI {
 
-    public MissionREST(String uri) {
-        super(uri);
-    }
+        public MissionREST(String uri) {
+                super(uri);
+        }
 
+        public String createNewMission(Mission mission) throws IOException, InterruptedException {
 
-    public String createNewMission(Mission mission) throws IOException, InterruptedException {
+                HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(mission)))
+                                .header("Content-Type", "application/json").uri(URI.create(uri + "/")).build();
 
-        HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(mission)))
-                .header("Content-Type", "application/json").uri(URI.create(uri + "/")).build();
+                client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        client.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+                return response.toString();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        }
 
-        return response.toString();
+        public void updatePayloadStatus(PayloadStatus payloadStatus, String missionId)
+                        throws IOException, InterruptedException {
 
-    }
+                HttpRequest request = HttpRequest.newBuilder()
+                                .POST(BodyPublishers.ofString(JsonUtils.toJson(payloadStatus)))
+                                .header("Content-Type", "application/json")
+                                .uri(URI.create(uri + "/status/" + missionId + "/payload")).build();
 
-    public void updatePayloadStatus(PayloadStatus payloadStatus,String missionId)
-            throws IOException, InterruptedException {
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        }
 
+        public void updateMissionStatus(MissionStatus missionStatus, String missionId)
+                        throws IOException, InterruptedException {
 
-        HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(payloadStatus)))
-                .header("Content-Type", "application/json").uri(URI.create(uri + "/status/"+missionId+"/payload")).build();
+                HttpRequest request = HttpRequest.newBuilder()
+                                .POST(BodyPublishers.ofString(JsonUtils.toJson(missionStatus)))
+                                .header("Content-Type", "application/json")
+                                .uri(URI.create(uri + "/status/" + missionId)).build();
 
-        client.send(request, HttpResponse.BodyHandlers.ofString());
-    }
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+        }
 
-    public void updateMissionStatus(MissionStatus missionStatus,String missionId)
-            throws IOException, InterruptedException {
-
-
-        HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(missionStatus)))
-                .header("Content-Type", "application/json").uri(URI.create(uri + "/status/"+missionId)).build();
-
-        client.send(request, HttpResponse.BodyHandlers.ofString());
-    }
-
-    public Mission retrieveMissionStatus(String missionId)
-            throws IOException, InterruptedException {
+        public Mission retrieveMissionStatus(String missionId) throws IOException, InterruptedException {
                 HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri + "/status/"+missionId)).build();
+                                .uri(URI.create(uri + "/status/" + missionId)).build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return mapper.readValue(response.body(), new TypeReference<Mission>() {
-        });
-        
-    }
+                return mapper.readValue(response.body(), new TypeReference<Mission>() {
+                });
 
-    
+        }
+
 }
