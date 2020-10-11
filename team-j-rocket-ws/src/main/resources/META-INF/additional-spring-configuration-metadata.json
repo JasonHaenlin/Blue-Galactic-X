@@ -19,11 +19,14 @@
             "name": "api.mission.port",
             "type": "java.lang.String",
             "description": "A description for 'api.mission.port'"
+<<<<<<< HEAD
         },
         {
             "name": "api.mission.grpc",
             "type": "java.lang.String",
             "description": "A description for 'api.mission.grpc'"
+=======
+>>>>>>> [#60] update docker env properties for spring-boot and link network
         }
     ]
 }
