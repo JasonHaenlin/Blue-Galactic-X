@@ -89,4 +89,8 @@ public class MissionController {
         }
     }
 
+    @GetMapping("/ping")
+    public String ping() {
+        return "ok";
+    }
 }

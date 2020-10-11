@@ -49,4 +49,9 @@ public class PayloadController {
         }
     }
 
+    @GetMapping("/ping")
+    public String ping() {
+        return "ok";
+    }
+
 }

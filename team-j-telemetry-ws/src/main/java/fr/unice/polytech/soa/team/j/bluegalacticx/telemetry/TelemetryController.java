@@ -61,4 +61,9 @@ public class TelemetryController {
 
     }
 
+    @GetMapping("/ping")
+    public String ping() {
+        return "ok";
+    }
+
 }
