@@ -2,6 +2,8 @@
 
 project name : **Blue Galactic X**
 
+NB : all deliverables not concerning code for the project is in deliverable
+
 ## Web Services Architecture
 
 [architecture](./docs/Architecture.md)
