@@ -19,23 +19,30 @@ public class MissionService {
     @Autowired
     private RestApiService restService;
 
-    public MissionReply createMission(Mission mission) throws InvalidMissionException {
+    public Mission createMission(Mission mission) throws InvalidMissionException {
         if (invalidMission(mission)) {
             throw new InvalidMissionException();
         }
-        return new MissionReply(mission);
+        MissionsMocked.missions.add(mission);
+        return mission;
     }
 
-    public MissionReply setMissionStatus(MissionStatus missionStatus, String missionId)
+    public MissionStatus setMissionStatus(MissionStatus missionStatus, String missionId)
             throws MissionDoesNotExistException, BadPayloadIdException {
         Mission mission = findMissionOrThrow(missionId);
         mission.setMissionStatus(missionStatus);
         restService.updatePayloadStatus(missionId, PayloadStatus.values()[missionStatus.ordinal()]);
-        return new MissionReply(mission);
+        return mission.getMissionStatus();
+    }
+
+    public Mission getMissionStatus(String missionId)
+            throws MissionDoesNotExistException {
+        Mission mission = findMissionOrThrow(missionId);
+        return mission;
     }
 
     private boolean invalidMission(Mission mission) {
-        return Integer.parseInt(mission.getRocketId()) <= 0 || mission.getDate() == null;
+        return mission.getDate() == null;
 
     }
 

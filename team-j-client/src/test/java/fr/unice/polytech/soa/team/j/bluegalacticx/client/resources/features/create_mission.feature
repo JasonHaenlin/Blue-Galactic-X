@@ -18,5 +18,4 @@ Feature: Create a new mission
         And Jeff can consult the telemetry data
         And Jeff can inform that there is no anomaly
         When the payload is on the destination point
-        Then the payload is delivered
-        And the mission is succesfull
+        Then the mission is succesfull

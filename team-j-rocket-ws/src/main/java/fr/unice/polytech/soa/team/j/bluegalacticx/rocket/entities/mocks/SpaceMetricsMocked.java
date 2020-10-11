@@ -58,7 +58,7 @@ public class SpaceMetricsMocked {
         // @formatter:off
         return (SpaceMetrics) inAir
                 .heatShield(randomDouble(5, inAir.getHeatShield()))
-                .distance(newDistance <0 ? 0 : newDistance)
+                .distance(newDistance <1 ? 0 : newDistance)
                 .speed(randomDouble(20, inAir.getSpeed()))
                 .irradiance(randomInt(10, inAir.getIrradiance()))
                 .velocityVariation(randomInt(10, inAir.getVelocityVariation()))

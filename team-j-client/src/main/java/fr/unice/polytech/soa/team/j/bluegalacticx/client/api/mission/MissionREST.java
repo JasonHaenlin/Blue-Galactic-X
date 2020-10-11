@@ -27,7 +27,7 @@ public class MissionREST extends RestAPI {
     public String createNewMission(Mission mission) throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(mission)))
-                .header("Content-Type", "application/json").uri(URI.create(uri + "/create")).build();
+                .header("Content-Type", "application/json").uri(URI.create(uri + "/")).build();
 
         client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -58,16 +58,14 @@ public class MissionREST extends RestAPI {
         client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    public MissionReply retrieveMissionStatus(String missionId)
+    public Mission retrieveMissionStatus(String missionId)
             throws IOException, InterruptedException {
-
-
                 HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
                 .uri(URI.create(uri + "/status/"+missionId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return mapper.readValue(response.body(), new TypeReference<MissionReply>() {
+        return mapper.readValue(response.body(), new TypeReference<Mission>() {
         });
         
     }

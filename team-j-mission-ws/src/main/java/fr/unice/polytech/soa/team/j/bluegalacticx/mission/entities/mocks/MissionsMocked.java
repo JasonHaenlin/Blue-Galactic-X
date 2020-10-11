@@ -17,6 +17,7 @@ public class MissionsMocked {
                 .destination(new SpaceCoordinate(1,2,3))
                 .status(MissionStatus.PENDING)
                 .rocketId("1")
+                .payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7")
                 .date(new Date())
         );
 
@@ -33,5 +34,7 @@ public class MissionsMocked {
     public static final Optional<Mission> find(String id) {
         return missions.stream().filter(r -> r.getId().equals(id)).findFirst();
     }
+
+
 
 }

@@ -27,9 +27,8 @@ public class RestApiService {
         @Value("${api.rocket.host}") String hostRocket,
         @Value("${api.rocket.port}") String portRocket
         ) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+hostPayload);
-        rocketClient = WebClient.create("http://" + hostPayload + ":" + portPayload + "/telemetry/");
-        payloadClient = WebClient.create("http://" + hostRocket + ":" + portRocket + "/mission/");
+        rocketClient = WebClient.create("http://" + hostRocket + ":" + portRocket + "/telemetry/");
+        payloadClient = WebClient.create("http://" + hostPayload + ":" + portPayload + "/payload/");
     }
     // @formatter:on
 
@@ -44,8 +43,8 @@ public class RestApiService {
     public void updatePayloadStatus(String missionId, PayloadStatus status)
             throws BadPayloadIdException, MissionDoesNotExistException {
         String pId = MissionsMocked.find(missionId).orElseThrow(() -> new MissionDoesNotExistException(missionId))
-                .getRocketId();
-        payloadClient.post().uri(URI.create("/" + pId)).body(BodyInserters.fromValue(status)).retrieve()
+                .getPayloadId();
+        payloadClient.post().uri("/"+pId).body(BodyInserters.fromValue(status)).retrieve()
                 .bodyToMono(Void.class).subscribe();
     }
 

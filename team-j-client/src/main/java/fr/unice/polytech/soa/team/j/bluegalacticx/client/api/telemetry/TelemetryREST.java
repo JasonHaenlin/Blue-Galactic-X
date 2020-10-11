@@ -16,8 +16,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.Roc
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.entities.TelemetryRocketData;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class TelemetryREST extends RestAPI {
