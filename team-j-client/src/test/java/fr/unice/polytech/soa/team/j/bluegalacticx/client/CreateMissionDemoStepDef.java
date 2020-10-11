@@ -12,7 +12,6 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.MissionREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.MissionReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.payload.PayloadREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.payload.entities.Payload;
@@ -23,8 +22,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.RocketRPC;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketReport;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.SpaceMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.TelemetryREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.entities.TelemetryRocketData;
@@ -72,7 +69,6 @@ public class CreateMissionDemoStepDef implements En {
 
         });
 
-
         And("rocket department create a new report", () -> {
 
             rocketReport = new RocketReport().fuelLevel(10).overallResult("Good");
@@ -87,16 +83,17 @@ public class CreateMissionDemoStepDef implements En {
             weatherREST.setReport(weatherReport);
         });
 
-
-
         And("payload department create a new payload", () -> {
-            payload = new Payload().id("4f6911a8-437a-43fc-adad-a0ed6c6f69a7").type(PayloadType.SPACECRAFT).weight(10000);    
+            payload = new Payload().id("4f6911a8-437a-43fc-adad-a0ed6c6f69a7").type(PayloadType.SPACECRAFT)
+                    .weight(10000);
             payloadREST.createNewPayload(payload);
 
         });
 
         When("I add a new mission", () -> {
-            String response = missionREST.createNewMission(new Mission().id("1").payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7").destination(new SpaceCoordinate(10,10,10)).date(new Date()));
+            String response = missionREST
+                    .createNewMission(new Mission().id("1").payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7")
+                            .destination(new SpaceCoordinate(10, 10, 10)).date(new Date()));
             assertEquals(true, response.contains("200"));
         });
 
@@ -109,29 +106,30 @@ public class CreateMissionDemoStepDef implements En {
         And("the rocket report is valid", () -> {
 
             RocketReport rocketReport = rocketREST.getReport("1");
-            assertEquals(true, rocketReport.getOverallResult().equals("No problem, the preparation of the rocket goes well."));
+            assertEquals(true,
+                    rocketReport.getOverallResult().equals("No problem, the preparation of the rocket goes well."));
         });
 
         Then("I can make a GO request", () -> {
-            rocketRPC.setReadyToLaunch("1","1");
+            rocketRPC.setReadyToLaunch("1", "1");
         });
         Then("Elon makes a launch request to rocket service", () -> {
-            launchOrderReply = rocketRPC.LaunchOrderRequest(true,"1");
+            launchOrderReply = rocketRPC.LaunchOrderRequest(true, "1");
         });
         Then("the launch order to the rocket is triggered if the rocket is ready to launch", () -> {
             // need to check the boolean
             assertNotNull(launchOrderReply.getReply());
             missionREST.updateMissionStatus(MissionStatus.STARTED, "1");
-            
-            telemetryREST.sendTelemetryRocketData(rocketMetrics,"1");
+
+            telemetryREST.sendTelemetryRocketData(rocketMetrics, "1");
         });
         When("rocket first stage is empty in fuel", () -> {
-            
-            telemetryRocketData =  telemetryREST.retrieveTelemetryRocketData("1");
-            while(telemetryRocketData.getBoosters().get(0).getFuelLevel() > 0){
+
+            telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
+            while (telemetryRocketData.getBoosters().get(0).getFuelLevel() > 0) {
                 telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
             }
-            assertEquals(true,telemetryRocketData.getBoosters().get(0).getFuelLevel()==0);
+            assertEquals(true, telemetryRocketData.getBoosters().get(0).getFuelLevel() == 0);
         });
         Then("Elon split the rocket", () -> {
             nextStageReply = rocketRPC.nextStage("1");
@@ -139,38 +137,37 @@ public class CreateMissionDemoStepDef implements En {
 
             rocketMetrics = rocketREST.getMetrics("1");
 
-            assertEquals(true, rocketMetrics!=null);
+            assertEquals(true, rocketMetrics != null);
 
         });
         And("Jeff can consult the telemetry data", () -> {
-            telemetryRocketData =  telemetryREST.retrieveTelemetryRocketData("1");
-            assertEquals(true, telemetryRocketData!=null);
+            telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
+            assertEquals(true, telemetryRocketData != null);
 
         });
         And("Jeff can inform that there is no anomaly", () -> {
             listAnomalies = telemetryREST.checkForAnomalies();
-            assertEquals(true, listAnomalies.size()==0);
+            assertEquals(true, listAnomalies.size() == 0);
 
         });
         When("the payload is on the destination point", () -> {
-            
-            telemetryRocketData =  telemetryREST.retrieveTelemetryRocketData("1");
-            while((int)telemetryRocketData.getDistance() > 0){
+
+            telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
+            while ((int) telemetryRocketData.getDistance() > 0) {
                 telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
             }
-            assertEquals(true,(int)(telemetryRocketData.getDistance())==0);
+            assertEquals(true, (int) (telemetryRocketData.getDistance()) == 0);
 
         });
         Then("the mission is succesfull", () -> {
             missionREST.updateMissionStatus(MissionStatus.SUCCESSFUL, "1");
             Mission mission = missionREST.retrieveMissionStatus("1");
-            
+
             assertEquals(true, mission.getMissionStatus().equals(MissionStatus.SUCCESSFUL));
             payload = payloadREST.retrievePayload("4f6911a8-437a-43fc-adad-a0ed6c6f69a7");
             assertEquals(true, payload.getStatus().equals(PayloadStatus.DELIVERED));
 
         });
-
 
     }
 

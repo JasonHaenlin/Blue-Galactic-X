@@ -60,4 +60,9 @@ public class RocketController {
         }
     }
 
+    @GetMapping("/ping")
+    public String ping() {
+        return "ok";
+    }
+
 }

@@ -15,24 +15,24 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackageClasses = TelemetryRocketDataRepository.class)
 public class MongoTelemetryConfig {
 
-    @Value("${api.mongodb.host}")
-    private String hostMongodb;
-    @Value("${api.mongodb.port}")
-    private String portMongodb;
+        @Value("${api.mongodb.host}")
+        private String hostMongodb;
+        @Value("${api.mongodb.port}")
+        private String portMongodb;
 
-    @Bean
-    public MongoClient mongo() throws Exception {
-        final ConnectionString connectionString = new ConnectionString(
-                "mongodb://" + hostMongodb + ":" + portMongodb + "/telemetry");
-        final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-                .applyConnectionString(connectionString).build();
-        return MongoClients.create(mongoClientSettings);
+        @Bean
+        public MongoClient mongo() throws Exception {
+                final ConnectionString connectionString = new ConnectionString(
+                                "mongodb://" + hostMongodb + ":" + portMongodb + "/telemetry");
+                final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                                .applyConnectionString(connectionString).build();
+                return MongoClients.create(mongoClientSettings);
 
-    }
+        }
 
-    @Bean
-    public MongoTemplate mongoTemplate() throws Exception {
-        return new MongoTemplate(mongo(), "telemetry");
-    }
+        @Bean
+        public MongoTemplate mongoTemplate() throws Exception {
+                return new MongoTemplate(mongo(), "telemetry");
+        }
 
 }

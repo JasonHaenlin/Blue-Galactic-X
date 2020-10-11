@@ -12,7 +12,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.RocketReport;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities.SpaceMetrics;
 
 public class RocketREST extends RestAPI {
 
@@ -22,7 +21,7 @@ public class RocketREST extends RestAPI {
 
     public RocketMetrics getMetrics(String rocketId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri + "/status/"+rocketId)).build();
+                .uri(URI.create(uri + "/status/" + rocketId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -33,7 +32,7 @@ public class RocketREST extends RestAPI {
 
     public RocketReport getReport(String rocketId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri + "/report/"+rocketId)).build();
+                .uri(URI.create(uri + "/report/" + rocketId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 

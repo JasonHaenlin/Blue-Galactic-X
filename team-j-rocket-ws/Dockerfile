@@ -10,6 +10,9 @@ ENV MISSION_HOST="team-j-blue-galactic-mission"
 ENV MISSION_PORT="8070"
 ENV MISSION_GRPC="8071"
 
+HEALTHCHECK  --interval=5s --timeout=3s \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/rocket/ping/ || exit 1
+
 EXPOSE 8080 8081
 
 ENTRYPOINT ["/usr/bin/java"]

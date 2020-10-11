@@ -44,8 +44,8 @@ public class RestApiService {
             throws BadPayloadIdException, MissionDoesNotExistException {
         String pId = MissionsMocked.find(missionId).orElseThrow(() -> new MissionDoesNotExistException(missionId))
                 .getPayloadId();
-        payloadClient.post().uri("/"+pId).body(BodyInserters.fromValue(status)).retrieve()
-                .bodyToMono(Void.class).subscribe();
+        payloadClient.post().uri("/" + pId).body(BodyInserters.fromValue(status)).retrieve().bodyToMono(Void.class)
+                .subscribe();
     }
 
 }

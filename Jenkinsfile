@@ -29,8 +29,7 @@ pipeline{
                             stage("Test ${modules[i]}") {
                                 dir("./${modules[i]}") {
                                     echo "Test WebService"
-                                    // no test for now
-                                    // sh "./mvnw test"
+                                    sh "./mvnw test"
                                 }
                             }
                             stage('Sonarqube') {

@@ -1,9 +1,9 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.api.payload.entities;
 
+import java.util.Date;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.Date;
 
 public class Payload {
 
@@ -12,7 +12,6 @@ public class Payload {
     private SpaceCoordinate position;
     private int weight; // kg
 
-    // TODO autogenerate id and date when using database based persistence
     private String id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;

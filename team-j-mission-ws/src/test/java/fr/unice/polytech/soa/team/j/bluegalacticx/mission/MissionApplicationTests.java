@@ -36,7 +36,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadI
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadRocketIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.replies.MissionReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils.JsonUtils;
@@ -107,8 +106,8 @@ class MissionApplicationTests {
 
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
-		mvc.perform(MockMvcRequestBuilders.post("/mission/").content("Create a mission")
-				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+		mvc.perform(MockMvcRequestBuilders.post("/mission/").content("Create a mission").characterEncoding("utf-8")
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest());
 
 		verify(missionService, times(0)).createMission(any(Mission.class));

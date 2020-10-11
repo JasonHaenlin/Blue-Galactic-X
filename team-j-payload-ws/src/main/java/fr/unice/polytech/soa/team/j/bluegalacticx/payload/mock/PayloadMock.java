@@ -3,7 +3,6 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.payload.mock;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;

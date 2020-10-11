@@ -1,7 +1,5 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,8 +13,6 @@ import reactor.core.publisher.Mono;
  */
 @Service
 public class RestService {
-
-    private final static Logger LOG = LoggerFactory.getLogger(MissionRPCClient.class);
 
     WebClient webClientTelemetry;
     WebClient webClientMission;
@@ -34,7 +30,7 @@ public class RestService {
      // @formatter:on
 
     public Mono<SpaceCoordinate> getCoordinatesFromMission(String id) {
-        return webClientMission.get().uri("/destination/"+id).retrieve().bodyToMono(SpaceCoordinate.class);
+        return webClientMission.get().uri("/destination/" + id).retrieve().bodyToMono(SpaceCoordinate.class);
     }
 
     public void postMissionStatus(SpaceMetrics telemetry) {
