@@ -22,7 +22,6 @@ public class MongoTelemetryConfig {
 
     @Bean
     public MongoClient mongo() throws Exception {
-        System.out.println(hostMongodb);
         final ConnectionString connectionString = new ConnectionString(
                 "mongodb://" + hostMongodb + ":" + portMongodb + "/telemetry");
         final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()

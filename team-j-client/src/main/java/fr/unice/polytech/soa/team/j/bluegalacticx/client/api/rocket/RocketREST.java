@@ -20,13 +20,13 @@ public class RocketREST extends RestAPI {
         super(uri);
     }
 
-    public SpaceMetrics getMetrics(String rocketId) throws IOException, InterruptedException {
+    public RocketMetrics getMetrics(String rocketId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
                 .uri(URI.create(uri + "/status/"+rocketId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return mapper.readValue(response.body(), new TypeReference<SpaceMetrics>() {
+        return mapper.readValue(response.body(), new TypeReference<RocketMetrics>() {
         });
 
     }

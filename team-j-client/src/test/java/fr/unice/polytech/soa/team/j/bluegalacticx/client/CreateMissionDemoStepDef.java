@@ -53,7 +53,7 @@ public class CreateMissionDemoStepDef implements En {
 
     private LaunchOrderReply launchOrderReply;
     private NextStageReply nextStageReply;
-    private SpaceMetrics rocketMetrics;
+    private RocketMetrics rocketMetrics;
     private TelemetryRocketData telemetryRocketData;
     private List<Anomaly> listAnomalies;
     private Payload payload;
@@ -138,8 +138,6 @@ public class CreateMissionDemoStepDef implements En {
             assertEquals(true, nextStageReply.getMovedToNextStage());
 
             rocketMetrics = rocketREST.getMetrics("1");
-            rocketMetrics = rocketMetrics.heatShield(3.0).speed(2.0).distance(1.0);
-            rocketMetrics.setRocketId("1");
 
             assertEquals(true, rocketMetrics!=null);
 
