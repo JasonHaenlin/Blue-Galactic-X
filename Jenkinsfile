@@ -1,5 +1,5 @@
 
-def modules = ["team-j-rocket-ws", "team-j-weather-ws","team-j-mission-ws"]
+def modules = ["team-j-rocket-ws", "team-j-weather-ws","team-j-mission-ws","team-j-telemetry-ws"]
 def gates = ""
 def results = ""
 
@@ -29,8 +29,7 @@ pipeline{
                             stage("Test ${modules[i]}") {
                                 dir("./${modules[i]}") {
                                     echo "Test WebService"
-                                    // no test for now
-                                    // sh "./mvnw test"
+                                    sh "./mvnw test"
                                 }
                             }
                             stage('Sonarqube') {

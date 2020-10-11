@@ -44,4 +44,9 @@ public class WeatherController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "ok";
+    }
 }

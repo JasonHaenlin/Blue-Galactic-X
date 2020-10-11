@@ -12,3 +12,11 @@ server:
 grpc:
   enable-reflection: true
   port: 8071
+
+api:
+  payload:
+    host: ${PAYLOAD_HOST:localhost}
+    port: ${PAYLOAD_PORT:8050}
+  rocket:
+    host: ${ROCKET_HOST:localhost}
+    port: ${PAYLOAD_PORT:8080}
