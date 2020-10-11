@@ -2,15 +2,15 @@ Feature: Create a new mission
 
     Background: Init connexion with other department
         Given a handshake with all department
-        And rocket department create a new report
-        And weather department create a new report
-        And payload department create a new payload
+        And Elon from the rocket department check the rocket metrics and create a report for Richard
+        And Tory from the weather department check the weather metrics and create a report for Richard
+        And Gwynne from the payload department create a new payload
 
-    Scenario: Send a GO request when the mission is valid
-        When I add a new mission
+    Scenario: Execute a new mission and deliver the payload to the targeted location
+        When Richard add a new mission
         And the weather report is valid
         And the rocket report is valid
-        Then I can make a GO request
+        Then Richard can make a GO request
         Then Elon makes a launch request to rocket service
         Then the launch order to the rocket is triggered if the rocket is ready to launch
         When rocket first stage is empty in fuel

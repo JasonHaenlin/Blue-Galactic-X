@@ -6,10 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.MissionREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.MissionStatus;
@@ -28,13 +27,13 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.telemetry.entities.
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.WeatherREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.entities.WeatherReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.weather.entities.WeatherType;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.LaunchOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.NextStageReply;
 import io.cucumber.java8.En;
 
 public class CreateMissionDemoStepDef implements En {
 
-    Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+    private static final Logger LOG = LogManager.getLogger(CreateMissionDemoStepDef.class);
 
     // Endpoints
     private WeatherREST weatherREST;
@@ -57,9 +56,8 @@ public class CreateMissionDemoStepDef implements En {
 
     public CreateMissionDemoStepDef() {
 
-        root.setLevel(Level.INFO);
-
         Given("a handshake with all department", () -> {
+            LOG.info("Create REST clients and RPC Clients");
             weatherREST = new WeatherREST("http://localhost:8060/weather");
             missionREST = new MissionREST("http://localhost:8070/mission");
             rocketREST = new RocketREST("http://localhost:8080/rocket");
@@ -69,48 +67,47 @@ public class CreateMissionDemoStepDef implements En {
 
         });
 
-        And("rocket department create a new report", () -> {
-
+        And("Elon from the rocket department check the rocket metrics and create a report for Richard", () -> {
             rocketReport = new RocketReport().fuelLevel(10).overallResult("Good");
+            LOG.info("Report : \n" + rocketReport.toString());
             rocketREST.setReport(rocketReport);
-
         });
 
-        And("weather department create a new report", () -> {
-
+        And("Tory from the weather department check the weather metrics and create a report for Richard", () -> {
             weatherReport = new WeatherReport().avgRainfall(50).avgHumidity(10).avgWind(20).avgVisibility(90)
                     .avgTemperature(25).weatherType(WeatherType.SUNNY).overallResult("Good");
+            LOG.info("Report : \n" + weatherReport.toString());
             weatherREST.setReport(weatherReport);
         });
 
-        And("payload department create a new payload", () -> {
+        And("Gwynne from the payload department create a new payload", () -> {
             payload = new Payload().id("4f6911a8-437a-43fc-adad-a0ed6c6f69a7").type(PayloadType.SPACECRAFT)
                     .weight(10000);
+            LOG.info("");
             payloadREST.createNewPayload(payload);
 
         });
 
-        When("I add a new mission", () -> {
-            String response = missionREST
-                    .createNewMission(new Mission().id("1").payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7")
-                            .destination(new SpaceCoordinate(10, 10, 10)).date(new Date()));
+        When("Richard add a new mission", () -> {
+            Mission m = new Mission().id("1").payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7")
+                    .destination(new SpaceCoordinate(10, 10, 10)).date(new Date());
+            String response = missionREST.createNewMission(m);
+            LOG.info("mission : \n" + m);
             assertEquals(true, response.contains("200"));
         });
 
         And("the weather report is valid", () -> {
-
             WeatherReport weatherReport = weatherREST.getReport();
             assertEquals(true, weatherReport.getOverallResult().contains("Good"));
         });
 
         And("the rocket report is valid", () -> {
-
             RocketReport rocketReport = rocketREST.getReport("1");
             assertEquals(true,
                     rocketReport.getOverallResult().equals("No problem, the preparation of the rocket goes well."));
         });
 
-        Then("I can make a GO request", () -> {
+        Then("Richard can make a GO request", () -> {
             rocketRPC.setReadyToLaunch("1", "1");
         });
         Then("Elon makes a launch request to rocket service", () -> {
@@ -128,6 +125,8 @@ public class CreateMissionDemoStepDef implements En {
             telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
             while (telemetryRocketData.getBoosters().get(0).getFuelLevel() > 0) {
                 telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
+                LOG.info(telemetryRocketData.toString());
+                Thread.sleep(1000);
             }
             assertEquals(true, telemetryRocketData.getBoosters().get(0).getFuelLevel() == 0);
         });
@@ -143,18 +142,21 @@ public class CreateMissionDemoStepDef implements En {
         And("Jeff can consult the telemetry data", () -> {
             telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
             assertEquals(true, telemetryRocketData != null);
-
+            Thread.sleep(1000);
         });
         And("Jeff can inform that there is no anomaly", () -> {
             listAnomalies = telemetryREST.checkForAnomalies();
             assertEquals(true, listAnomalies.size() == 0);
-
+            LOG.info(listAnomalies.toString());
+            Thread.sleep(1000);
         });
         When("the payload is on the destination point", () -> {
 
             telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
             while ((int) telemetryRocketData.getDistance() > 0) {
                 telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
+                LOG.info(telemetryRocketData.toString());
+                Thread.sleep(1000);
             }
             assertEquals(true, (int) (telemetryRocketData.getDistance()) == 0);
 
@@ -162,9 +164,10 @@ public class CreateMissionDemoStepDef implements En {
         Then("the mission is succesfull", () -> {
             missionREST.updateMissionStatus(MissionStatus.SUCCESSFUL, "1");
             Mission mission = missionREST.retrieveMissionStatus("1");
-
+            LOG.info(mission.toString());
             assertEquals(true, mission.getMissionStatus().equals(MissionStatus.SUCCESSFUL));
             payload = payloadREST.retrievePayload("4f6911a8-437a-43fc-adad-a0ed6c6f69a7");
+            LOG.info(payload.toString());
             assertEquals(true, payload.getStatus().equals(PayloadStatus.DELIVERED));
 
         });

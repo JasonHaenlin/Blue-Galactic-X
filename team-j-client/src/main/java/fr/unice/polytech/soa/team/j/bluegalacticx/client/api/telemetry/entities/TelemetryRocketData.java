@@ -218,5 +218,4 @@ public class TelemetryRocketData {
                 + ", distance='" + getDistance() + "'" + ", boosters='" + getBoosters() + "'" + "}";
     }
 
-
 }

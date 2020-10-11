@@ -1,12 +1,12 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketBlockingStub;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.LaunchOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.LaunchOrderRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.MissionRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.NextStageReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.NextStageRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.RocketGrpc;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.proto.RocketGrpc.RocketBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -25,7 +25,8 @@ public class RocketRPC {
     }
 
     public LaunchOrderReply LaunchOrderRequest(boolean launchRocket, String rocketId) {
-        LaunchOrderRequest request = LaunchOrderRequest.newBuilder().setLaunchRocket(launchRocket).setRocketId(rocketId).build();
+        LaunchOrderRequest request = LaunchOrderRequest.newBuilder().setLaunchRocket(launchRocket).setRocketId(rocketId)
+                .build();
         return stub.launchOrderRocket(request);
     }
 

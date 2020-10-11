@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration infous="off">
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} : %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <!-- Log levels: Trace < Debug < Info < Warn < Error < Fatal -->
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="stdout"/>
+        </Root>
+    </Loggers>
+</Configuration>
