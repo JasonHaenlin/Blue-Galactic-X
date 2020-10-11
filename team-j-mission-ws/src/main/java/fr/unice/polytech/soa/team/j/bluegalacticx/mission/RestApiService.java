@@ -27,14 +27,8 @@ public class RestApiService {
         @Value("${api.rocket.host}") String hostRocket,
         @Value("${api.rocket.port}") String portRocket
         ) {
-<<<<<<< HEAD
         rocketClient = WebClient.create("http://" + hostRocket + ":" + portRocket + "/telemetry/");
         payloadClient = WebClient.create("http://" + hostPayload + ":" + portPayload + "/payload/");
-=======
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+hostPayload);
-        rocketClient = WebClient.create("http://" + hostPayload + ":" + portPayload + "/telemetry/");
-        payloadClient = WebClient.create("http://" + hostRocket + ":" + portRocket + "/mission/");
->>>>>>> [#60] update docker env properties for spring-boot and link network
     }
     // @formatter:on
 
@@ -49,14 +43,9 @@ public class RestApiService {
     public void updatePayloadStatus(String missionId, PayloadStatus status)
             throws BadPayloadIdException, MissionDoesNotExistException {
         String pId = MissionsMocked.find(missionId).orElseThrow(() -> new MissionDoesNotExistException(missionId))
-<<<<<<< HEAD
                 .getPayloadId();
-        payloadClient.post().uri("/"+pId).body(BodyInserters.fromValue(status)).retrieve()
-=======
-                .getRocketId();
-        payloadClient.post().uri(URI.create("/" + pId)).body(BodyInserters.fromValue(status)).retrieve()
->>>>>>> [#60] update docker env properties for spring-boot and link network
-                .bodyToMono(Void.class).subscribe();
+        payloadClient.post().uri("/" + pId).body(BodyInserters.fromValue(status)).retrieve().bodyToMono(Void.class)
+                .subscribe();
     }
 
 }

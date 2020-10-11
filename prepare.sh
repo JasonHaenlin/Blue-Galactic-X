@@ -10,5 +10,4 @@ echo "Building Docker images"
 docker-compose build
 
 echo "Running Docker Containers in DETACHED mode"
-docker-compose up
-
+docker-compose up -d

@@ -4,17 +4,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-
-import java.net.http.HttpResponse;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.MissionReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.mission.entities.MissionStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.payload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.api.payload.entities.PayloadStatus;
 
 public class MissionREST extends RestAPI {
