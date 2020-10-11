@@ -17,7 +17,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadI
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadRocketIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.replies.MissionReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.RocketStatus;
 
@@ -31,10 +30,11 @@ public class MissionController {
     @Autowired
     private RestApiService restService;
 
-    @PostMapping("/create")
-    public MissionReply createNewMission(@RequestBody Mission mission) {
+    @PostMapping("/")
+    public void createNewMission(@RequestBody Mission mission) {
         try {
-            return missionService.createMission(mission);
+            
+            missionService.createMission(mission);
         } catch (InvalidMissionException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -50,10 +50,19 @@ public class MissionController {
     }
 
     @PostMapping("/status/{missionId}")
-    public MissionReply setMissionStatus(@RequestBody MissionStatus missionStatus, @PathVariable String missionId) {
+    public Mission setMissionStatus(@RequestBody MissionStatus missionStatus, @PathVariable String missionId) {
         try {
             return missionService.setMissionStatus(missionStatus, missionId);
         } catch (MissionDoesNotExistException | BadPayloadIdException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/status/{missionId}")
+    public Mission retrieveMissionStatus(@PathVariable String missionId) {
+        try {
+            return missionService.getMissionStatus(missionId);
+        } catch (MissionDoesNotExistException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

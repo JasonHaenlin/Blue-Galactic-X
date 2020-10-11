@@ -18,6 +18,7 @@ public class SpaceMetricsMocked {
     public static void preset() {
         // @formatter:off
         inAir = (SpaceMetrics) new SpaceMetrics()
+                    .rocketId("1")
                     .heatShield(95)
                     .speed(950)
                     .distance(500)
@@ -31,6 +32,7 @@ public class SpaceMetricsMocked {
                     .midRocketRGA(35);
 
                     onGround = (SpaceMetrics) new SpaceMetrics()
+                    .rocketId("1")
                     .heatShield(100)
                     .speed(0)
                     .distance(0)
@@ -56,7 +58,7 @@ public class SpaceMetricsMocked {
         // @formatter:off
         return (SpaceMetrics) inAir
                 .heatShield(randomDouble(5, inAir.getHeatShield()))
-                .distance(newDistance <0 ? 0 : newDistance)
+                .distance(newDistance <1 ? 0 : newDistance)
                 .speed(randomDouble(20, inAir.getSpeed()))
                 .irradiance(randomInt(10, inAir.getIrradiance()))
                 .velocityVariation(randomInt(10, inAir.getVelocityVariation()))

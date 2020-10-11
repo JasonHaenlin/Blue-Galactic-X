@@ -52,11 +52,11 @@ public class TelemetryService {
     }
 
     private boolean checkRocketTelemetryDataExist(String rocketId) {
-        return telemetryRocketDataRepository.findById(rocketId).get() == null;
+        return telemetryRocketDataRepository.findById(rocketId).get() != null;
     }
 
     private boolean checkRocketIdExist(TelemetryRocketData rocketData) {
-        return rocketData.getRocketId() != "" || rocketData.getRocketId() != null;
+        return rocketData.getRocketId() != null;
     }
 
 }

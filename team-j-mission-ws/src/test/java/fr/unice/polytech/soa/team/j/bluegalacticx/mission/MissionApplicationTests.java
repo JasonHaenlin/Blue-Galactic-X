@@ -58,7 +58,7 @@ class MissionApplicationTests {
 	private MissionService missionService;
 
 	private Mission mission;
-	private MissionReply missionReply;
+	private Mission missionReply;
 	private Date date;
 	private String rocketId;
 	private String missionId;
@@ -73,7 +73,7 @@ class MissionApplicationTests {
 		payloadId = "1";
 		destination = new SpaceCoordinate(1000, 100, 10);
 		mission = new Mission(missionId, rocketId, payloadId, destination, date);
-		missionReply = new MissionReply(mission);
+		missionReply = new Mission(missionId, rocketId, payloadId, destination, date);
 	}
 
 	@BeforeAll
@@ -93,10 +93,9 @@ class MissionApplicationTests {
 	void createMissionWithGoodParametersTest() throws Exception {
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
-		mvc.perform(MockMvcRequestBuilders.post("/mission/create").content(JsonUtils.toJson(mission))
+		mvc.perform(MockMvcRequestBuilders.post("/mission/").content(JsonUtils.toJson(mission))
 				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(jsonPath(".rocketId").value(rocketId))
-				.andExpect(jsonPath(".date").exists());
+				.andExpect(status().isOk());
 
 		verify(missionService, times(1)).createMission(any(Mission.class));
 
@@ -108,7 +107,7 @@ class MissionApplicationTests {
 
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
-		mvc.perform(MockMvcRequestBuilders.post("/mission/create").content("Create a mission")
+		mvc.perform(MockMvcRequestBuilders.post("/mission/").content("Create a mission")
 				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest());
 
@@ -122,7 +121,7 @@ class MissionApplicationTests {
 
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
-		mvc.perform(MockMvcRequestBuilders.post("/create").content(JsonUtils.toJson(mission)).characterEncoding("utf-8")
+		mvc.perform(MockMvcRequestBuilders.post("/").content(JsonUtils.toJson(mission)).characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
 
@@ -138,7 +137,7 @@ class MissionApplicationTests {
 
 		when(missionService.createMission(any(Mission.class))).thenThrow(new InvalidMissionException());
 
-		mvc.perform(MockMvcRequestBuilders.post("/mission/create").content(JsonUtils.toJson(invalidMission))
+		mvc.perform(MockMvcRequestBuilders.post("/mission/").content(JsonUtils.toJson(invalidMission))
 				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andExpect(status().reason(
 						"Invalid mission, give a correct date and an available rocket ID (positive and greather than 0)"));
@@ -151,7 +150,7 @@ class MissionApplicationTests {
 	@Order(5)
 	void changeMissionStatusToSuccessFul() throws Exception {
 		mission.setMissionStatus(MissionStatus.SUCCESSFUL);
-		when(missionService.setMissionStatus(any(MissionStatus.class), any())).thenReturn(new MissionReply(mission));
+		when(missionService.setMissionStatus(any(MissionStatus.class), any())).thenReturn(mission);
 
 		mvc.perform(MockMvcRequestBuilders.post("/mission/status/" + missionId)
 				.content(JsonUtils.toJson(MissionStatus.SUCCESSFUL)).characterEncoding("utf-8")

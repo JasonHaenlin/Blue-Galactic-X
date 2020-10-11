@@ -37,6 +37,7 @@ public class RocketController {
         }
     }
 
+
     @PostMapping("/report/{rocketId}")
     public void postRocketReport(@PathVariable String rocketId, @RequestBody RocketReport report) {
         try {

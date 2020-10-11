@@ -44,4 +44,10 @@ public class Booster {
             throw new BoosterDestroyedException(msg);
         }
     }
+
+    @Override
+    public String toString() {
+        return "{" + " status='" + status + "'" + ", fuelLevel='" + fuelLevel + "'" + "}";
+    }
+
 }

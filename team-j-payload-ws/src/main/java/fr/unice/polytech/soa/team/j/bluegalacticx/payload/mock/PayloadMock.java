@@ -17,7 +17,7 @@ public class PayloadMock {
     static {
         payloads = new ArrayList<>();
         payloads.add(new Payload(PayloadType.WARHEADS, PayloadStatus.WAITING_FOR_MISSION,
-                new SpaceCoordinate(30, 10, 0), 500, "6c8c700c-1c01-4c72-b845-f251f01502e4", new Date()));
+                new SpaceCoordinate(30, 10, 0),500, "6c8c700c-1c01-4c72-b845-f251f01502e4", new Date()));
         payloads.add(new Payload(PayloadType.SATELLITE, PayloadStatus.WAITING_FOR_MISSION,
                 new SpaceCoordinate(30, 20, 0), 500, "4f6911a8-437a-43fc-adad-a0ed6c6f69a7", new Date()));
     }

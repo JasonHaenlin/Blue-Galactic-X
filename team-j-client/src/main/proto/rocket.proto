@@ -8,12 +8,31 @@ option java_multiple_files = true;
 option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
 
 service Rocket {
-  rpc setReadyToLaunch(MissionId) returns (google.protobuf.Empty) {}
+  rpc setReadyToLaunch(MissionRequest) returns (google.protobuf.Empty) {}
   rpc launchOrderRocket(LaunchOrderRequest) returns (LaunchOrderReply) {}
+  rpc destructionOrderOnRocket(DestructionOrderRequest)
+      returns (DesctructionOrderReply) {}
+  rpc nextStage(NextStageRequest) returns (NextStageReply) {}
 }
 
-message MissionId { int32 missionId = 1; }
+message MissionRequest {
+  string rocketId = 1;
+  string missionId = 2;
+}
 
-message LaunchOrderRequest { bool launchRocket = 2; }
+message LaunchOrderRequest {
+  string rocketId = 1;
+  bool launchRocket = 2;
+}
 
-message LaunchOrderReply { string reply = 3; }
+message NextStageRequest {
+  string rocketId = 1;
+}
+
+message LaunchOrderReply { string reply = 1; }
+
+message DestructionOrderRequest { string rocketId = 1; }
+
+message DesctructionOrderReply { string destructionRocket = 1; }
+
+message NextStageReply { bool movedToNextStage = 1; }

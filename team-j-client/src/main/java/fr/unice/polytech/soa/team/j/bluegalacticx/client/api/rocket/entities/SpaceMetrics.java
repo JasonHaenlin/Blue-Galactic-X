@@ -1,8 +1,9 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
+package fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities;
 
 import java.util.Objects;
 
-public class SpaceMetrics extends RocketMetrics {
+    public class SpaceMetrics extends RocketMetrics {
+
     private String rocketId;
     private double heatShield; // %
     private double speed; // m/s
@@ -90,7 +91,6 @@ public class SpaceMetrics extends RocketMetrics {
     @Override
     public String toString() {
         return "{" + " rocketId='" + getRocketId() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='"
-                + getSpeed() + "'" + ", distance='" + getDistance() + "'" + "}" + super.toString();
+                + getSpeed() + "'" + ", distance='" + getDistance() + "'" + "}";
     }
-
 }

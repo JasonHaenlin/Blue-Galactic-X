@@ -1,8 +1,9 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
+package fr.unice.polytech.soa.team.j.bluegalacticx.client.api.rocket.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 
 public class RocketMetrics {
 
@@ -165,8 +166,8 @@ public class RocketMetrics {
     public String toString() {
         return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
                 + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
-                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", boosters='"
-                + getBoosters().toString() + "'" + "}";
+                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", boosters='" + getBoosters()
+                + "'" + "}";
     }
 
     @Deprecated

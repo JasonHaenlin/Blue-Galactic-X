@@ -8,4 +8,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRo
 @Repository
 public interface TelemetryRocketDataRepository extends MongoRepository<TelemetryRocketData, String> {
 
+
+
 }
