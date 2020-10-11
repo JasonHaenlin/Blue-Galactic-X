@@ -37,6 +37,17 @@ public class RocketController {
         }
     }
 
+    @GetMapping("/status/{rocketId}")
+    public RocketMetrics getRocketStatus(@PathVariable String rocketId) {
+        try {
+            return service.getLastMetrics(rocketId);
+        } catch (RocketDestroyedException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (RocketDoesNotExistException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     @PostMapping("/report/{rocketId}")
     public void postRocketReport(@PathVariable String rocketId, @RequestBody RocketReport report) {
         try {

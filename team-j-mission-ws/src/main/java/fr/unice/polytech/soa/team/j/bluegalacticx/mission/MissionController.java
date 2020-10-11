@@ -50,7 +50,7 @@ public class MissionController {
     }
 
     @PostMapping("/status/{missionId}")
-    public MissionStatus setMissionStatus(@RequestBody MissionStatus missionStatus, @PathVariable String missionId) {
+    public Mission setMissionStatus(@RequestBody MissionStatus missionStatus, @PathVariable String missionId) {
         try {
             return missionService.setMissionStatus(missionStatus, missionId);
         } catch (MissionDoesNotExistException | BadPayloadIdException e) {

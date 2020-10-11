@@ -27,12 +27,12 @@ public class MissionService {
         return mission;
     }
 
-    public MissionStatus setMissionStatus(MissionStatus missionStatus, String missionId)
+    public Mission setMissionStatus(MissionStatus missionStatus, String missionId)
             throws MissionDoesNotExistException, BadPayloadIdException {
         Mission mission = findMissionOrThrow(missionId);
         mission.setMissionStatus(missionStatus);
         restService.updatePayloadStatus(missionId, PayloadStatus.values()[missionStatus.ordinal()]);
-        return mission.getMissionStatus();
+        return mission;
     }
 
     public Mission getMissionStatus(String missionId)
