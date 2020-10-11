@@ -22,7 +22,4 @@ api:
   mission:
     host: ${MISSION_HOST:localhost}
     port: ${MISSION_PORT:8070}
-<<<<<<< HEAD
     grpc: ${MISSION_GRPC:8071}
-=======
->>>>>>> [#60] update docker env properties for spring-boot and link network
