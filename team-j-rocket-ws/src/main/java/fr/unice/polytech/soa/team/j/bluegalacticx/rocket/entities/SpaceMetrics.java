@@ -90,7 +90,7 @@ public class SpaceMetrics extends RocketMetrics {
     @Override
     public String toString() {
         return "{" + " rocketId='" + getRocketId() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='"
-                + getSpeed() + "'" + ", distance='" + getDistance() + "'" + "}";
+                + getSpeed() + "'" + ", distance='" + getDistance() + "'" + "}" + super.toString();
     }
 
 }

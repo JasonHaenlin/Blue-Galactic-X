@@ -165,8 +165,8 @@ public class RocketMetrics {
     public String toString() {
         return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
                 + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
-                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", boosters='" + getBoosters()
-                + "'" + "}";
+                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", boosters='"
+                + getBoosters().toString() + "'" + "}";
     }
 
     @Deprecated

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -40,6 +38,7 @@ public class TelemetryController {
 
     @PostMapping("/rocket")
     public void createTelemetryData(@RequestBody TelemetryRocketData rocketData) {
+        LOG.info(rocketData.toString());
         try {
             LOG.info(rocketData.toString());
             telemetryService.createRocketData(rocketData);

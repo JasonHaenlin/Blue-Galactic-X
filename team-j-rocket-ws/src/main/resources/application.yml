@@ -14,3 +14,11 @@ server:
 grpc:
   enable-reflection: true
   port: 8081
+
+api:
+  telemetry:
+    host: ${TELEMETRY_HOST:localhost}
+    port: ${TELEMETRY_PORT:8090}
+  mission:
+    host: ${MISSION_HOST:localhost}
+    port: ${MISSION_PORT:8070}

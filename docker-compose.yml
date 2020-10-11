@@ -6,16 +6,16 @@ services:
     ports:
       - "8060:8060"
       - "8061:8061"
+
   rocket:
     build: ./team-j-rocket-ws
     container_name: team-j-blue-galactic-rocket
     ports:
       - "8080:8080"
       - "8081:8081"
-    depends_on: 
+    depends_on:
       - telemetry
-    links: 
-      - telemetry
+      - mission
 
   mission:
     build: ./team-j-mission-ws
@@ -23,6 +23,7 @@ services:
     ports:
       - "8070:8070"
       - "8071:8071"
+
   telemetry-database:
     image: mongo:latest
     volumes:
@@ -30,17 +31,17 @@ services:
     container_name: team-j-blue-galactic-telemetry-database
     ports:
       - 27017:27017
+
   telemetry:
     build: ./team-j-telemetry-ws
     container_name: team-j-blue-galactic-telemetry
     ports:
       - "8090:8090"
       - "8091:8091"
-    links: 
-      - telemetry-database
+
   payload:
     build: ./team-j-payload-ws
     container_name: team-j-blue-galactic-payload
     ports:
       - "8050:8050"
-      - "8051:8051" 
+      - "8051:8051"
