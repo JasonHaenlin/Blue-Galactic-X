@@ -16,10 +16,11 @@ public class MongoTelemetryConfig {
 
     @Bean
     public MongoClient mongo() throws Exception {
-        final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/telemetry");
+        final ConnectionString connectionString = new ConnectionString("mongodb://telemetry-database:27017/telemetry");
         final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString).build();
         return MongoClients.create(mongoClientSettings);
+        
     }
 
     @Bean

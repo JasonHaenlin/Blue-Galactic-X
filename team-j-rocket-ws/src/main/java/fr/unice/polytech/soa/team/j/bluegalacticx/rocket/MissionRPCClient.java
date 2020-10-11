@@ -16,14 +16,14 @@ import io.grpc.stub.StreamObserver;
 @Service
 public class MissionRPCClient {
     private final static Logger LOG = LoggerFactory.getLogger(MissionRPCClient.class);
-    private static final String source = "http://localhost";
+    private static final String source = "localhost";
     private static final int port = 8071;
 
     private ManagedChannel channel;
     private MissionStub stub;
 
     public MissionRPCClient() {
-        this.channel = ManagedChannelBuilder.forAddress(source, port).usePlaintext().build();
+        this.channel = ManagedChannelBuilder.forAddress(source,port).usePlaintext().build();
         this.stub = MissionGrpc.newStub(channel);
     }
 

@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class RestService {
 
-    WebClient webClientTelemetry = WebClient.create("http://localhost:8090/telemetry/");
+    WebClient webClientTelemetry = WebClient.create("http://telemetry:8090/telemetry/");
     WebClient webClientMission = WebClient.create("http://localhost:8070/mission/");
 
     public Mono<SpaceCoordinate> getCoordinatesFromMission(String id) {
