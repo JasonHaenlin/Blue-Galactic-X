@@ -45,3 +45,9 @@ services:
     ports:
       - "8050:8050"
       - "8051:8051"
+  booster:
+    build: ./team-j-booster-ws
+    container_name: team-j-blue-galactic-booster
+    ports:
+      - "8030:8030"
+      - "8031:8031"
