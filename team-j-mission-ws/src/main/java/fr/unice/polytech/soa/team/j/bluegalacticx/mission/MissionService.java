@@ -10,13 +10,13 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadI
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionStatusRequest.MissionStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.PayloadStatusRequest.PayloadStatus;
 
 @Service
 public class MissionService {
 
     @Autowired
-    private RestApiService restService;
+    private PayloadProducer payloadProducer;
 
     public Mission createMission(Mission mission) throws InvalidMissionException {
         if (invalidMission(mission)) {
@@ -30,7 +30,7 @@ public class MissionService {
             throws MissionDoesNotExistException, BadPayloadIdException {
         Mission mission = findMissionOrThrow(missionId);
         mission.setStatus(missionStatus);
-        restService.updatePayloadStatus(missionId, PayloadStatus.values()[missionStatus.ordinal()]);
+        payloadProducer.updatePayloadStatus(mission.getPayloadId(), PayloadStatus.values()[missionStatus.ordinal()]);
         return mission;
     }
 
