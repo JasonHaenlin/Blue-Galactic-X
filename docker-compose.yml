@@ -19,6 +19,8 @@ services:
       - schema-registry
       - broker
       - booster
+      - schema-registry
+      - broker
 
   mission:
     build: ./team-j-mission-ws
