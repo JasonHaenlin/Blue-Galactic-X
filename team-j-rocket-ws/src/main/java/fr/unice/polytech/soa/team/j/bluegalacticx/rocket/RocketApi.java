@@ -33,7 +33,7 @@ public class RocketApi {
         double distance = computeDistance(origin, objectiveCoordinates);
         this.mockDistStep = distance / this.iteration;
         this.mockFuelStep = (100.0 / this.iteration) * SpaceMetricsMocked.inAir.getBoosters().size();
-        return SpaceMetricsMocked.inAir.distance(distance).rocketId(rocketId);
+        return SpaceMetricsMocked.inAir.totalDistance(distance).distance(distance).rocketId(rocketId);
     }
 
     public void dettachStage() throws BoosterDestroyedException {

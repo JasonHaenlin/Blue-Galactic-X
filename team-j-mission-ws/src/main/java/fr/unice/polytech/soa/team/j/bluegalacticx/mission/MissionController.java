@@ -33,7 +33,7 @@ public class MissionController {
     @PostMapping("/")
     public void createNewMission(@RequestBody Mission mission) {
         try {
-            
+
             missionService.createMission(mission);
         } catch (InvalidMissionException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

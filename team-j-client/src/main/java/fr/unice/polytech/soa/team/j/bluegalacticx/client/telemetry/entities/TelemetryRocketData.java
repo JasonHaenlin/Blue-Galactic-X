@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
+package fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.Booster;
 
 @Document(collection = "rocketTelemetry")
 public class TelemetryRocketData {
