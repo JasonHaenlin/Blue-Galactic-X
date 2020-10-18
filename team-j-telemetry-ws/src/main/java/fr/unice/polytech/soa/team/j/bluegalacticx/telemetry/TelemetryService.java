@@ -7,12 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryBoosterDataRepository;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryPayloadDataRepository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryRocketDataRepository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryBoosterData;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryPayloadData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.mocks.AnomaliesMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.BadPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryBoosterDataException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryPayloadDataException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryRocketDataException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataBoosterIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataRocketIdException;
@@ -27,6 +31,9 @@ public class TelemetryService {
 
     @Autowired
     private TelemetryBoosterDataRepository telemetryBoosterDataRepository;
+
+    @Autowired
+    private TelemetryPayloadDataRepository telemetryPayloadDataRepository;
 
     /**
      * for now, the first call, we do not send back any anomalies but the second
@@ -56,6 +63,13 @@ public class TelemetryService {
         telemetryBoosterDataRepository.save(boosterData);
     }
 
+    public void createPayloadData(TelemetryPayloadData payloadData) throws BadPayloadIdException {
+        if (payloadData.getPayloadId() == null) {
+            throw new BadPayloadIdException();
+        }
+        telemetryPayloadDataRepository.save(payloadData);
+    }
+
     public List<TelemetryRocketData> retrieveRocketData(String rocketId) throws NoTelemetryRocketDataException {
 
         if (!(checkRocketTelemetryDataExist(rocketId))) {
@@ -72,6 +86,16 @@ public class TelemetryService {
         }
 
         return telemetryBoosterDataRepository.findByBoosterId(boosterId);
+    }
+
+    public TelemetryPayloadData retrievePayloadData(String payloadId) throws NoTelemetryPayloadDataException {
+        TelemetryPayloadData result = telemetryPayloadDataRepository.findById(payloadId).get();
+
+        if (result == null) {
+            throw new NoTelemetryPayloadDataException();
+        }
+
+        return result;
     }
 
     private boolean checkRocketTelemetryDataExist(String rocketId) {
