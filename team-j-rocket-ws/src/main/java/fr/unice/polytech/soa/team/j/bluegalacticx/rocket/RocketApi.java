@@ -1,14 +1,9 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Booster;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.SpaceMetricsMocked;
 
 @Service

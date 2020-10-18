@@ -24,6 +24,26 @@
             "name": "api.mission.grpc",
             "type": "java.lang.String",
             "description": "A description for 'api.mission.grpc'"
+        },
+        {
+            "name": "kafka.broker.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.broker.host'"
+        },
+        {
+            "name": "kafka.broker.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.broker.port'"
+        },
+        {
+            "name": "kafka.schema.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.schema.host'"
+        },
+        {
+            "name": "kafka.schema.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.schema.port'"
         }
     ]
 }

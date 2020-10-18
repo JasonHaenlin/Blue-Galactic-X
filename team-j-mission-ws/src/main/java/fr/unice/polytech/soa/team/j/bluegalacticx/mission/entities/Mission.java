@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionStatusRequest.MissionStatus;
+
 public class Mission {
 
     private String id;

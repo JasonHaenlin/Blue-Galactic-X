@@ -1,15 +1,14 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
-
-package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 option java_multiple_files = true;
-option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto";
+option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
 
-service Mission {
-  rpc startMission(MissionRequest) returns (google.protobuf.Empty) {}
-  rpc failedMission(MissionRequest) returns (google.protobuf.Empty) {}
+message MissionStatusRequest {
+  string missionId = 1;
+  enum MissionStatus {
+    PENDING = 0; STARTED = 1; SUCCESSFUL = 2; FAILED = 3; ABORTED = 4;
+  }
+  MissionStatus status = 2;
 }
-
-message MissionRequest { string missionId = 1; }

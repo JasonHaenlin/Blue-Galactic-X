@@ -115,6 +115,23 @@
 			<version>${io.grpc.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Kafka -->
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-protobuf-serializer</artifactId>
+			<version>5.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -163,18 +180,6 @@
 					</execution>
 				</executions>
 			</plugin>
-<!-- 
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M5</version>
-				<dependencies>
-					<dependency>
-						 <groupId>org.junit.platform</groupId>
-						 <artifactId>junit-platform-surefire-provider</artifactId>
-						 <version>1.3.2</version>
-					 </dependency>
-				 </dependencies>
-			</plugin> -->
 
 		</plugins>
 
@@ -187,5 +192,14 @@
 		</extensions>
 
 	</build>
+
+	<repositories>
+        <repository>
+            <id>confluent</id>
+            <name>confluent</name>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
 
 </project>
