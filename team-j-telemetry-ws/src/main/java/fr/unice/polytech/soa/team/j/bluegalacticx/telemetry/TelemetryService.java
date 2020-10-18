@@ -30,9 +30,6 @@ public class TelemetryService {
     private TelemetryRocketDataRepository telemetryRocketDataRepository;
 
     @Autowired
-    private TelemetryBoosterDataRepository telemetryBoosterDataRepository;
-
-    @Autowired
     private TelemetryPayloadDataRepository telemetryPayloadDataRepository;
 
     @Autowired
@@ -114,11 +111,7 @@ public class TelemetryService {
     }
 
     private boolean checkBoosterIdExist(TelemetryBoosterData boosterData) {
-<<<<<<< HEAD
         return boosterData.getBoosterId() != null;
-=======
-        return boosterData.getBoosterId() != null && boosterData.getRocketID() != null;
->>>>>>> #52 read, store telemetry data of booster
     }
 
 }
