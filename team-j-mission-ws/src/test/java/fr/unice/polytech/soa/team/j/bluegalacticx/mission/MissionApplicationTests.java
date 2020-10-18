@@ -71,8 +71,8 @@ class MissionApplicationTests {
 		missionId = "1";
 		payloadId = "1";
 		destination = new SpaceCoordinate(1000, 100, 10);
-		mission = new Mission(missionId, rocketId, payloadId, destination, date);
-		missionReply = new Mission(missionId, rocketId, payloadId, destination, date);
+		mission = new Mission(missionId, rocketId, payloadId, destination, date, MissionStatus.PENDING);
+		missionReply = new Mission(missionId, rocketId, payloadId, destination, date, MissionStatus.PENDING);
 	}
 
 	@BeforeAll
@@ -148,13 +148,13 @@ class MissionApplicationTests {
 	@Test
 	@Order(5)
 	void changeMissionStatusToSuccessFul() throws Exception {
-		mission.setMissionStatus(MissionStatus.SUCCESSFUL);
+		mission.setStatus(MissionStatus.SUCCESSFUL);
 		when(missionService.setMissionStatus(any(MissionStatus.class), any())).thenReturn(mission);
 
 		mvc.perform(MockMvcRequestBuilders.post("/mission/status/" + missionId)
 				.content(JsonUtils.toJson(MissionStatus.SUCCESSFUL)).characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath(".missionStatus").value("SUCCESSFUL"));
+				.andExpect(jsonPath(".status").value("SUCCESSFUL"));
 
 		verify(missionService, times(1)).setMissionStatus(eq(MissionStatus.SUCCESSFUL), eq("1"));
 	}

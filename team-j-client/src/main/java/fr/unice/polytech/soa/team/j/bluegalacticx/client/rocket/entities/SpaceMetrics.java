@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
+package fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities;
 
 import java.util.Objects;
 
@@ -93,7 +93,9 @@ public class SpaceMetrics extends RocketMetrics {
             return false;
         }
         SpaceMetrics spaceMetrics = (SpaceMetrics) o;
-        return Objects.equals(rocketId, spaceMetrics.rocketId) && heatShield == spaceMetrics.heatShield && speed == spaceMetrics.speed && distance == spaceMetrics.distance && totalDistance == spaceMetrics.totalDistance;
+        return Objects.equals(rocketId, spaceMetrics.rocketId) && heatShield == spaceMetrics.heatShield
+                && speed == spaceMetrics.speed && distance == spaceMetrics.distance
+                && totalDistance == spaceMetrics.totalDistance;
     }
 
     @Override
@@ -103,13 +105,9 @@ public class SpaceMetrics extends RocketMetrics {
 
     @Override
     public String toString() {
-        return "{" +
-            " rocketId='" + getRocketId() + "'" +
-            ", heatShield='" + getHeatShield() + "'" +
-            ", speed='" + getSpeed() + "'" +
-            ", distance='" + getDistance() + "'" +
-            ", totalDistance='" + getTotalDistance() + "'" +
-            "}";
+        return "{" + " rocketId='" + getRocketId() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='"
+                + getSpeed() + "'" + ", distance='" + getDistance() + "'" + ", totalDistance='" + getTotalDistance()
+                + "'" + "}";
     }
 
 }

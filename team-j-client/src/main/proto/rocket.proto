@@ -2,10 +2,10 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
-package fr.unice.polytech.soa.team.j.bluegalacticx.client;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 option java_multiple_files = true;
-option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.client.proto";
+option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
 
 service Rocket {
   rpc setReadyToLaunch(MissionRequest) returns(google.protobuf.Empty) {}

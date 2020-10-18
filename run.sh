@@ -10,7 +10,7 @@ cd "$parent_path"
 
 for i in "team-j-blue-galactic-weather" "team-j-blue-galactic-rocket" "team-j-blue-galactic-mission" "team-j-blue-galactic-telemetry" "team-j-blue-galactic-payload" "team-j-blue-galactic-booster"
 do
-    printf "${mag}Healtcheck${end} ${blu}${i}${end}\t\t"
+    printf "${mag}Healtcheck${end} ${blu}${i}${end} "
     res=`docker inspect -f {{.State.Health.Status}} $i`
     while [ "$res" != "healthy" ]; do
         sleep 0.5;
@@ -22,4 +22,4 @@ done
 
 cd "team-j-client"
 printf "${cyn}Start demo scenario${end}\n"
-mvn test
+mvn compile test
