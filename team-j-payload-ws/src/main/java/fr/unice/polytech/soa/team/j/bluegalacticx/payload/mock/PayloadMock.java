@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.SpaceCoordinate;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest.PayloadStatus;
 
 public class PayloadMock {
 

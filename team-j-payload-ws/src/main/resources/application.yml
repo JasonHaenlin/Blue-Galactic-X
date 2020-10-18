@@ -8,9 +8,19 @@ spring:
 
 server:
   port: 8050
-  error: 
+  error:
     include-stacktrace: never
 
 grpc:
   enable-reflection: true
   port: 8051
+
+kafka:
+  broker:
+    host: ${KAFKA_BROKER_HOST:localhost}
+    port: ${KAFKA_BROKER_PORT:19092}
+  schema:
+    host: ${SCHEMA_BROKER_HOST:http://localhost}
+    port: ${SCHEMA_BROKER_PORT:9090}
+    group:
+      payload: blue-origin-payload

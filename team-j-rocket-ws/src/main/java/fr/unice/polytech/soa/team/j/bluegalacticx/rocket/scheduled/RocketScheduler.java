@@ -1,8 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled;
 
-import org.graalvm.compiler.lir.CompositeValue.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;

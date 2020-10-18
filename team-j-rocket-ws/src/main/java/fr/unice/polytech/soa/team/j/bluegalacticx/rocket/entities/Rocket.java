@@ -36,7 +36,7 @@ public class Rocket {
         this.missionId = missionId;
     }
 
-    public String detachNextStage(){
+    public String detachNextStage() {
         String boosterId = this.boosterId;
         this.boosterId = "";
         return boosterId;
@@ -60,7 +60,6 @@ public class Rocket {
     }
 
     public void replaceWithNewReport(RocketReport report) throws CannotBeNullException {
-        System.out.println(report);
         if (report.getEngine() == null || report.getOverallResult() == null) {
             throw new CannotBeNullException("report");
         }
@@ -87,11 +86,11 @@ public class Rocket {
         return missionId;
     }
 
-    public String getBoosterId(){
+    public String getBoosterId() {
         return this.boosterId;
     }
 
-    public void setBoosterId(String id){
+    public void setBoosterId(String id) {
         this.boosterId = id;
     }
 
