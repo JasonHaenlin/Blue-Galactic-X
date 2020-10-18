@@ -17,7 +17,7 @@ public class MissionsMocked {
         // @formatter:off
         missions.add(new Mission()
                 .id("1")
-                .destination(new SpaceCoordinate(1,2,3))
+                .destination(new SpaceCoordinate(1000,2000,3000))
                 .status(MissionStatus.PENDING)
                 .rocketId("1")
                 .payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7")
@@ -26,7 +26,7 @@ public class MissionsMocked {
 
         missions.add(new Mission()
                 .id("2")
-                .destination(new SpaceCoordinate(3,2,1))
+                .destination(new SpaceCoordinate(3000,2000,1000))
                 .status(MissionStatus.STARTED)
                 .rocketId("2")
                 .date(new Date())

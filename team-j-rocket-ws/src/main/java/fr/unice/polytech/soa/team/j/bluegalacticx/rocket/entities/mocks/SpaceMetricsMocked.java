@@ -29,7 +29,7 @@ public class SpaceMetricsMocked {
                     .boosterRGA(30)
                     .midRocketRGA(35);
 
-                    onGround = (SpaceMetrics) new SpaceMetrics()
+        onGround = (SpaceMetrics) new SpaceMetrics()
                     .rocketId("1")
                     .heatShield(100)
                     .speed(0)

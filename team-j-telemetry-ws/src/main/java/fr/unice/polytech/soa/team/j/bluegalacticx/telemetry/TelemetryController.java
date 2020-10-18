@@ -41,7 +41,6 @@ public class TelemetryController {
 
     @PostMapping("/rocket")
     public void createTelemetryData(@RequestBody TelemetryRocketData rocketData) {
-        LOG.info(rocketData.toString());
         try {
             LOG.info(rocketData.toString());
             telemetryService.createRocketData(rocketData);
@@ -54,7 +53,6 @@ public class TelemetryController {
 
     @PostMapping("/booster")
     public void createBoosterTelemetryData(@RequestBody TelemetryBoosterData boosterData) {
-        LOG.info(boosterData.toString());
         try {
             LOG.info(boosterData.toString());
             telemetryService.createBoosterData(boosterData);

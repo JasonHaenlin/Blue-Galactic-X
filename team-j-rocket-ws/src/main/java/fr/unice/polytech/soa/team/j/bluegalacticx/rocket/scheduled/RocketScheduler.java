@@ -26,7 +26,7 @@ public class RocketScheduler {
     @Scheduled(fixedDelay = 1000)
     public void scheduleRocketMetricsTask() {
         sm = rocketApi.retrieveLastMetrics();
-        LOG.info("Rocket Telemetry : " + sm);
+        //LOG.info("Rocket Telemetry : " + sm);
         restService.postTelemetry(sm);
     }
 

@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
+package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

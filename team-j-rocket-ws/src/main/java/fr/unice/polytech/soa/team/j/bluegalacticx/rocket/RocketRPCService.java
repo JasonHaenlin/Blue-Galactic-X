@@ -5,12 +5,17 @@ import com.google.protobuf.Empty;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotAssignMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.SpaceMetricsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
@@ -27,6 +32,8 @@ import io.grpc.stub.StreamObserver;
 @GRpcService
 public class RocketRPCService extends RocketImplBase {
 
+    private final static Logger LOG = LoggerFactory.getLogger(RocketRPCService.class);
+
     @Autowired
     private RestService service;
 
@@ -36,6 +43,9 @@ public class RocketRPCService extends RocketImplBase {
     @Autowired
     private MissionProducer missionProducer;
 
+    @Autowired
+    private BoosterRPCClient boosterRpcClient;
+
     @Override
     public void setReadyToLaunch(MissionRequest request, StreamObserver<Empty> responseObserver) {
         String rId = request.getRocketId();
@@ -44,6 +54,9 @@ public class RocketRPCService extends RocketImplBase {
             r.assignMission(request.getMissionId());
             service.getCoordinatesFromMission(request.getMissionId()).subscribe(coor -> {
                 r.setMissionObjective(coor);
+            });
+            service.getAvailableRocketID().subscribe(id -> {
+                r.setBoosterId(id);
             });
             responseObserver.onNext(null);
             responseObserver.onCompleted();
@@ -101,11 +114,20 @@ public class RocketRPCService extends RocketImplBase {
 
     @Override
     public void nextStage(NextStageRequest request, StreamObserver<NextStageReply> responseObserver) {
-
-        NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
-        responseObserver.onNext(nextStageReply);
-        responseObserver.onCompleted();
-
+        try {
+            LOG.info("Rocket proceeding to next stage");
+            String rocketId = request.getRocketId();
+            Rocket r = findRocketOrThrow(rocketId);
+            String detachedBoosterId = r.detachNextStage();
+            double distanceFromEarth = (SpaceMetricsMocked.inAir.getTotalDistance() - SpaceMetricsMocked.inAir.getDistance());
+            boosterRpcClient.initiateLandingSequence(detachedBoosterId, 
+                    distanceFromEarth, SpaceMetricsMocked.inAir.getSpeed());
+            NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
+            responseObserver.onNext(nextStageReply);
+            responseObserver.onCompleted();
+        } catch (RocketDoesNotExistException e) {
+            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        }
     }
 
     private Rocket findRocketOrThrow(String id) throws RocketDoesNotExistException {

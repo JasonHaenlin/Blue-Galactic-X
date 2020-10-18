@@ -9,7 +9,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.SpaceMet
 @Service
 public class RocketApi {
     // mocked data
-    private int iteration = 10;
+    private int iteration = 40;
     private Double mockFuelStep = null;
     private Double mockDistStep = null;
     private SpaceCoordinate origin = new SpaceCoordinate(0, 0, 0);
@@ -29,8 +29,6 @@ public class RocketApi {
         this.mockDistStep = distance / this.iteration;
         return SpaceMetricsMocked.inAir.totalDistance(distance).distance(distance).rocketId(rocketId);
     }
-
-
 
     public SpaceMetrics retrieveLastMetrics() {
         if (this.mockDistStep == null) {
