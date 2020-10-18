@@ -35,6 +35,9 @@ public class TelemetryService {
     @Autowired
     private TelemetryPayloadDataRepository telemetryPayloadDataRepository;
 
+    @Autowired
+    private TelemetryBoosterDataRepository telemetryBoosterDataRepository;
+
     /**
      * for now, the first call, we do not send back any anomalies but the second
      * time yes
@@ -56,18 +59,18 @@ public class TelemetryService {
         telemetryRocketDataRepository.save(rocketData);
     }
 
-    public void createBoosterData(TelemetryBoosterData boosterData) throws TelemetryDataBoosterIdException {
-        if (!checkBoosterIdExist(boosterData)) {
-            throw new TelemetryDataBoosterIdException();
-        }
-        telemetryBoosterDataRepository.save(boosterData);
-    }
-
     public void createPayloadData(TelemetryPayloadData payloadData) throws BadPayloadIdException {
         if (payloadData.getPayloadId() == null) {
             throw new BadPayloadIdException();
         }
         telemetryPayloadDataRepository.save(payloadData);
+    }
+
+    public void createBoosterData(TelemetryBoosterData boosterData) throws TelemetryDataBoosterIdException {
+        if (!checkBoosterIdExist(boosterData)) {
+            throw new TelemetryDataBoosterIdException();
+        }
+        telemetryBoosterDataRepository.save(boosterData);
     }
 
     public List<TelemetryRocketData> retrieveRocketData(String rocketId) throws NoTelemetryRocketDataException {
@@ -111,7 +114,11 @@ public class TelemetryService {
     }
 
     private boolean checkBoosterIdExist(TelemetryBoosterData boosterData) {
+<<<<<<< HEAD
         return boosterData.getBoosterId() != null;
+=======
+        return boosterData.getBoosterId() != null && boosterData.getRocketID() != null;
+>>>>>>> #52 read, store telemetry data of booster
     }
 
 }
