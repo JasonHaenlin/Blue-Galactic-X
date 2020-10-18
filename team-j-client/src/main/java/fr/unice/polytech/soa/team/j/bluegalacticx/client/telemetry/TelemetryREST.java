@@ -15,6 +15,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities.Anomaly;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities.TelemetryBoosterData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities.TelemetryRocketData;
 
 public class TelemetryREST extends RestAPI {
@@ -34,13 +35,24 @@ public class TelemetryREST extends RestAPI {
 
     }
 
-    public TelemetryRocketData retrieveTelemetryRocketData(String rocketId) throws IOException, InterruptedException {
+    public List<TelemetryRocketData> retrieveTelemetryRocketData(String rocketId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
                 .uri(URI.create(uri + "/rocket/" + rocketId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return mapper.readValue(response.body(), new TypeReference<TelemetryRocketData>() {
+        return mapper.readValue(response.body(), new TypeReference<List<TelemetryRocketData>>() {
+        });
+
+    }
+
+    public List<TelemetryBoosterData> retrieveTelemetryBoosterData(String boosterId) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
+                .uri(URI.create(uri + "/booster/" + boosterId)).build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return mapper.readValue(response.body(), new TypeReference<List<TelemetryBoosterData> >() {
         });
 
     }

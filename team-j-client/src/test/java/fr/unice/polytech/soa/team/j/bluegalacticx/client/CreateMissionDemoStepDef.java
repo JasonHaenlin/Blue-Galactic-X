@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.Date;
 import java.util.List;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.MissionREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.MissionStatus;
@@ -20,6 +21,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.Booster
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.TelemetryREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities.Anomaly;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities.TelemetryBoosterData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities.TelemetryRocketData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.weather.WeatherREST;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.weather.entities.WeatherReport;
@@ -44,7 +46,9 @@ public class CreateMissionDemoStepDef implements En {
 
     private LaunchOrderReply launchOrderReply;
     private NextStageReply nextStageReply;
-    private TelemetryRocketData telemetryRocketData;
+    private List<TelemetryRocketData> telemetryRocketData;
+    
+    private List<TelemetryBoosterData> telemetryBoosterData;
     private List<Anomaly> listAnomalies;
     private Payload payload;
 
@@ -88,8 +92,7 @@ public class CreateMissionDemoStepDef implements En {
         });
 
         When("Richard add a new mission", () -> {
-            Mission m = new Mission().id("1").payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7")
-                    .destination(new SpaceCoordinate(10, 10, 10)).date(new Date());
+            Mission m = new Mission().id("1").payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7").date(new Date());
             String response = missionREST.createNewMission(m);
             assertEquals(true, response.contains("200"));
 
@@ -131,14 +134,14 @@ public class CreateMissionDemoStepDef implements En {
         });
         When("rocket first stage is empty in fuel", () -> {
 
-            telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
+            telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
             log.request("Get the new telemetry data from the rocket").info("Rocket id : 1");
-            while (telemetryRocketData.getBoosters().get(0).getFuelLevel() > 0) {
-                telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
-                log.trace(rocketTrace(telemetryRocketData));
+            while (telemetryBoosterData.get(telemetryBoosterData.size()).getFuel() > 0) {
+                telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
+                //log.trace(rocketTrace(telemetryBoosterData.get(telemetryBoosterData.size())));
                 wait1s();
             }
-            assertEquals(true, telemetryRocketData.getBoosters().get(0).getFuelLevel() == 0);
+            assertEquals(true, telemetryBoosterData.get(telemetryBoosterData.size()).getFuel()==0);
             log.info("First stage empty in fuel").endSection();
         });
         Then("Elon split the rocket", () -> {
@@ -166,12 +169,12 @@ public class CreateMissionDemoStepDef implements En {
 
             telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
             log.info("Continue with the second stage");
-            while ((int) telemetryRocketData.getDistance() > 0) {
+            while ((int) telemetryRocketData.get(telemetryRocketData.size()).getDistance() > 0) {
                 telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
-                log.trace(rocketTrace(telemetryRocketData));
+                log.trace(rocketTrace(telemetryRocketData.get(telemetryRocketData.size())));
                 wait1s();
             }
-            assertEquals(true, (int) (telemetryRocketData.getDistance()) == 0);
+            assertEquals(true, (int) (telemetryRocketData.get(telemetryRocketData.size()).getDistance()) == 0);
             log.endSection();
         });
         Then("the mission is succesfull", () -> {
@@ -184,6 +187,15 @@ public class CreateMissionDemoStepDef implements En {
 
             log.request("Put final mission and payload status").info("mission " + mission.toString())
                     .info("payload " + payload.toString()).endSection();
+        });
+        And("the booster first stage landed correctly", () -> {
+            telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
+            while (telemetryBoosterData.get(telemetryBoosterData.size()).getDistanceFromEarth() > 0) {
+                telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
+                wait1s();
+            }
+
+            assertEquals(telemetryBoosterData.get(telemetryBoosterData.size()).getBoosterStatus(),BoosterStatus.LANDED);
         });
 
     }
@@ -206,10 +218,7 @@ public class CreateMissionDemoStepDef implements En {
             }
         }
         sb.append("] ");
-        for (Booster b : metrics.getBoosters()) {
-            sb.append(b.toString());
-            sb.append(" ");
-        }
+      
         return sb.toString();
     }
 

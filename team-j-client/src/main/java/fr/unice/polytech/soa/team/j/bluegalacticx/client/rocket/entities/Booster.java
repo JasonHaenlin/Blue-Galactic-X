@@ -1,24 +1,15 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities;
 
-import java.util.Objects;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.exceptions.BoosterDestroyedException;
 
 public class Booster {
     private BoosterStatus status;
-    private int fuelLevel;
+    private int fuelLevel = 100;
 
     public Booster() {
     }
 
-    public Booster(BoosterStatus status, int fuelLevel) {
-        this.status = status;
-        this.fuelLevel = fuelLevel;
-    }
-
-    public BoosterStatus getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(BoosterStatus status) {
+    public Booster(BoosterStatus status) {
         this.status = status;
     }
 
@@ -26,13 +17,15 @@ public class Booster {
         return this.fuelLevel;
     }
 
-    public void setFuelLevel(int fuelLevel) {
-        this.fuelLevel = fuelLevel;
+    public void reduceFuel(int fuel) {
+        this.fuelLevel -= fuel;
+        if (this.fuelLevel < 0) {
+            this.fuelLevel = 0;
+        }
     }
 
-    public Booster status(BoosterStatus status) {
-        this.status = status;
-        return this;
+    public BoosterStatus getStatus() {
+        return status;
     }
 
     public Booster fuelLevel(int fuelLevel) {
@@ -40,25 +33,21 @@ public class Booster {
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Booster)) {
-            return false;
-        }
-        Booster booster = (Booster) o;
-        return Objects.equals(status, booster.status) && fuelLevel == booster.fuelLevel;
+    public Booster status(BoosterStatus status) throws BoosterDestroyedException {
+        throwIfBoosterIsDestroyed("Cannot change the status of a destroyed rocket");
+        this.status = status;
+        return this;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(status, fuelLevel);
+    private void throwIfBoosterIsDestroyed(String msg) throws BoosterDestroyedException {
+        if (status == BoosterStatus.DESTROYED) {
+            throw new BoosterDestroyedException(msg);
+        }
     }
 
     @Override
     public String toString() {
-        return "{" + " status='" + getStatus() + "'" + ", fuelLevel='" + getFuelLevel() + "'" + "}";
+        return "{" + " status='" + status + "'" + ", fuelLevel='" + fuelLevel + "'" + "}";
     }
 
 }

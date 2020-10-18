@@ -1,5 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities;
-
+package fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities;
 
 
 public enum MissionStatus {

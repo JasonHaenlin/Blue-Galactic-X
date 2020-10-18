@@ -19,3 +19,4 @@ Feature: Create a new mission
         And Jeff can inform that there is no anomaly
         When the payload is on the destination point
         Then the mission is succesfull
+        And the booster first stage landed correctly

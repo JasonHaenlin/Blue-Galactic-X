@@ -1,11 +1,11 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
