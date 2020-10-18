@@ -48,7 +48,8 @@ import io.grpc.internal.testing.StreamRecorder;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest
-@ContextConfiguration(classes = { RocketRPCService.class, RestService.class, RocketApi.class, RestTemplate.class })
+@ContextConfiguration(classes = { RocketRPCService.class, RestService.class, RocketApi.class, RestTemplate.class,
+		BoosterRPCClient.class })
 @Tags(value = { @Tag("grpc"), @Tag("grpc-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -64,10 +65,14 @@ class RocketRPCServiceTest {
 	@MockBean
 	private MissionProducer missionProducer;
 
+	@MockBean
+	private BoosterRPCClient boosterRPCClient;
+
 	@BeforeAll
 	public void init() throws IOException {
 		Mockito.lenient().when(restService.getCoordinatesFromMission(any(String.class)))
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
+		Mockito.lenient().when(restService.getAvailableRocketID()).thenReturn(Mono.just("1"));
 	}
 
 	@Test

@@ -16,11 +16,9 @@ services:
     depends_on:
       - telemetry
       - mission
-      - schema-registry
       - broker
       - booster
       - schema-registry
-      - broker
 
   mission:
     build: ./team-j-mission-ws

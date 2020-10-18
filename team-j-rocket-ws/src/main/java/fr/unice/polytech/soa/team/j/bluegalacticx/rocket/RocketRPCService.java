@@ -3,13 +3,11 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 import com.google.protobuf.Empty;
 
 import org.lognet.springboot.grpc.GRpcService;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotAssignMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
@@ -120,7 +118,7 @@ public class RocketRPCService extends RocketImplBase {
             Rocket r = findRocketOrThrow(rocketId);
             String detachedBoosterId = r.detachNextStage();
             double distanceFromEarth = (SpaceMetricsMocked.inAir.getTotalDistance() - SpaceMetricsMocked.inAir.getDistance());
-            boosterRpcClient.initiateLandingSequence(detachedBoosterId, 
+            boosterRpcClient.initiateLandingSequence(detachedBoosterId,
                     distanceFromEarth, SpaceMetricsMocked.inAir.getSpeed());
             NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
             responseObserver.onNext(nextStageReply);
