@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.MongoTelemetryConfig;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryRocketDataRepository;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryBoosterData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryRocketDataException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataRocketIdException;
@@ -36,6 +40,7 @@ class TelemetryApplicationTests {
     @MockBean
     private TelemetryService telemetryService;
     private TelemetryRocketData rocketData;
+    private TelemetryBoosterData boosterData;
 
     @BeforeEach
     public void setup() {
@@ -43,6 +48,24 @@ class TelemetryApplicationTests {
         rocketData = new TelemetryRocketData();
         rocketData.setRocketId("125");
         rocketData.heatShield(50);
+        boosterData = new TelemetryBoosterData();
+        boosterData.boosterId("10").rocketID("125").fuel(50);
+
+    }
+
+    @Test
+    public void createTelemetryDataBoosterGoodParameterTest() throws Exception {
+
+        telemetryService.createBoosterData(any(TelemetryBoosterData.class));
+
+        // @formatter:off
+        mvc.perform(MockMvcRequestBuilders.post("/telemetry/booster")
+                    .content(JsonUtils.toJson(boosterData))
+                    .characterEncoding("utf-8")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+         // @formatter:on
 
     }
 
@@ -124,11 +147,14 @@ class TelemetryApplicationTests {
     @Test
     public void retrieveTelemetryDataRocketExistTest() throws Exception {
 
+        List<TelemetryRocketData> telemetryRocketDataList = new ArrayList<>();
         TelemetryRocketData telemetryRocketData = new TelemetryRocketData();
         telemetryRocketData.heatShield(95.0);
         telemetryRocketData.setRocketId("125");
 
-        when(telemetryService.retrieveRocketData("125")).thenReturn(telemetryRocketData);
+        telemetryRocketDataList.add(telemetryRocketData);
+
+        when(telemetryService.retrieveRocketData("125")).thenReturn(telemetryRocketDataList);
 
         // @formatter:off
         mvc.perform(get("/telemetry/rocket/125").param("rocketId", "125")
@@ -140,6 +166,5 @@ class TelemetryApplicationTests {
                     .andExpect(jsonPath(".rocketId").value("125"));
          // @formatter:on
     }
-
 
 }

@@ -32,22 +32,10 @@ public class RocketApi {
     public SpaceMetrics launchWhenReady(SpaceCoordinate objectiveCoordinates, String rocketId) {
         double distance = computeDistance(origin, objectiveCoordinates);
         this.mockDistStep = distance / this.iteration;
-        this.mockFuelStep = (100.0 / this.iteration) * SpaceMetricsMocked.inAir.getBoosters().size();
         return SpaceMetricsMocked.inAir.totalDistance(distance).distance(distance).rocketId(rocketId);
     }
 
-    public void dettachStage() throws BoosterDestroyedException {
-        List<Booster> b = SpaceMetricsMocked.inAir.getBoosters();
-        for (int i = 0; i < b.size(); i++) {
-            if (b.get(i).getStatus() == BoosterStatus.RUNNING) {
-                b.get(i).status(BoosterStatus.DROPED);
-                if (i + 1 < b.size()) {
-                    b.get(i + 1).status(BoosterStatus.RUNNING);
-                }
-                break;
-            }
-        }
-    }
+
 
     public SpaceMetrics retrieveLastMetrics() {
         if (this.mockDistStep == null) {

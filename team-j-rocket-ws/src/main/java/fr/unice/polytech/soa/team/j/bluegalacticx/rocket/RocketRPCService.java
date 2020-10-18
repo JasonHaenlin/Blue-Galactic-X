@@ -101,16 +101,11 @@ public class RocketRPCService extends RocketImplBase {
 
     @Override
     public void nextStage(NextStageRequest request, StreamObserver<NextStageReply> responseObserver) {
-        try {
-            rocketApi.dettachStage();
 
-            NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
-            responseObserver.onNext(nextStageReply);
-            responseObserver.onCompleted();
+        NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
+        responseObserver.onNext(nextStageReply);
+        responseObserver.onCompleted();
 
-        } catch (BoosterDestroyedException e) {
-            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
-        }
     }
 
     private Rocket findRocketOrThrow(String id) throws RocketDoesNotExistException {
