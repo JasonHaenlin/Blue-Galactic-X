@@ -34,7 +34,7 @@ public class RocketRPCService extends RocketImplBase {
     private RocketApi rocketApi;
 
     @Autowired
-    private MissionRPCClient missionRpcClient;
+    private MissionProducer missionProducer;
 
     @Override
     public void setReadyToLaunch(MissionRequest request, StreamObserver<Empty> responseObserver) {
@@ -62,7 +62,7 @@ public class RocketRPCService extends RocketImplBase {
             r.initiateTheSelfDestructSequence();
             responseObserver
                     .onNext(DesctructionOrderReply.newBuilder().setDestructionRocket("DESTROYED MOUHAHAH !!").build());
-            missionRpcClient.failedMission(r.getTheCurrentMissionId());
+            missionProducer.failedMission(r.getTheCurrentMissionId());
             responseObserver.onCompleted();
 
         } catch (RocketDoesNotExistException e) {
@@ -82,7 +82,7 @@ public class RocketRPCService extends RocketImplBase {
                 rocketApi.launchWhenReady(r.retrieveObjectiveCoordinates(), r.getId());
                 message = "Launch approved !";
                 r.launchSequenceActivated();
-                missionRpcClient.startMission(r.getTheCurrentMissionId());
+                missionProducer.startMission(r.getTheCurrentMissionId());
             }
 
             LaunchOrderReply launchOrderReply = LaunchOrderReply.newBuilder().setReply(message).build();

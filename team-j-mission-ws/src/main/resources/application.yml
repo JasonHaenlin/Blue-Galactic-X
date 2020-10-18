@@ -20,3 +20,13 @@ api:
   rocket:
     host: ${ROCKET_HOST:localhost}
     port: ${PAYLOAD_PORT:8080}
+
+kafka:
+  broker:
+    host: ${KAFKA_BROKER_HOST:localhost}
+    port: ${KAFKA_BROKER_PORT:19092}
+  schema:
+    host: ${SCHEMA_BROKER_HOST:http://localhost}
+    port: ${SCHEMA_BROKER_PORT:9090}
+    group:
+      mission: blue-origin-mission

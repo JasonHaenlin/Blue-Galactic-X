@@ -62,7 +62,7 @@ class RocketRPCServiceTest {
 	private RestService restService;
 
 	@MockBean
-	private MissionRPCClient missionRpcClient;
+	private MissionProducer missionProducer;
 
 	@BeforeAll
 	public void init() throws IOException {
