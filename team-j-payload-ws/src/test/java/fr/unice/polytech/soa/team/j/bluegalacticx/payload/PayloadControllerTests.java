@@ -21,8 +21,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.utils.JsonUtil;
 
 @AutoConfigureMockMvc

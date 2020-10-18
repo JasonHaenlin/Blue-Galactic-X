@@ -6,10 +6,10 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.InvalidPayloadException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.PayloadNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.mock.PayloadMock;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest.PayloadStatus;
 
 @Service
 public class PayloadService {

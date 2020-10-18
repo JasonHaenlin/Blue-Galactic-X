@@ -56,13 +56,13 @@ public class TelemetryController {
 
     @PostMapping("/payload")
     public void createPayloadTelemetryData(@RequestBody TelemetryPayloadData payloadData) {
-        LOG.info(payloadData.toString());
         try {
             LOG.info(payloadData.toString());
             telemetryService.createPayloadData(payloadData);
         } catch (DataAccessResourceFailureException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
         } catch (BadPayloadIdException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

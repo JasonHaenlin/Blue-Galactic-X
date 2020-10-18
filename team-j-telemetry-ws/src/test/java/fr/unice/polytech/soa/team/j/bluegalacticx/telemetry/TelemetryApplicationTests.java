@@ -40,22 +40,31 @@ class TelemetryApplicationTests {
 
     @Autowired
     private MockMvc mvc;
+
     @MockBean
     private TelemetryService telemetryService;
+
+    @MockBean
     private TelemetryRocketData rocketData;
-    private TelemetryBoosterData boosterData;
+
+    @MockBean
     private TelemetryPayloadData payloadData;
+
+    @MockBean
     private TelemetryBoosterData boosterData;
 
     @BeforeEach
     public void setup() {
-
         rocketData = new TelemetryRocketData();
         rocketData.setRocketId("125");
         rocketData.heatShield(50);
+
         boosterData = new TelemetryBoosterData();
         boosterData.boosterId("10").rocketID("125").fuel(50);
 
+        payloadData = new TelemetryPayloadData();
+        payloadData.setPayloadId("501");
+        payloadData.setWeight(3000);
     }
 
     @Test

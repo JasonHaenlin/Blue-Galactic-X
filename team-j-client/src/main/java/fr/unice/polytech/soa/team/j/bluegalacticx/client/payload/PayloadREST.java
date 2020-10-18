@@ -20,13 +20,10 @@ public class PayloadREST extends RestAPI {
     }
 
     public Payload createNewPayload(Payload payload) throws IOException, InterruptedException {
-        System.out.println(JsonUtils.toJson(payload));
         HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(payload)))
                 .header("Content-Type", "application/json").uri(URI.create(uri)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        System.out.println(response);
 
         return mapper.readValue(response.body(), new TypeReference<Payload>() {
         });
@@ -34,13 +31,10 @@ public class PayloadREST extends RestAPI {
 
     public Payload changePayloadStatus(PayloadStatus payload, String payloadId)
             throws IOException, InterruptedException {
-        System.out.println(JsonUtils.toJson(payload));
         HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(payload)))
                 .header("Content-Type", "application/json").uri(URI.create(uri + "/" + payloadId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        System.out.println(response);
 
         return mapper.readValue(response.body(), new TypeReference<Payload>() {
         });
