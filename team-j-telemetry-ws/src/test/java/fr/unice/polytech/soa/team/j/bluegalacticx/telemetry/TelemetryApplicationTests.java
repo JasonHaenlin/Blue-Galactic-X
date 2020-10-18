@@ -45,6 +45,7 @@ class TelemetryApplicationTests {
     private TelemetryRocketData rocketData;
     private TelemetryBoosterData boosterData;
     private TelemetryPayloadData payloadData;
+    private TelemetryBoosterData boosterData;
 
     @BeforeEach
     public void setup() {

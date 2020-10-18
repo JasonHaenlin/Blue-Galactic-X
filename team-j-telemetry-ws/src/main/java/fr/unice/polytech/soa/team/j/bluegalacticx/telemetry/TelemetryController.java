@@ -75,6 +75,17 @@ public class TelemetryController {
         } catch (DataAccessResourceFailureException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
         } catch (BadPayloadIdException e) {
+        }
+        }
+    @PostMapping("/booster")
+    public void createBoosterTelemetryData(@RequestBody TelemetryBoosterData boosterData) {
+        LOG.info(boosterData.toString());
+        try {
+            LOG.info(boosterData.toString());
+            telemetryService.createBoosterData(boosterData);
+        } catch (DataAccessResourceFailureException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+        } catch (TelemetryDataBoosterIdException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
