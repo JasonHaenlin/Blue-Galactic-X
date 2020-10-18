@@ -1,7 +1,5 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class RocketMetrics {

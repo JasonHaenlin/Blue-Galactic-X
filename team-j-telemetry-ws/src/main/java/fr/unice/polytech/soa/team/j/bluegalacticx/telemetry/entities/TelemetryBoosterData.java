@@ -11,11 +11,14 @@ public class TelemetryBoosterData {
     private String boosterId;
     private String rocketId;
     private BoosterStatus boosterStatus;
+    private double distanceFromEarth;
+    private double speed;
+
 
     public TelemetryBoosterData() {
     }
 
-    public TelemetryBoosterData(int fuel, String boosterId, String rocketId, BoosterStatus boosterStatus) {
+    public TelemetryBoosterData(int fuel, String boosterId, String rocketId, BoosterStatus boosterStatus, double distanceFromEarth, double speed) {
         this.fuel = fuel;
         this.boosterId = boosterId;
         this.rocketId = rocketId;
@@ -28,6 +31,22 @@ public class TelemetryBoosterData {
 
     public void setFuel(int fuel) {
         this.fuel = fuel;
+    }
+
+    public double getDistanceFromEarth() {
+        return this.distanceFromEarth;
+    }
+
+    public void setDistanceFromEarth(double distance) {
+        this.distanceFromEarth = distance;
+    }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     public String getBoosterId() {
@@ -84,18 +103,24 @@ public class TelemetryBoosterData {
         TelemetryBoosterData telemetryBoosterData = (TelemetryBoosterData) o;
         return fuel == telemetryBoosterData.fuel && Objects.equals(boosterId, telemetryBoosterData.boosterId)
                 && Objects.equals(rocketId, telemetryBoosterData.rocketId)
-                && Objects.equals(boosterStatus, telemetryBoosterData.boosterStatus);
+                && Objects.equals(boosterStatus, telemetryBoosterData.boosterStatus)
+                && Objects.equals(distanceFromEarth, telemetryBoosterData.distanceFromEarth)
+                && Objects.equals(speed, telemetryBoosterData.speed);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fuel, boosterId, rocketId, boosterStatus);
+        return Objects.hash(fuel, boosterId, rocketId, boosterStatus, distanceFromEarth, speed);
     }
 
     @Override
     public String toString() {
-        return "{" + " fuel='" + getFuel() + "'" + ", boosterId='" + getBoosterId() + "'" + ", rocketId='"
-                + getRocketID() + "'" + ", boosterStatus='" + getBoosterStatus() + "'" + "}";
+        return "{" + " fuel='" + getFuel() + "'" 
+                + ", boosterId='" + getBoosterId() + "'" 
+                + ", rocketId='" + getRocketID() + "'"
+                + ", boosterStatus='" + getBoosterStatus() + "'" 
+                + ", distanceFromEarth='" + getDistanceFromEarth() + "'" 
+                + ", speed='" + getSpeed() + "'" + "}";
     }
 
 }

@@ -48,7 +48,6 @@ public class RocketApiTest {
         assertEquals(SpaceMetricsMocked.inAir.getDistance(), ms.getDistance());
 
         double lDist;
-        double lFuel;
 
         for (int i = 0; i < 5; i++) {
             lDist = SpaceMetricsMocked.inAir.getDistance();
@@ -70,7 +69,6 @@ public class RocketApiTest {
         }
 
         assertEquals(7.0, ms.getDistance(), 0.1);
-
 
         for (int i = 0; i < 5; i++) {
             ms = api.retrieveLastMetrics();

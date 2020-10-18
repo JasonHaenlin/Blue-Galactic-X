@@ -87,7 +87,7 @@ public class TelemetryService {
     }
 
     private boolean checkBoosterIdExist(TelemetryBoosterData boosterData) {
-        return boosterData.getBoosterId() != null && boosterData.getRocketID() != null;
+        return boosterData.getBoosterId() != null;
     }
 
 }

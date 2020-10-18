@@ -2,8 +2,6 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Booster;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
 
 public class SpaceMetricsMocked {
@@ -29,7 +27,7 @@ public class SpaceMetricsMocked {
                     .boosterRGA(30)
                     .midRocketRGA(35);
 
-                    onGround = (SpaceMetrics) new SpaceMetrics()
+        onGround = (SpaceMetrics) new SpaceMetrics()
                     .rocketId("1")
                     .heatShield(100)
                     .speed(0)

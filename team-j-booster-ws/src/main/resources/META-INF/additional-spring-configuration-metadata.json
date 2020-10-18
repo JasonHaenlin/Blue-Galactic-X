@@ -1,0 +1,14 @@
+{
+    "properties": [
+        {
+            "name": "api.telemetry.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.telemetry.host'"
+        },
+        {
+            "name": "api.telemetry.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.telemetry.port'"
+        }
+    ]
+}

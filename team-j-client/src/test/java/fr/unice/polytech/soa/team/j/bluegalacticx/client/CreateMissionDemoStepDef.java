@@ -179,6 +179,7 @@ public class CreateMissionDemoStepDef implements En {
             Mission mission = missionREST.retrieveMissionStatus("1");
             assertEquals(true, mission.getStatus().equals(MissionStatus.SUCCESSFUL));
             payload = payloadREST.retrievePayload("4f6911a8-437a-43fc-adad-a0ed6c6f69a7");
+            System.out.println(payload.getStatus());
             assertEquals(true, payload.getStatus().equals(PayloadStatus.DELIVERED));
 
             log.request("Put final mission and payload status").info("mission " + mission.toString())
