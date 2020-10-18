@@ -46,18 +46,14 @@ public class RocketApiTest {
 
         ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
         assertEquals(SpaceMetricsMocked.inAir.getDistance(), ms.getDistance());
-        assertEquals(SpaceMetricsMocked.inAir.retrieveActiveBooster().getFuelLevel(),
-                ms.retrieveActiveBooster().getFuelLevel());
 
         double lDist;
         double lFuel;
 
         for (int i = 0; i < 5; i++) {
             lDist = SpaceMetricsMocked.inAir.getDistance();
-            lFuel = SpaceMetricsMocked.inAir.retrieveLastBooster().getFuelLevel();
             ms = api.retrieveLastMetrics();
             assertTrue(lDist > ms.getDistance());
-            assertTrue(lFuel > ms.retrieveLastBooster().getFuelLevel());
         }
     }
 
@@ -69,21 +65,18 @@ public class RocketApiTest {
 
         ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "");
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
             ms = api.retrieveLastMetrics();
         }
 
         assertEquals(7.0, ms.getDistance(), 0.1);
-        assertEquals(0, ms.retrieveLastBooster().getFuelLevel());
 
-        api.dettachStage();
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
             ms = api.retrieveLastMetrics();
         }
 
         assertEquals(0.0, ms.getDistance(), 0.1);
-        assertEquals(0, ms.retrieveLastBooster().getFuelLevel());
 
     }
 

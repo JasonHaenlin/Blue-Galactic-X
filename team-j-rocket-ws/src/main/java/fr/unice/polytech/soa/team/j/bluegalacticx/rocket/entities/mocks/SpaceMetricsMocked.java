@@ -22,8 +22,6 @@ public class SpaceMetricsMocked {
                     .heatShield(95)
                     .speed(950)
                     .distance(500)
-                    .addBooster(new Booster(BoosterStatus.RUNNING))
-                    .addBooster(new Booster(BoosterStatus.PENDING))
                     .irradiance(10)
                     .velocityVariation(15)
                     .temperature(200)
@@ -36,8 +34,6 @@ public class SpaceMetricsMocked {
                     .heatShield(100)
                     .speed(0)
                     .distance(0)
-                    .addBooster(new Booster(BoosterStatus.READY))
-                    .addBooster(new Booster(BoosterStatus.READY))
                     .irradiance(10)
                     .velocityVariation(15)
                     .temperature(50)
@@ -49,11 +45,7 @@ public class SpaceMetricsMocked {
 
     public static final SpaceMetrics nextMetrics(double distStep, Double fuelStep) {
         double newDistance = inAir.getDistance();
-        Booster b = inAir.retrieveActiveBooster();
-        if (b != null) {
-            b.reduceFuel((int) Math.round(fuelStep));
             newDistance -= distStep;
-        }
 
         // @formatter:off
         return (SpaceMetrics) inAir

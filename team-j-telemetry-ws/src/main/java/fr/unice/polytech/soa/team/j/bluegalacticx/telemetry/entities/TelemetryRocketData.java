@@ -1,16 +1,12 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "rocketTelemetry")
 public class TelemetryRocketData {
 
-    @Id
     private String rocketId;
     private int irradiance = 0; // sun sensors in nm
     private int velocityVariation = 0; // accelerometers value in mm/s
@@ -22,14 +18,11 @@ public class TelemetryRocketData {
     private double speed; // m/s
     private double distance;
     private double totalDistance;
-    private List<Booster> boosters = new ArrayList<>();
-
+    
     public TelemetryRocketData() {
     }
 
-    public TelemetryRocketData(String rocketId, int irradiance, int velocityVariation, int temperature, int vibration,
-            int boosterRGA, int midRocketRGA, double heatShield, double speed, double distance, double totalDistance,
-            List<Booster> boosters) {
+    public TelemetryRocketData(String rocketId, int irradiance, int velocityVariation, int temperature, int vibration, int boosterRGA, int midRocketRGA, double heatShield, double speed, double distance,double totalDistance) {
         this.rocketId = rocketId;
         this.irradiance = irradiance;
         this.velocityVariation = velocityVariation;
@@ -41,7 +34,6 @@ public class TelemetryRocketData {
         this.speed = speed;
         this.distance = distance;
         this.totalDistance = totalDistance;
-        this.boosters = boosters;
     }
 
     public String getRocketId() {
@@ -132,14 +124,6 @@ public class TelemetryRocketData {
         this.totalDistance = totalDistance;
     }
 
-    public List<Booster> getBoosters() {
-        return this.boosters;
-    }
-
-    public void setBoosters(List<Booster> boosters) {
-        this.boosters = boosters;
-    }
-
     public TelemetryRocketData rocketId(String rocketId) {
         this.rocketId = rocketId;
         return this;
@@ -195,10 +179,6 @@ public class TelemetryRocketData {
         return this;
     }
 
-    public TelemetryRocketData boosters(List<Booster> boosters) {
-        this.boosters = boosters;
-        return this;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -213,14 +193,13 @@ public class TelemetryRocketData {
                 && temperature == telemetryRocketData.temperature && vibration == telemetryRocketData.vibration
                 && boosterRGA == telemetryRocketData.boosterRGA && midRocketRGA == telemetryRocketData.midRocketRGA
                 && heatShield == telemetryRocketData.heatShield && speed == telemetryRocketData.speed
-                && distance == telemetryRocketData.distance && totalDistance == telemetryRocketData.totalDistance
-                && Objects.equals(boosters, telemetryRocketData.boosters);
+                && distance == telemetryRocketData.distance && Objects.equals(totalDistance, telemetryRocketData.totalDistance);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(rocketId, irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA,
-                heatShield, speed, distance, totalDistance, boosters);
+                heatShield, speed, distance, totalDistance);
     }
 
     @Override
@@ -229,8 +208,7 @@ public class TelemetryRocketData {
                 + ", velocityVariation='" + getVelocityVariation() + "'" + ", temperature='" + getTemperature() + "'"
                 + ", vibration='" + getVibration() + "'" + ", boosterRGA='" + getBoosterRGA() + "'" + ", midRocketRGA='"
                 + getMidRocketRGA() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='" + getSpeed() + "'"
-                + ", distance='" + getDistance() + "'" + ", totalDistance='" + getTotalDistance() + "'" + ", boosters='"
-                + getBoosters() + "'" + "}";
+                + ", distance='" + getDistance() + "'" + ", totalDistance='" + getTotalDistance() + "'" + "}";
     }
 
 }
