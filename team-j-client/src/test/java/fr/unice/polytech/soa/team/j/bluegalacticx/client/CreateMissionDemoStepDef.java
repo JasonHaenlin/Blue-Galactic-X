@@ -136,12 +136,12 @@ public class CreateMissionDemoStepDef implements En {
 
             telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
             log.request("Get the new telemetry data from the rocket").info("Rocket id : 1");
-            while (telemetryBoosterData.get(telemetryBoosterData.size()).getFuel() > 0) {
+            while (telemetryBoosterData.get(telemetryBoosterData.size()-1).getFuel() > 0) {
                 telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
                 //log.trace(rocketTrace(telemetryBoosterData.get(telemetryBoosterData.size())));
                 wait1s();
             }
-            assertEquals(true, telemetryBoosterData.get(telemetryBoosterData.size()).getFuel()==0);
+            assertEquals(true, telemetryBoosterData.get(telemetryBoosterData.size()-1).getFuel()==0);
             log.info("First stage empty in fuel").endSection();
         });
         Then("Elon split the rocket", () -> {
@@ -169,12 +169,12 @@ public class CreateMissionDemoStepDef implements En {
 
             telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
             log.info("Continue with the second stage");
-            while ((int) telemetryRocketData.get(telemetryRocketData.size()).getDistance() > 0) {
+            while ((int) telemetryRocketData.get(telemetryRocketData.size()-1).getDistance() > 0) {
                 telemetryRocketData = telemetryREST.retrieveTelemetryRocketData("1");
-                log.trace(rocketTrace(telemetryRocketData.get(telemetryRocketData.size())));
+                log.trace(rocketTrace(telemetryRocketData.get(telemetryRocketData.size()-1)));
                 wait1s();
             }
-            assertEquals(true, (int) (telemetryRocketData.get(telemetryRocketData.size()).getDistance()) == 0);
+            assertEquals(true, (int) (telemetryRocketData.get(telemetryRocketData.size()-1).getDistance()) == 0);
             log.endSection();
         });
         Then("the mission is succesfull", () -> {
@@ -190,12 +190,12 @@ public class CreateMissionDemoStepDef implements En {
         });
         And("the booster first stage landed correctly", () -> {
             telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
-            while (telemetryBoosterData.get(telemetryBoosterData.size()).getDistanceFromEarth() > 0) {
+            while (telemetryBoosterData.get(telemetryBoosterData.size()-1).getDistanceFromEarth() > 0) {
                 telemetryBoosterData = telemetryREST.retrieveTelemetryBoosterData("1");
                 wait1s();
             }
 
-            assertEquals(telemetryBoosterData.get(telemetryBoosterData.size()).getBoosterStatus(),BoosterStatus.LANDED);
+            assertEquals(telemetryBoosterData.get(telemetryBoosterData.size()-1).getBoosterStatus(),BoosterStatus.LANDED);
         });
 
     }
