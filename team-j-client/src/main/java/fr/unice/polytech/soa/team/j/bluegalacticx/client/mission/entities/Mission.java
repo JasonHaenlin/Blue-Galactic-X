@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionStatusRequest.MissionStatus;
+
 
 public class Mission {
 

@@ -11,8 +11,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.payload.entities.PayloadStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionStatusRequest.MissionStatus;
 
 public class MissionREST extends RestAPI {
 
