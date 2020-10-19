@@ -14,11 +14,11 @@ public class TelemetryBoosterData {
     private double distanceFromEarth;
     private double speed;
 
-
     public TelemetryBoosterData() {
     }
 
-    public TelemetryBoosterData(int fuel, String boosterId, String rocketId, BoosterStatus boosterStatus, double distanceFromEarth, double speed) {
+    public TelemetryBoosterData(int fuel, String boosterId, String rocketId, BoosterStatus boosterStatus,
+            double distanceFromEarth, double speed) {
         this.fuel = fuel;
         this.boosterId = boosterId;
         this.rocketId = rocketId;
@@ -115,12 +115,9 @@ public class TelemetryBoosterData {
 
     @Override
     public String toString() {
-        return "{" + " fuel='" + getFuel() + "'" 
-                + ", boosterId='" + getBoosterId() + "'" 
-                + ", rocketId='" + getRocketID() + "'"
-                + ", boosterStatus='" + getBoosterStatus() + "'" 
-                + ", distanceFromEarth='" + getDistanceFromEarth() + "'" 
-                + ", speed='" + getSpeed() + "'" + "}";
+        return "{" + " fuel='" + getFuel() + "'" + ", boosterId='" + getBoosterId() + "'" + ", rocketId='"
+                + getRocketID() + "'" + ", boosterStatus='" + getBoosterStatus() + "'" + ", distanceFromEarth='"
+                + getDistanceFromEarth() + "'" + ", speed='" + getSpeed() + "'" + "}";
     }
 
 }

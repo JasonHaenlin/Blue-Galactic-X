@@ -36,7 +36,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadRocketId
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionStatusRequest.MissionStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.PayloadStatusRequest.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils.JsonUtils;
 

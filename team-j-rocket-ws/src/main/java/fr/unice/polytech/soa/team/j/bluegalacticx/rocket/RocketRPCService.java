@@ -117,9 +117,10 @@ public class RocketRPCService extends RocketImplBase {
             String rocketId = request.getRocketId();
             Rocket r = findRocketOrThrow(rocketId);
             String detachedBoosterId = r.detachNextStage();
-            double distanceFromEarth = (SpaceMetricsMocked.inAir.getTotalDistance() - SpaceMetricsMocked.inAir.getDistance());
-            boosterRpcClient.initiateLandingSequence(detachedBoosterId,
-                    distanceFromEarth, SpaceMetricsMocked.inAir.getSpeed());
+            double distanceFromEarth = (SpaceMetricsMocked.inAir.getTotalDistance()
+                    - SpaceMetricsMocked.inAir.getDistance());
+            boosterRpcClient.initiateLandingSequence(detachedBoosterId, distanceFromEarth,
+                    SpaceMetricsMocked.inAir.getSpeed());
             NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
             responseObserver.onNext(nextStageReply);
             responseObserver.onCompleted();
