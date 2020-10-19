@@ -15,6 +15,7 @@ public class AppLog {
     private static final int BLUE = 34;
     private static final int MAGENTA = 35;
     private static final int CYAN = 36;
+    private static final int YELLOW = 33;
 
     private static final String PREFIX = "\u001b[";
     private static final String SUFFIX = "m";
@@ -29,7 +30,7 @@ public class AppLog {
     }
 
     public AppLog info(String str) {
-        ROOT.info(PREFIX + NORMAL + SEPARATOR + BLUE + SUFFIX + "Info > " + str + END_COLOUR + NEWLINE);
+        ROOT.info(PREFIX + NORMAL + SEPARATOR + YELLOW + SUFFIX + "Info > " + str + END_COLOUR + NEWLINE);
         return LOGGER_INSTANCE;
     }
 
