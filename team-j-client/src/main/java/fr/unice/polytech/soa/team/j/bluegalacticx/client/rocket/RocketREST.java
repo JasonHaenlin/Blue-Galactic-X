@@ -41,9 +41,9 @@ public class RocketREST extends RestAPI {
 
     }
 
-    public void setReport(RocketReport rocketReport) throws IOException, InterruptedException {
+    public void setReport(RocketReport rocketReport,String rocketId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(rocketReport)))
-                .header("Content-Type", "application/json").uri(URI.create(uri + "/report")).build();
+                .header("Content-Type", "application/json").uri(URI.create(uri + "/report/"+rocketId)).build();
 
         client.send(request, HttpResponse.BodyHandlers.ofString());
 

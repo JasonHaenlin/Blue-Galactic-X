@@ -5,7 +5,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.payload.entities.SpaceCoordinate;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionStatusRequest.MissionStatus;
+
 
 public class Mission {
 
@@ -21,7 +22,8 @@ public class Mission {
     public Mission() {
     }
 
-    public Mission(String id, String rocketId, String payloadId, SpaceCoordinate destination, Date date, MissionStatus status) {
+    public Mission(String id, String rocketId, String payloadId, SpaceCoordinate destination, Date date,
+            MissionStatus status) {
         this.id = id;
         this.rocketId = rocketId;
         this.payloadId = payloadId;
@@ -116,7 +118,9 @@ public class Mission {
             return false;
         }
         Mission mission = (Mission) o;
-        return Objects.equals(id, mission.id) && Objects.equals(rocketId, mission.rocketId) && Objects.equals(payloadId, mission.payloadId) && Objects.equals(destination, mission.destination) && Objects.equals(date, mission.date) && Objects.equals(status, mission.status);
+        return Objects.equals(id, mission.id) && Objects.equals(rocketId, mission.rocketId)
+                && Objects.equals(payloadId, mission.payloadId) && Objects.equals(destination, mission.destination)
+                && Objects.equals(date, mission.date) && Objects.equals(status, mission.status);
     }
 
     @Override
@@ -126,14 +130,9 @@ public class Mission {
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", rocketId='" + getRocketId() + "'" +
-            ", payloadId='" + getPayloadId() + "'" +
-            ", destination='" + getDestination() + "'" +
-            ", date='" + getDate() + "'" +
-            ", status='" + getStatus() + "'" +
-            "}";
+        return "{" + " id='" + getId() + "'" + ", rocketId='" + getRocketId() + "'" + ", payloadId='" + getPayloadId()
+                + "'" + ", destination='" + getDestination() + "'" + ", date='" + getDate() + "'" + ", status='"
+                + getStatus() + "'" + "}";
     }
 
 }
