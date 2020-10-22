@@ -9,6 +9,9 @@ ENV TELEMETRY_PORT="8090"
 ENV MISSION_HOST="team-j-blue-galactic-mission"
 ENV MISSION_PORT="8070"
 ENV MISSION_GRPC="8071"
+ENV BOOSTER_HOST="team-j-blue-galactic-booster"
+ENV BOOSTER_PORT="8030"
+ENV BOOSTER_GRPC="8031"
 
 HEALTHCHECK  --interval=5s --timeout=3s \
     CMD wget --no-verbose --tries=1 --spider http://localhost:8080/rocket/ping/ || exit 1

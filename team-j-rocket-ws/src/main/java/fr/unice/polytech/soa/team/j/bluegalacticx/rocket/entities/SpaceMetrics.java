@@ -7,15 +7,17 @@ public class SpaceMetrics extends RocketMetrics {
     private double heatShield; // %
     private double speed; // m/s
     private double distance;
+    private double totalDistance;
 
     public SpaceMetrics() {
     }
 
-    public SpaceMetrics(String rocketId, double heatShield, double speed, double distance) {
+    public SpaceMetrics(String rocketId, double heatShield, double speed, double distance, double totalDistance) {
         this.rocketId = rocketId;
         this.heatShield = heatShield;
         this.speed = speed;
         this.distance = distance;
+        this.totalDistance = totalDistance;
     }
 
     public String getRocketId() {
@@ -50,6 +52,14 @@ public class SpaceMetrics extends RocketMetrics {
         this.distance = distance;
     }
 
+    public double getTotalDistance() {
+        return this.totalDistance;
+    }
+
+    public void setTotalDistance(double totalDistance) {
+        this.totalDistance = totalDistance;
+    }
+
     public SpaceMetrics rocketId(String rocketId) {
         this.rocketId = rocketId;
         return this;
@@ -70,6 +80,11 @@ public class SpaceMetrics extends RocketMetrics {
         return this;
     }
 
+    public SpaceMetrics totalDistance(double totalDistance) {
+        this.totalDistance = totalDistance;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -78,19 +93,23 @@ public class SpaceMetrics extends RocketMetrics {
             return false;
         }
         SpaceMetrics spaceMetrics = (SpaceMetrics) o;
-        return Objects.equals(rocketId, spaceMetrics.rocketId) && heatShield == spaceMetrics.heatShield
-                && speed == spaceMetrics.speed && distance == spaceMetrics.distance;
+        return Objects.equals(rocketId, spaceMetrics.rocketId) && heatShield == spaceMetrics.heatShield && speed == spaceMetrics.speed && distance == spaceMetrics.distance && totalDistance == spaceMetrics.totalDistance;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rocketId, heatShield, speed, distance);
+        return Objects.hash(rocketId, heatShield, speed, distance, totalDistance);
     }
 
     @Override
     public String toString() {
-        return "{" + " rocketId='" + getRocketId() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='"
-                + getSpeed() + "'" + ", distance='" + getDistance() + "'" + "}" + super.toString();
+        return "{" +
+            " rocketId='" + getRocketId() + "'" +
+            ", heatShield='" + getHeatShield() + "'" +
+            ", speed='" + getSpeed() + "'" +
+            ", distance='" + getDistance() + "'" +
+            ", totalDistance='" + getTotalDistance() + "'" +
+            "}";
     }
 
 }

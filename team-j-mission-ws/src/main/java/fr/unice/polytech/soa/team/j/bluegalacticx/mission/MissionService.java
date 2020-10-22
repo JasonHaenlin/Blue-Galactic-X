@@ -4,19 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.mocks.MissionsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionStatusRequest.MissionStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.PayloadStatusRequest.PayloadStatus;
 
 @Service
 public class MissionService {
 
     @Autowired
-    private RestApiService restService;
+    private PayloadProducer payloadProducer;
 
     public Mission createMission(Mission mission) throws InvalidMissionException {
         if (invalidMission(mission)) {
@@ -29,13 +29,12 @@ public class MissionService {
     public Mission setMissionStatus(MissionStatus missionStatus, String missionId)
             throws MissionDoesNotExistException, BadPayloadIdException {
         Mission mission = findMissionOrThrow(missionId);
-        mission.setMissionStatus(missionStatus);
-        restService.updatePayloadStatus(missionId, PayloadStatus.values()[missionStatus.ordinal()]);
+        mission.setStatus(missionStatus);
+        payloadProducer.updatePayloadStatus(mission.getPayloadId(), PayloadStatus.values()[missionStatus.ordinal()]);
         return mission;
     }
 
-    public Mission getMissionStatus(String missionId)
-            throws MissionDoesNotExistException {
+    public Mission getMissionStatus(String missionId) throws MissionDoesNotExistException {
         Mission mission = findMissionOrThrow(missionId);
         return mission;
     }

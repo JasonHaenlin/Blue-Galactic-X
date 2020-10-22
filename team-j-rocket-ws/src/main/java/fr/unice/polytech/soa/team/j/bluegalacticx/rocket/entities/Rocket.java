@@ -15,6 +15,7 @@ public class Rocket {
     private RocketStatus status;
     private String missionId;
     private SpaceCoordinate objective;
+    private String boosterId;
 
     public Rocket() {
     }
@@ -35,6 +36,12 @@ public class Rocket {
         this.missionId = missionId;
     }
 
+    public String detachNextStage() {
+        String boosterId = this.boosterId;
+        this.boosterId = "";
+        return boosterId;
+    }
+
     public RocketMetrics retrieveLastMetrics() throws RocketDestroyedException {
         throwIfRocketIsDestroyed();
         return this.metrics;
@@ -53,7 +60,6 @@ public class Rocket {
     }
 
     public void replaceWithNewReport(RocketReport report) throws CannotBeNullException {
-        System.out.println(report);
         if (report.getEngine() == null || report.getOverallResult() == null) {
             throw new CannotBeNullException("report");
         }
@@ -78,6 +84,14 @@ public class Rocket {
 
     public String getTheCurrentMissionId() {
         return missionId;
+    }
+
+    public String getBoosterId() {
+        return this.boosterId;
+    }
+
+    public void setBoosterId(String id) {
+        this.boosterId = id;
     }
 
     public void launchSequenceActivated() throws NoSameStatusException, BoosterDestroyedException {

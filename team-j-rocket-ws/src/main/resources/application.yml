@@ -23,3 +23,15 @@ api:
     host: ${MISSION_HOST:localhost}
     port: ${MISSION_PORT:8070}
     grpc: ${MISSION_GRPC:8071}
+  booster:
+    host: ${BOOSTER_HOST:localhost}
+    port: ${BOOSTER_PORT:8030}
+    grpc: ${BOOSTER_GRPC:8031}
+
+kafka:
+  broker:
+    host: ${KAFKA_BROKER_HOST:localhost}
+    port: ${KAFKA_BROKER_PORT:19092}
+  schema:
+    host: ${SCHEMA_BROKER_HOST:http://localhost}
+    port: ${SCHEMA_BROKER_PORT:9090}

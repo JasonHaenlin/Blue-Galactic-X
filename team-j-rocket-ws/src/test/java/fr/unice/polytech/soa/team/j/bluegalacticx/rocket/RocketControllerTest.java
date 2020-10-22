@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Engine;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.EngineState;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.utils.JsonUtil;
 
 @AutoConfigureMockMvc
@@ -37,11 +39,16 @@ public class RocketControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @BeforeAll
+    public static void resetMocks() {
+        RocketsMocked.reset();
+    }
+
     @Test
     @Order(1)
     public void getRocketStatusShouldBeOkTest() throws Exception {
         mvc.perform(get("/rocket/status/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(7)));
+                .andExpect(jsonPath("$.*", hasSize(6)));
     }
 
     @Test

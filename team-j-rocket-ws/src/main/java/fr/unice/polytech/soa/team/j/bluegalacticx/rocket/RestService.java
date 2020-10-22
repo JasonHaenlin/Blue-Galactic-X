@@ -16,16 +16,20 @@ public class RestService {
 
     WebClient webClientTelemetry;
     WebClient webClientMission;
+    WebClient webClientBooster;
 
     // @formatter:off
     public RestService(
             @Value("${api.telemetry.host}") String hostTelemetry,
             @Value("${api.telemetry.port}") String portTelemetry,
             @Value("${api.mission.host}") String hostMission,
-            @Value("${api.mission.port}") String portMission
+            @Value("${api.mission.port}") String portMission,
+            @Value("${api.booster.host}") String hostBooster,
+            @Value("${api.booster.port}") String portBooster
             ) {
         webClientTelemetry = WebClient.create("http://" + hostTelemetry + ":" + portTelemetry + "/telemetry/");
         webClientMission = WebClient.create("http://" + hostMission + ":" + portMission + "/mission/");
+        webClientBooster = WebClient.create("http://" + hostBooster + ":" + portBooster + "/booster/");
     }
      // @formatter:on
 
@@ -41,5 +45,9 @@ public class RestService {
     public void postTelemetry(SpaceMetrics telemetry) {
         webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class).retrieve()
                 .bodyToMono(Void.class).subscribe();
+    }
+
+    public Mono<String> getAvailableRocketID(){
+        return webClientBooster.get().uri("/available").retrieve().bodyToMono(String.class);
     }
 }

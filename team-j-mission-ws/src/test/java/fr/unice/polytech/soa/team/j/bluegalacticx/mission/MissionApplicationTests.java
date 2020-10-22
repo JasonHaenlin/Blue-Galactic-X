@@ -30,13 +30,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadRocketIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.PayloadStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionStatusRequest.MissionStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.PayloadStatusRequest.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils.JsonUtils;
 
@@ -71,8 +71,8 @@ class MissionApplicationTests {
 		missionId = "1";
 		payloadId = "1";
 		destination = new SpaceCoordinate(1000, 100, 10);
-		mission = new Mission(missionId, rocketId, payloadId, destination, date);
-		missionReply = new Mission(missionId, rocketId, payloadId, destination, date);
+		mission = new Mission(missionId, rocketId, payloadId, destination, date, MissionStatus.PENDING);
+		missionReply = new Mission(missionId, rocketId, payloadId, destination, date, MissionStatus.PENDING);
 	}
 
 	@BeforeAll
@@ -148,13 +148,13 @@ class MissionApplicationTests {
 	@Test
 	@Order(5)
 	void changeMissionStatusToSuccessFul() throws Exception {
-		mission.setMissionStatus(MissionStatus.SUCCESSFUL);
+		mission.setStatus(MissionStatus.SUCCESSFUL);
 		when(missionService.setMissionStatus(any(MissionStatus.class), any())).thenReturn(mission);
 
 		mvc.perform(MockMvcRequestBuilders.post("/mission/status/" + missionId)
 				.content(JsonUtils.toJson(MissionStatus.SUCCESSFUL)).characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath(".missionStatus").value("SUCCESSFUL"));
+				.andExpect(jsonPath(".status").value("SUCCESSFUL"));
 
 		verify(missionService, times(1)).setMissionStatus(eq(MissionStatus.SUCCESSFUL), eq("1"));
 	}

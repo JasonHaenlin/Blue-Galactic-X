@@ -1,7 +1,5 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class RocketMetrics {
@@ -12,20 +10,18 @@ public class RocketMetrics {
     private int vibration = 0; // ground vibration in Hz
     private int boosterRGA = 0; // RGA of booster in %
     private int midRocketRGA = 0; // RGA of the middle of the rocket in %mvn te
-    private List<Booster> boosters = new ArrayList<>();
 
     public RocketMetrics() {
     }
 
     public RocketMetrics(int irradiance, int velocityVariation, int temperature, int vibration, int boosterRGA,
-            int midRocketRGA, List<Booster> boosters) {
+            int midRocketRGA) {
         this.irradiance = irradiance;
         this.velocityVariation = velocityVariation;
         this.temperature = temperature;
         this.vibration = vibration;
         this.boosterRGA = boosterRGA;
         this.midRocketRGA = midRocketRGA;
-        this.boosters = boosters;
     }
 
     public int getIrradiance() {
@@ -76,18 +72,6 @@ public class RocketMetrics {
         this.midRocketRGA = midRocketRGA;
     }
 
-    public List<Booster> getBoosters() {
-        return this.boosters;
-    }
-
-    public void setBoosters(List<Booster> boosters) {
-        this.boosters = boosters;
-    }
-
-    public RocketMetrics addBooster(Booster booster) {
-        this.boosters.add(booster);
-        return this;
-    }
 
     public RocketMetrics irradiance(int irradiance) {
         this.irradiance = irradiance;
@@ -119,28 +103,6 @@ public class RocketMetrics {
         return this;
     }
 
-    public RocketMetrics boosters(List<Booster> boosters) {
-        this.boosters = boosters;
-        return this;
-    }
-
-    public Booster retrieveActiveBooster() {
-        for (Booster booster : boosters) {
-            if (booster.getFuelLevel() > 0 && booster.getStatus() == BoosterStatus.RUNNING) {
-                return booster;
-            }
-        }
-        return null;
-    }
-
-    public Booster retrieveLastBooster() {
-        for (Booster booster : boosters) {
-            if (booster.getStatus() == BoosterStatus.RUNNING) {
-                return booster;
-            }
-        }
-        return null;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -152,21 +114,19 @@ public class RocketMetrics {
         RocketMetrics rocketMetrics = (RocketMetrics) o;
         return irradiance == rocketMetrics.irradiance && velocityVariation == rocketMetrics.velocityVariation
                 && temperature == rocketMetrics.temperature && vibration == rocketMetrics.vibration
-                && boosterRGA == rocketMetrics.boosterRGA && midRocketRGA == rocketMetrics.midRocketRGA
-                && Objects.equals(boosters, rocketMetrics.boosters);
+                && boosterRGA == rocketMetrics.boosterRGA && midRocketRGA == rocketMetrics.midRocketRGA;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA, boosters);
+        return Objects.hash(irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA);
     }
 
     @Override
     public String toString() {
         return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
                 + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
-                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", boosters='"
-                + getBoosters().toString() + "'" + "}";
+                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + "}";
     }
 
     @Deprecated

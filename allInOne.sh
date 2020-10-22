@@ -2,3 +2,4 @@
 
 ./prepare.sh
 ./run.sh
+docker-compose down

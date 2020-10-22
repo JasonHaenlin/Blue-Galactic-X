@@ -17,6 +17,10 @@ public class RocketsMocked {
     static public List<Rocket> rockets;
 
     static {
+        reset();
+    }
+
+    public static final void reset() {
         rockets = new ArrayList<>();
         try {
             // @formatter:off

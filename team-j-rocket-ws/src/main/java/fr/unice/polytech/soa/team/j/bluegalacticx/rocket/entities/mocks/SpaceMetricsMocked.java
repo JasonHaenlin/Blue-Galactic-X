@@ -2,8 +2,6 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Booster;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
 
 public class SpaceMetricsMocked {
@@ -22,8 +20,6 @@ public class SpaceMetricsMocked {
                     .heatShield(95)
                     .speed(950)
                     .distance(500)
-                    .addBooster(new Booster(BoosterStatus.RUNNING))
-                    .addBooster(new Booster(BoosterStatus.PENDING))
                     .irradiance(10)
                     .velocityVariation(15)
                     .temperature(200)
@@ -31,13 +27,11 @@ public class SpaceMetricsMocked {
                     .boosterRGA(30)
                     .midRocketRGA(35);
 
-                    onGround = (SpaceMetrics) new SpaceMetrics()
+        onGround = (SpaceMetrics) new SpaceMetrics()
                     .rocketId("1")
                     .heatShield(100)
                     .speed(0)
                     .distance(0)
-                    .addBooster(new Booster(BoosterStatus.READY))
-                    .addBooster(new Booster(BoosterStatus.READY))
                     .irradiance(10)
                     .velocityVariation(15)
                     .temperature(50)
@@ -49,11 +43,7 @@ public class SpaceMetricsMocked {
 
     public static final SpaceMetrics nextMetrics(double distStep, Double fuelStep) {
         double newDistance = inAir.getDistance();
-        Booster b = inAir.retrieveActiveBooster();
-        if (b != null) {
-            b.reduceFuel((int) Math.round(fuelStep));
             newDistance -= distStep;
-        }
 
         // @formatter:off
         return (SpaceMetrics) inAir

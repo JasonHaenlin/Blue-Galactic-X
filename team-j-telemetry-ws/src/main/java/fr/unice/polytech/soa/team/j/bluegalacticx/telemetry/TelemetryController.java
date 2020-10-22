@@ -17,8 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.Anomaly;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryBoosterData;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryPayloadData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.BadPayloadIdException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryBoosterDataException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryPayloadDataException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryRocketDataException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataBoosterIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataRocketIdException;
 
 @RestController
@@ -37,8 +43,7 @@ public class TelemetryController {
     }
 
     @PostMapping("/rocket")
-    public void createTelemetryData(@RequestBody TelemetryRocketData rocketData) {
-        LOG.info(rocketData.toString());
+    public void createRocketTelemetryData(@RequestBody TelemetryRocketData rocketData) {
         try {
             LOG.info(rocketData.toString());
             telemetryService.createRocketData(rocketData);
@@ -49,13 +54,60 @@ public class TelemetryController {
         }
     }
 
+    @PostMapping("/payload")
+    public void createPayloadTelemetryData(@RequestBody TelemetryPayloadData payloadData) {
+        try {
+            LOG.info(payloadData.toString());
+            telemetryService.createPayloadData(payloadData);
+        } catch (DataAccessResourceFailureException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+        } catch (BadPayloadIdException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping("/booster")
+    public void createBoosterTelemetryData(@RequestBody TelemetryBoosterData boosterData) {
+        LOG.info(boosterData.toString());
+        try {
+            LOG.info(boosterData.toString());
+            telemetryService.createBoosterData(boosterData);
+        } catch (DataAccessResourceFailureException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+        } catch (TelemetryDataBoosterIdException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     @GetMapping("/rocket/{rocketId}")
-    public TelemetryRocketData retrieveTelemetryData(@PathVariable String rocketId) {
+    public List<TelemetryRocketData> retrieveRocketTelemetryData(@PathVariable String rocketId) {
         try {
             return telemetryService.retrieveRocketData(rocketId);
         } catch (DataAccessResourceFailureException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
         } catch (NoTelemetryRocketDataException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/payload/{payloadId}")
+    public TelemetryPayloadData retrievePayloadTelemetryData(@PathVariable String payloadId) {
+        try {
+            return telemetryService.retrievePayloadData(payloadId);
+        } catch (DataAccessResourceFailureException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+        } catch (NoTelemetryPayloadDataException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/booster/{boosterId}")
+    public List<TelemetryBoosterData> retrieveBoosterData(@PathVariable String boosterId) {
+        try {
+            return telemetryService.retrieveBoosterData(boosterId);
+        } catch (DataAccessResourceFailureException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
+        } catch (NoTelemetryBoosterDataException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
