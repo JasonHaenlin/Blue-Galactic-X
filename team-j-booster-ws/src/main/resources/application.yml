@@ -6,9 +6,11 @@ spring:
   application:
     name: Demo
 
-
 server:
   port: 8030
+  error:
+    include-stacktrace: never
+
 grpc:
   enable-reflection: true
   port: 8031
