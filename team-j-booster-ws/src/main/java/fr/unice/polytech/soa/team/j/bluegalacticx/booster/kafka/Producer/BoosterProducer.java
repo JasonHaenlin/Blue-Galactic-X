@@ -10,8 +10,8 @@ public class BoosterProducer {
     @Autowired
     private KafkaTemplate<String, Double> kafkaTemplate;
 
-    public void updateSpeedRocket(double newSpeed ) {
-        kafkaTemplate.send("speedChange", newSpeed);
+    public void updateSpeedRocket(double newSpeed) {
+        kafkaTemplate.send("teamj.booster-speed-update.0", newSpeed);
     }
 
 }

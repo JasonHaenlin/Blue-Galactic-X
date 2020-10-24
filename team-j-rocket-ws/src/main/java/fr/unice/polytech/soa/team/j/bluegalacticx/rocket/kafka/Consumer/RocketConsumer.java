@@ -8,12 +8,12 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
 
 @Service
-public class MaxQConsumer {
+public class RocketConsumer {
 
     @Autowired
     private RocketApi rocketApi;
 
-    @KafkaListener(topics = "speedChange", groupId = "blue-origin-rocket", containerFactory = "maxQkafkaListenerContainerFactory")
+    @KafkaListener(topics = "teamj.booster-speed-update.0", groupId = "blue-origin-rocket", containerFactory = "maxQkafkaListenerContainerFactory")
     public void updateSpeed(double pourcentageIncreaseOrDecrease) {
         SpaceMetrics rocketM = rocketApi.retrieveLastMetrics();
         double newSpeed = rocketM.getSpeed() + (rocketM.getSpeed() * pourcentageIncreaseOrDecrease);

@@ -8,7 +8,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.MaxQ;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.Producer.MaxQProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.Producer.RocketProducer;
 
 @Component
 public class RocketScheduler {
@@ -22,7 +22,7 @@ public class RocketScheduler {
     private RestService restService;
 
     @Autowired 
-    private MaxQProducer maxQProducer;
+    private RocketProducer rocketProducer;
 
     @Scheduled(fixedDelay = 1000)
     public void scheduleRocketMetricsTask() {
@@ -35,9 +35,9 @@ public class RocketScheduler {
     private void sendMaxQ(SpaceMetrics sm){
         if(sm.getSpeed()>0){
             if((sm.getDistance() >= MaxQ.MIN && sm.getDistance() <= MaxQ.MAX) ){
-                maxQProducer.sendInMaxQ();
+                rocketProducer.sendInMaxQ();
             }else{
-                maxQProducer.sendNotInMaxQ();
+                rocketProducer.sendNotInMaxQ();
             }
         }
     }
