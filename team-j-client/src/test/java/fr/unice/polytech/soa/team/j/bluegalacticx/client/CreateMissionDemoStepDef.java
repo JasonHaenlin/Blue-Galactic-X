@@ -185,7 +185,6 @@ public class CreateMissionDemoStepDef implements En {
             log.endSection();
         });
         Then("the mission is succesfull", () -> {
-            missionREST.updateMissionStatus(MissionStatus.SUCCESSFUL, "1");
             Mission mission = missionREST.retrieveMissionStatus("1");
             System.out.println(mission);
             assertEquals(true, mission.getStatus().equals(MissionStatus.SUCCESSFUL));

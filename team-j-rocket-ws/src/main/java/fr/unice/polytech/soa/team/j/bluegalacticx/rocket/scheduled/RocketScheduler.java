@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.MaxQ;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.Producer.MaxQProducer;
 
 @Component
 public class RocketScheduler {
@@ -19,10 +21,25 @@ public class RocketScheduler {
     @Autowired
     private RestService restService;
 
+    @Autowired 
+    private MaxQProducer maxQProducer;
+
     @Scheduled(fixedDelay = 1000)
     public void scheduleRocketMetricsTask() {
         sm = rocketApi.retrieveLastMetrics();
+        sendMaxQ(sm);
         restService.postTelemetry(sm);
+    }
+
+
+    private void sendMaxQ(SpaceMetrics sm){
+        if(sm.getSpeed()>0){
+            if((sm.getDistance() >= MaxQ.MIN && sm.getDistance() <= MaxQ.MAX) ){
+                maxQProducer.sendInMaxQ();
+            }else{
+                maxQProducer.sendNotInMaxQ();
+            }
+        }
     }
 
 }

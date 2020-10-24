@@ -93,6 +93,12 @@ public class Booster {
         }
     }
 
+    public void updatePower(double power){
+        double newSpeed = this.getSpeed() + (this.getSpeed()*power);
+        this.setSpeed(newSpeed);
+    }
+
+
     public BoosterLandingStep getLandingStep(){
         return this.landingStep;
     }

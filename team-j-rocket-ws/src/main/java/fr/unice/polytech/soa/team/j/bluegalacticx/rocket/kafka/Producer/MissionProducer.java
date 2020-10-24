@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.Producer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;

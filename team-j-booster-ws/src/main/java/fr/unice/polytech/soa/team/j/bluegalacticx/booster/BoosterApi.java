@@ -11,4 +11,9 @@ public class BoosterApi {
         BoostersMocked.nextMetrics();
         return BoostersMocked.getAll();
     }
+
+    public List<Booster> retrieveBoosterMetrics() {
+        return BoostersMocked.getAll();
+    }
+
 }

@@ -35,6 +35,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.Producer.MissionProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
@@ -48,7 +49,7 @@ import io.grpc.internal.testing.StreamRecorder;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest
-@ContextConfiguration(classes = { RocketRPCService.class, RestService.class, RocketApi.class, RestTemplate.class,
+@ContextConfiguration(classes = { RocketRPCService.class, RestService.class, RocketApi.class, RestTemplate.class,MissionProducer.class,
 		BoosterRPCClient.class })
 @Tags(value = { @Tag("grpc"), @Tag("grpc-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
@@ -58,6 +59,7 @@ class RocketRPCServiceTest {
 
 	@Autowired
 	private RocketRPCService rocketRpcService;
+
 
 	@MockBean
 	private RestService restService;
