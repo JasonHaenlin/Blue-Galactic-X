@@ -10,6 +10,6 @@ cd "$parent_path"
 for i in "team-j-rocket-ws" "team-j-weather-ws" "team-j-mission-ws" "team-j-telemetry-ws" "team-j-payload-ws" "team-j-booster-ws"
 do
     printf "${mag}test${end} ${blu}${i}${end} ...\n"
-    cd $i; ./mvnw clean test; cd ..
+    cd $i; sh mvnw clean test; cd ..
     printf "${grn}DONE${end} \n"
 done

@@ -6,6 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketTelemetryRequestFailedException;
 import reactor.core.publisher.Mono;
 
 /**
@@ -44,10 +45,11 @@ public class RestService {
 
     public void postTelemetry(SpaceMetrics telemetry) {
         webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class).retrieve()
-                .bodyToMono(Void.class).subscribe();
+                .bodyToMono(Void.class).onErrorResume(e -> Mono.error(new RocketTelemetryRequestFailedException()))
+                .subscribe();
     }
 
-    public Mono<String> getAvailableRocketID(){
+    public Mono<String> getAvailableRocketID() {
         return webClientBooster.get().uri("/available").retrieve().bodyToMono(String.class);
     }
 }
