@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetryData;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.exceptions.BoosterTelemetryRequestFailedException;
 import reactor.core.publisher.Mono;
 
 /**
@@ -25,9 +26,14 @@ public class RestService {
      // @formatter:on
 
     public void postTelemetry(BoosterTelemetryData telemetry) {
-        webClientTelemetry.post().uri("/booster").body(Mono.just(telemetry), 
-                BoosterTelemetryData.class).retrieve()
-                .bodyToMono(Void.class).subscribe();
+        // @formatter:off
+        webClientTelemetry.post().uri("/booster")
+                .body(Mono.just(telemetry), BoosterTelemetryData.class)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .onErrorResume(e -> Mono.error(new BoosterTelemetryRequestFailedException()))
+                .subscribe();
+        // @formatter:on
     }
 
 }

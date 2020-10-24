@@ -1,4 +1,4 @@
-version: "3"
+version: "3.0"
 services:
   # BLUE ORIGIN
   weather:
@@ -7,6 +7,7 @@ services:
     ports:
       - "8060:8060"
       - "8061:8061"
+
   rocket:
     build: ./team-j-rocket-ws
     container_name: team-j-blue-galactic-rocket
@@ -16,9 +17,8 @@ services:
     depends_on:
       - telemetry
       - mission
-      - broker
       - booster
-      - schema-registry
+      - broker
 
   mission:
     build: ./team-j-mission-ws
@@ -27,7 +27,6 @@ services:
       - "8070:8070"
       - "8071:8071"
     depends_on:
-      - schema-registry
       - broker
 
   telemetry-database:
@@ -53,6 +52,9 @@ services:
     ports:
       - "8050:8050"
       - "8051:8051"
+    depends_on:
+      - broker
+
   booster:
     build: ./team-j-booster-ws
     container_name: team-j-blue-galactic-booster
@@ -64,7 +66,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:6.0.0
     hostname: zookeeper
-    container_name: zookeeper
+    container_name: team-j-zookeeper
     ports:
       - "9091:9091"
     environment:
@@ -74,7 +76,7 @@ services:
   broker:
     image: confluentinc/cp-kafka:6.0.0
     hostname: broker
-    container_name: broker
+    container_name: team-j-broker
     depends_on:
       - zookeeper
     ports:
@@ -89,7 +91,7 @@ services:
   schema-registry:
     image: confluentinc/cp-schema-registry:6.0.0
     hostname: schema-registry
-    container_name: schema-registry
+    container_name: team-j-schema-registry
     depends_on:
       - zookeeper
       - broker
@@ -103,7 +105,7 @@ services:
   kafka-setup:
     image: confluentinc/cp-kafka:6.0.0
     hostname: setup
-    container_name: setup
+    container_name: team-j-setup
     depends_on:
       - broker
       - schema-registry
