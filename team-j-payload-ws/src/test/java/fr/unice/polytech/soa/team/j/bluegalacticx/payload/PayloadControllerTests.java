@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
@@ -21,8 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.utils.JsonUtil;
 
 @AutoConfigureMockMvc
@@ -40,7 +39,7 @@ class PayloadControllerTests {
     @Test
     @Order(1)
     public void getNotExistingPayloadShouldFailTest() throws Exception {
-        mvc.perform(get("/payload/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+        mvc.perform(get("/payload/5").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
     }
 
     @Test
@@ -54,11 +53,9 @@ class PayloadControllerTests {
     public void createValidPayloadShouldSuccessTest() throws Exception {
         createdPayloadid = JsonUtil.getIdFromPayloadString(mvc
                 .perform(post("/payload").contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(JsonUtil.toJson(new Payload().type(PayloadType.SPACECRAFT).weight(10000))))
+                        .content(JsonUtil.toJson(new Payload().id("42").type(PayloadType.SPACECRAFT).weight(10000))))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.status", is("WAITING_FOR_MISSION")))
-                .andExpect(jsonPath("$.id", MatchesPattern.matchesPattern("^\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$")))
-                .andExpect(jsonPath("$.date",
-                        MatchesPattern.matchesPattern("^\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}$")))
+                .andExpect(jsonPath("$.id", is("42")))
                 .andReturn().getResponse().getContentAsString());
     }
 

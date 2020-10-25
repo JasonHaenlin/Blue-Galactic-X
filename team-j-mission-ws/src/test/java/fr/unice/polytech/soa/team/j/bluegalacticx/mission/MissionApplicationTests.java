@@ -11,14 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Date;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,14 +28,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadIdException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadRocketIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionStatusRequest.MissionStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.PayloadStatusRequest.PayloadStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.requestModels.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils.JsonUtils;
 
 @AutoConfigureMockMvc
@@ -49,9 +42,6 @@ class MissionApplicationTests {
 
 	@Autowired
 	private MockMvc mvc;
-
-	@MockBean
-	private RestApiService restService;
 
 	@MockBean
 	private MissionService missionService;
@@ -71,15 +61,6 @@ class MissionApplicationTests {
 		missionId = "1";
 		payloadId = "1";
 		destination = new SpaceCoordinate(1000, 100, 10);
-		mission = new Mission(missionId, rocketId, payloadId, destination, date, MissionStatus.PENDING);
-		missionReply = new Mission(missionId, rocketId, payloadId, destination, date, MissionStatus.PENDING);
-	}
-
-	@BeforeAll
-	public void init() throws BadPayloadIdException, MissionDoesNotExistException, BadRocketIdException {
-		missionInit();
-		Mockito.doNothing().when(restService).updatePayloadStatus(missionId, PayloadStatus.ON_MISSION);
-		Mockito.doNothing().when(restService).updateRocketStatus(missionId, RocketStatus.IN_SERVICE);
 	}
 
 	@BeforeEach
@@ -157,21 +138,6 @@ class MissionApplicationTests {
 				.andExpect(jsonPath(".status").value("SUCCESSFUL"));
 
 		verify(missionService, times(1)).setMissionStatus(eq(MissionStatus.SUCCESSFUL), eq("1"));
-	}
-
-	@Test
-	void changeRocketStatusTest() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.post("/mission/status/" + missionId + "/rocket/")
-				.content(JsonUtils.toJson(RocketStatus.IN_SERVICE)).characterEncoding("utf-8")
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-	}
-
-	@Test
-	void changePayloadStatusTest() throws Exception {
-
-		mvc.perform(MockMvcRequestBuilders.post("/mission/status/" + missionId + "/payload/")
-				.content(JsonUtils.toJson(PayloadStatus.ON_MISSION)).characterEncoding("utf-8")
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 	}
 
 	@Test

@@ -11,8 +11,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.payload.entities.PayloadStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionStatusRequest.MissionStatus;
 
 public class MissionREST extends RestAPI {
 
@@ -31,28 +29,6 @@ public class MissionREST extends RestAPI {
 
                 return response.toString();
 
-        }
-
-        public void updatePayloadStatus(PayloadStatus payloadStatus, String missionId)
-                        throws IOException, InterruptedException {
-
-                HttpRequest request = HttpRequest.newBuilder()
-                                .POST(BodyPublishers.ofString(JsonUtils.toJson(payloadStatus)))
-                                .header("Content-Type", "application/json")
-                                .uri(URI.create(uri + "/status/" + missionId + "/payload")).build();
-
-                client.send(request, HttpResponse.BodyHandlers.ofString());
-        }
-
-        public void updateMissionStatus(MissionStatus missionStatus, String missionId)
-                        throws IOException, InterruptedException {
-
-                HttpRequest request = HttpRequest.newBuilder()
-                                .POST(BodyPublishers.ofString(JsonUtils.toJson(missionStatus)))
-                                .header("Content-Type", "application/json")
-                                .uri(URI.create(uri + "/status/" + missionId)).build();
-
-                client.send(request, HttpResponse.BodyHandlers.ofString());
         }
 
         public Mission retrieveMissionStatus(String missionId) throws IOException, InterruptedException {

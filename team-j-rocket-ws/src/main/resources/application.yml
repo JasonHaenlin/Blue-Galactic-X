@@ -33,5 +33,7 @@ kafka:
     host: ${KAFKA_BROKER_HOST:localhost}
     port: ${KAFKA_BROKER_PORT:19092}
   schema:
-    host: ${SCHEMA_BROKER_HOST:http://localhost}
+    host: ${SCHEMA_BROKER_HOST:localhost}
     port: ${SCHEMA_BROKER_PORT:9090}
+  topics:
+    rocketstatus: teamj.rocket-status.0

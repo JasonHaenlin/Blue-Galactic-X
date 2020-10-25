@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
@@ -20,6 +21,10 @@ public class RocketService {
 
     public RocketMetrics getLastMetrics(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
         return retrieveCorrespondingRocket(rocketId).retrieveLastMetrics();
+    }
+
+    public RocketStatus getRocketStatus(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(rocketId).getStatus();
     }
 
     public void submitNewReport(String rocketId, RocketReport rocketReport)

@@ -12,7 +12,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionStatusRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 
@@ -29,17 +29,18 @@ public class KafkaProducerConfig {
     private String schemaPort;
 
     @Bean
-    public ProducerFactory<String, MissionStatusRequest> producerMissionStatusFactory() {
+    public ProducerFactory<String, RocketStatusRequest> producerRocketStatusFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerHost + ":" + brokerPort);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaProtobufSerializer.class);
-        configProps.put(KafkaProtobufSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaHost + ":" + schemaPort);
+        configProps.put(KafkaProtobufSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG,
+                "http://" + schemaHost + ":" + schemaPort);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
     @Bean
-    public KafkaTemplate<String, MissionStatusRequest> kafkaTemplate() {
-        return new KafkaTemplate<>(producerMissionStatusFactory());
+    public KafkaTemplate<String, RocketStatusRequest> kafkaTemplate() {
+        return new KafkaTemplate<>(producerRocketStatusFactory());
     }
 }

@@ -12,6 +12,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.client.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketStatus;
 
 public class RocketREST extends RestAPI {
 
@@ -21,11 +22,22 @@ public class RocketREST extends RestAPI {
 
     public RocketMetrics getMetrics(String rocketId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri + "/status/" + rocketId)).build();
+                .uri(URI.create(uri + "/telemetry/" + rocketId)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         return mapper.readValue(response.body(), new TypeReference<RocketMetrics>() {
+        });
+
+    }
+
+    public RocketStatus getStatus(String rocketId) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
+                .uri(URI.create(uri + "/telemetry/" + rocketId + "/status")).build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return mapper.readValue(response.body(), new TypeReference<RocketStatus>() {
         });
 
     }
@@ -41,9 +53,9 @@ public class RocketREST extends RestAPI {
 
     }
 
-    public void setReport(RocketReport rocketReport,String rocketId) throws IOException, InterruptedException {
+    public void setReport(RocketReport rocketReport, String rocketId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(rocketReport)))
-                .header("Content-Type", "application/json").uri(URI.create(uri + "/report/"+rocketId)).build();
+                .header("Content-Type", "application/json").uri(URI.create(uri + "/report/" + rocketId)).build();
 
         client.send(request, HttpResponse.BodyHandlers.ofString());
 

@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
@@ -26,8 +27,8 @@ public class RocketController {
     @Autowired
     private RocketService service;
 
-    @GetMapping("/status/{rocketId}")
-    public RocketMetrics getRocketStatus(@PathVariable String rocketId) {
+    @GetMapping("/telemetry/{rocketId}")
+    public RocketMetrics getRocketTelemetry(@PathVariable String rocketId) {
         try {
             return service.getLastMetrics(rocketId);
         } catch (RocketDestroyedException e) {
@@ -37,6 +38,16 @@ public class RocketController {
         }
     }
 
+    @GetMapping("/telemetry/{rocketId}/status")
+    public RocketStatus getRocketStatus(@PathVariable String rocketId) {
+        try {
+            return service.getRocketStatus(rocketId);
+        } catch (RocketDestroyedException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (RocketDoesNotExistException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
     @PostMapping("/report/{rocketId}")
     public void postRocketReport(@PathVariable String rocketId, @RequestBody RocketReport report) {

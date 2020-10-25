@@ -6,29 +6,29 @@ import java.util.List;
 import java.util.Optional;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.proto.MissionStatusRequest.MissionStatus;
 
 public class MissionsMocked {
-    static public List<Mission> missions;
+
+    public static final List<Mission> missions;
 
     static {
         missions = new ArrayList<>();
         // @formatter:off
         missions.add(new Mission()
-                .id("1")
+                .id("10")
                 .destination(new SpaceCoordinate(1000,2000,3000))
                 .status(MissionStatus.PENDING)
-                .rocketId("1")
-                .payloadId("4f6911a8-437a-43fc-adad-a0ed6c6f69a7")
+                .rocketId("10")
                 .date(new Date())
         );
 
         missions.add(new Mission()
-                .id("2")
+                .id("20")
                 .destination(new SpaceCoordinate(3000,2000,1000))
                 .status(MissionStatus.STARTED)
-                .rocketId("2")
+                .rocketId("20")
                 .date(new Date())
         );
         // @formatter:on
@@ -38,6 +38,8 @@ public class MissionsMocked {
         return missions.stream().filter(r -> r.getId().equals(id)).findFirst();
     }
 
-
+    public static final Optional<Mission> findByRocketId(String id) {
+        return missions.stream().filter(r -> r.getRocketId().equals(id)).findFirst();
+    }
 
 }

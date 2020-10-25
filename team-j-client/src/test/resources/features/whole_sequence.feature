@@ -1,4 +1,6 @@
-Feature: Create a new mission
+@integration
+Feature: whole sequence
+    Schedule a single mission with a rocket and a payload
 
     Background: Init connexion with other department
         Given a handshake with all department
