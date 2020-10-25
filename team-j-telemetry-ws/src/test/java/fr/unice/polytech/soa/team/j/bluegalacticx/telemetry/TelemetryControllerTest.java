@@ -19,12 +19,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.MongoTelemetryConfig;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryBoosterDataRepository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.db.TelemetryRocketDataRepository;
 
-@WebMvcTest
+
 @AutoConfigureMockMvc
+@WebMvcTest(TelemetryController.class)
 @ContextConfiguration(classes = { TelemetryController.class, TelemetryService.class,
-        TelemetryRocketDataRepository.class, MongoTelemetryConfig.class })
+        TelemetryRocketDataRepository.class, TelemetryBoosterDataRepository.class,
+        MongoTelemetryConfig.class })
 @Tags(value = { @Tag("mvc"), @Tag("mvc-telemetry") })
 @TestMethodOrder(OrderAnnotation.class)
 public class TelemetryControllerTest {
@@ -40,18 +43,6 @@ public class TelemetryControllerTest {
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(0)));
-        // @formatter:on
-    }
-
-    @Test
-    @Order(2)
-    public void check_for_anomalies_the_second_time_should_be_with_anomalies() throws Exception {
-        // @formatter:off
-        mvc.perform(get("/telemetry/anomalies")
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$", hasSize(2)));
-
         // @formatter:on
     }
 }

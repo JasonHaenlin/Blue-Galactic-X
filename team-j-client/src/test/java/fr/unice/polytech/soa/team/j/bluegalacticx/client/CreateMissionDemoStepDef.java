@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.MissionREST;
@@ -52,7 +53,7 @@ public class CreateMissionDemoStepDef implements En {
     private List<TelemetryRocketData> telemetryRocketData;
     
     private List<TelemetryBoosterData> telemetryBoosterData;
-    private List<Anomaly> listAnomalies;
+    private Set<Anomaly> listAnomalies;
     private Payload payload;
 
     AppLog log = AppLog.getInstance();

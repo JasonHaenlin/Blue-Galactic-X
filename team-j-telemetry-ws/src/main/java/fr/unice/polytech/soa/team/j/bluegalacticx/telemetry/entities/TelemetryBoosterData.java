@@ -1,6 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -23,6 +25,19 @@ public class TelemetryBoosterData {
         this.boosterId = boosterId;
         this.rocketId = rocketId;
         this.boosterStatus = boosterStatus;
+    }
+
+    public Set<Anomaly> checkForAnomalies() {
+        Set<Anomaly> anomalies = new HashSet<>();
+        if (boosterStatus == BoosterStatus.LANDING && fuel < 5) {
+            anomalies.add(new Anomaly(boosterId, AnomalyType.FUEL, SpaceModule.BOOSTER, AnomalySeverity.DANGER,
+                    "The booster won't have enough fuel to land !"));
+        }
+        if (boosterStatus == BoosterStatus.LANDING && distanceFromEarth < 50 && speed > 400) {
+            anomalies.add(new Anomaly(boosterId, AnomalyType.TRAJECTORY, SpaceModule.BOOSTER, AnomalySeverity.CRITICAL,
+                    "The booster is going too fast, and will hit the ground !!!!"));
+        }
+        return anomalies;
     }
 
     public int getFuel() {

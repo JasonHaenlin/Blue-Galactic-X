@@ -6,6 +6,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -57,14 +58,14 @@ public class TelemetryREST extends RestAPI {
 
     }
 
-    public List<Anomaly> checkForAnomalies() throws IOException, InterruptedException {
+    public Set<Anomaly> checkForAnomalies() throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
                 .uri(URI.create(uri + "/anomalies")).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        return mapper.readValue(response.body(), new TypeReference<List<Anomaly>>() {
+        return mapper.readValue(response.body(), new TypeReference<Set<Anomaly>>() {
         });
 
     }

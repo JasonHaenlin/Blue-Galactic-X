@@ -1,7 +1,9 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -32,6 +34,15 @@ public class TelemetryPayloadData {
         this.position = position;
         this.weight = weight;
         this.date = date;
+    }
+
+    public Set<Anomaly> checkForAnomalies() {
+        Set<Anomaly> anomalies = new HashSet<>();
+        if (position.getX() > 10000 || position.getY() > 10000 || position.getZ() > 10000) {
+            anomalies.add(new Anomaly(payloadId, AnomalyType.TRAJECTORY, SpaceModule.PAYLOAD, AnomalySeverity.DANGER,
+                    "The payload is lost ..."));
+        }
+        return anomalies;
     }
 
     public String getPayloadId() {

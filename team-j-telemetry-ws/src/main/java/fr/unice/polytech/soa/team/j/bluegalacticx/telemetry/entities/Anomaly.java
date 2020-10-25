@@ -3,15 +3,19 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 import java.util.Objects;
 
 public class Anomaly {
+    private String idSpaceModule;
     private AnomalyType type;
+    private SpaceModule spaceModule;
     private AnomalySeverity severity;
     private String reason;
 
     public Anomaly() {
     }
 
-    public Anomaly(AnomalyType type, AnomalySeverity severity, String reason) {
+    public Anomaly(String idSpaceModule, AnomalyType type, SpaceModule spaceModule, AnomalySeverity severity, String reason) {
+        this.idSpaceModule = idSpaceModule;
         this.type = type;
+        this.spaceModule = spaceModule;
         this.severity = severity;
         this.reason = reason;
     }
@@ -22,6 +26,22 @@ public class Anomaly {
 
     public void setType(AnomalyType type) {
         this.type = type;
+    }
+
+    public String getIdSpaceModule() {
+        return this.idSpaceModule;
+    }
+
+    public void setIdSpaceModule(String id) {
+        this.idSpaceModule = id;
+    }
+
+    public SpaceModule getSpaceModule() {
+        return this.spaceModule;
+    }
+
+    public void setSpaceModule(SpaceModule component) {
+        this.spaceModule = component;
     }
 
     public AnomalySeverity getSeverity() {
