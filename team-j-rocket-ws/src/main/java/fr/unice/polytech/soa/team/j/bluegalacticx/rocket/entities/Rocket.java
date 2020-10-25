@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
 
 import java.util.Objects;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
@@ -14,8 +15,10 @@ public class Rocket {
     private RocketStatus status;
     private SpaceCoordinate objective;
     private String boosterId;
+    private RocketApi rocketApi;
 
     public Rocket() {
+        this.rocketApi = new RocketApi();
     }
 
     public void setId(String id) {
@@ -31,12 +34,17 @@ public class Rocket {
         this.metrics = metrics;
         this.report = report;
         this.status = status;
+        this.rocketApi = new RocketApi();
     }
 
     public String detachNextStage() {
         String boosterId = this.boosterId;
         this.boosterId = "";
         return boosterId;
+    }
+
+    public SpaceMetrics getLastMetrics() {
+        return rocketApi.retrieveLastMetrics();
     }
 
     public RocketMetrics retrieveLastMetrics() throws RocketDestroyedException {
@@ -63,6 +71,10 @@ public class Rocket {
         this.report = report;
     }
 
+    public void initStatus() {
+        this.status = RocketStatus.AT_BASE;
+    }
+
     public RocketStatus getStatus() {
         return this.status;
     }
@@ -78,6 +90,10 @@ public class Rocket {
 
     public void setBoosterId(String id) {
         this.boosterId = id;
+    }
+
+    public void prepareLaunch() {
+        rocketApi.launchWhenReady(this.objective, this.id);
     }
 
     public void launchSequenceActivated() throws NoSameStatusException, BoosterDestroyedException {

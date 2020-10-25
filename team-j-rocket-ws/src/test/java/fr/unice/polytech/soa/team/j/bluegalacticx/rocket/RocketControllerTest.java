@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Engine;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.EngineState;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.utils.JsonUtil;
@@ -90,5 +93,17 @@ public class RocketControllerTest {
     public void postEmptyRocketStatusShouldNotAcceptableTest() throws Exception {
         mvc.perform(post("/rocket/report/2").contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.toJson(new RocketReport()))).andExpect(status().isNotAcceptable());
+    }
+
+    @Test
+    public void addRocketShouldBeOkTest() throws IOException, Exception {
+        mvc.perform(post("/rocket").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(new Rocket())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addRocketShouldFailTest() throws IOException, Exception {
+        mvc.perform(post("/rocket").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(null)))
+                .andExpect(status().isBadRequest());
     }
 }

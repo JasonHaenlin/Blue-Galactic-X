@@ -5,8 +5,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RocketApi;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 
 @Component
 public class RocketScheduler {
@@ -14,15 +15,14 @@ public class RocketScheduler {
     private SpaceMetrics sm = new SpaceMetrics();
 
     @Autowired
-    private RocketApi rocketApi;
-
-    @Autowired
     private RestService restService;
 
     @Scheduled(fixedDelay = 1000)
     public void scheduleRocketMetricsTask() {
-        sm = rocketApi.retrieveLastMetrics();
-        restService.postTelemetry(sm);
+        for (Rocket r : RocketsMocked.rockets) {
+            sm = r.getLastMetrics();
+            restService.postTelemetry(sm);
+        }
     }
 
 }
