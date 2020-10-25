@@ -1,6 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -34,6 +36,15 @@ public class TelemetryRocketData {
         this.speed = speed;
         this.distance = distance;
         this.totalDistance = totalDistance;
+    }
+
+    public Set<Anomaly> checkForAnomalies(){
+        Set<Anomaly> anomalies = new HashSet<>();
+        if(temperature > 5000){
+            anomalies.add(new Anomaly(rocketId, AnomalyType.TEMPERATURE, 
+                    SpaceModule.ROCKET, AnomalySeverity.CRITICAL, "The rocket temperature's too high !"));
+        }
+        return anomalies;
     }
 
     public String getRocketId() {

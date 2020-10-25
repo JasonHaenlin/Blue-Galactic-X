@@ -1,18 +1,18 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.mocks;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.AnomalySeverity;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.AnomalyType;
 
 public class AnomaliesMocked {
-    static public final List<Anomaly> anomalies;
+    static public final Set<Anomaly> anomalies;
 
     static {
         // @formatter:off
-        anomalies = new ArrayList<>();
+        anomalies = new HashSet<>();
         anomalies.add(new Anomaly()
                     .type(AnomalyType.TRAJECTORY)
                     .severity(AnomalySeverity.CRITICAL)

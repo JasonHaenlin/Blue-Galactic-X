@@ -1,6 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
 
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public class TelemetryController {
     private TelemetryService telemetryService;
 
     @GetMapping("/anomalies")
-    public List<Anomaly> checkForAnomalies() {
+    public Set<Anomaly> checkForAnomalies() {
         return telemetryService.checkRecordedAnomalies();
     }
 

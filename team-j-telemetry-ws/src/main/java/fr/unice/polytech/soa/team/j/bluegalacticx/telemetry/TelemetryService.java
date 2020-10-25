@@ -1,7 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.Anomaly;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryBoosterData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryPayloadData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.mocks.AnomaliesMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.BadPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryBoosterDataException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryPayloadDataException;
@@ -24,7 +24,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.Telemetry
 @Service
 public class TelemetryService {
 
-    private List<Anomaly> anomalies = AnomaliesMocked.anomalies;
+    private Set<Anomaly> anomalies = new HashSet<>();
 
     @Autowired
     private TelemetryRocketDataRepository telemetryRocketDataRepository;
@@ -35,17 +35,8 @@ public class TelemetryService {
     @Autowired
     private TelemetryBoosterDataRepository telemetryBoosterDataRepository;
 
-    /**
-     * for now, the first call, we do not send back any anomalies but the second
-     * time yes
-     */
-    private static boolean sendAnomalies = false;
 
-    public List<Anomaly> checkRecordedAnomalies() {
-        if (sendAnomalies == false) {
-            sendAnomalies = true;
-            return Collections.emptyList();
-        }
+    public Set<Anomaly> checkRecordedAnomalies() {
         return anomalies;
     }
 
@@ -53,6 +44,8 @@ public class TelemetryService {
         if (!checkRocketIdExist(rocketData)) {
             throw new TelemetryDataRocketIdException();
         }
+        Set<Anomaly> rocketAnomalies = rocketData.checkForAnomalies();
+        this.anomalies.addAll(rocketAnomalies);
         telemetryRocketDataRepository.save(rocketData);
     }
 
@@ -60,6 +53,8 @@ public class TelemetryService {
         if (payloadData.getPayloadId() == null) {
             throw new BadPayloadIdException();
         }
+        Set<Anomaly> payloadAnomalies = payloadData.checkForAnomalies();
+        this.anomalies.addAll(payloadAnomalies);
         telemetryPayloadDataRepository.save(payloadData);
     }
 
@@ -67,6 +62,8 @@ public class TelemetryService {
         if (!checkBoosterIdExist(boosterData)) {
             throw new TelemetryDataBoosterIdException();
         }
+        Set<Anomaly> boosterAnomalies = boosterData.checkForAnomalies();
+        this.anomalies.addAll(boosterAnomalies);
         telemetryBoosterDataRepository.save(boosterData);
     }
 

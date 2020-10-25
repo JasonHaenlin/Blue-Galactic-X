@@ -84,7 +84,6 @@ public class MongoDBTest {
         } catch (Exception e) {
             assertEquals(true, e instanceof TelemetryDataBoosterIdException);
         }
-
     }
 
     @Test
