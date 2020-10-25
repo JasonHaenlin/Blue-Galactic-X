@@ -5,14 +5,10 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionStatusRequest.MissionStatus;
-
-
 public class Mission {
 
     private String id;
     private String rocketId;
-    private String payloadId;
     private SpaceCoordinate destination;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -22,11 +18,9 @@ public class Mission {
     public Mission() {
     }
 
-    public Mission(String id, String rocketId, String payloadId, SpaceCoordinate destination, Date date,
-            MissionStatus status) {
+    public Mission(String id, String rocketId, SpaceCoordinate destination, Date date, MissionStatus status) {
         this.id = id;
         this.rocketId = rocketId;
-        this.payloadId = payloadId;
         this.destination = destination;
         this.date = date;
         this.status = status;
@@ -46,14 +40,6 @@ public class Mission {
 
     public void setRocketId(String rocketId) {
         this.rocketId = rocketId;
-    }
-
-    public String getPayloadId() {
-        return this.payloadId;
-    }
-
-    public void setPayloadId(String payloadId) {
-        this.payloadId = payloadId;
     }
 
     public SpaceCoordinate getDestination() {
@@ -90,11 +76,6 @@ public class Mission {
         return this;
     }
 
-    public Mission payloadId(String payloadId) {
-        this.payloadId = payloadId;
-        return this;
-    }
-
     public Mission destination(SpaceCoordinate destination) {
         this.destination = destination;
         return this;
@@ -119,20 +100,20 @@ public class Mission {
         }
         Mission mission = (Mission) o;
         return Objects.equals(id, mission.id) && Objects.equals(rocketId, mission.rocketId)
-                && Objects.equals(payloadId, mission.payloadId) && Objects.equals(destination, mission.destination)
-                && Objects.equals(date, mission.date) && Objects.equals(status, mission.status);
+                && Objects.equals(destination, mission.destination) && Objects.equals(date, mission.date)
+                && Objects.equals(status, mission.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, rocketId, payloadId, destination, date, status);
+        return Objects.hash(id, rocketId, destination, date, status);
     }
 
     @Override
     public String toString() {
-        return "{" + " id='" + getId() + "'" + ", rocketId='" + getRocketId() + "'" + ", payloadId='" + getPayloadId()
-                + "'" + ", destination='" + getDestination() + "'" + ", date='" + getDate() + "'" + ", status='"
-                + getStatus() + "'" + "}";
+        return "{" + " id='" + getId() + "'" + ", rocketId='" + getRocketId() + "'" + ", payloadId='" + "'"
+                + ", destination='" + getDestination() + "'" + ", date='" + getDate() + "'" + ", status='" + getStatus()
+                + "'" + "}";
     }
 
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Payload {
 
     private PayloadType type;
+    private String rocketId;
     private PayloadStatus status;
     private SpaceCoordinate position;
     private int weight; // kg
@@ -19,8 +20,10 @@ public class Payload {
     public Payload() {
     }
 
-    public Payload(PayloadType type, PayloadStatus status, SpaceCoordinate position, int weight, String id, Date date) {
+    public Payload(PayloadType type, String rocketId, PayloadStatus status, SpaceCoordinate position, int weight,
+            String id, Date date) {
         this.type = type;
+        this.rocketId = rocketId;
         this.status = status;
         this.position = position;
         this.weight = weight;
@@ -34,6 +37,14 @@ public class Payload {
 
     public void setType(PayloadType type) {
         this.type = type;
+    }
+
+    public String getRocketId() {
+        return this.rocketId;
+    }
+
+    public void setRocketId(String rocketId) {
+        this.rocketId = rocketId;
     }
 
     public PayloadStatus getStatus() {
@@ -81,6 +92,11 @@ public class Payload {
         return this;
     }
 
+    public Payload rocketId(String rocketId) {
+        this.rocketId = rocketId;
+        return this;
+    }
+
     public Payload status(PayloadStatus status) {
         this.status = status;
         return this;
@@ -114,21 +130,21 @@ public class Payload {
             return false;
         }
         Payload payload = (Payload) o;
-        return Objects.equals(type, payload.type) && Objects.equals(status, payload.status)
-                && Objects.equals(position, payload.position) && weight == payload.weight
-                && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
+        return Objects.equals(type, payload.type) && Objects.equals(rocketId, payload.rocketId)
+                && Objects.equals(status, payload.status) && Objects.equals(position, payload.position)
+                && weight == payload.weight && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, status, position, weight, id, date);
+        return Objects.hash(type, rocketId, status, position, weight, id, date);
     }
 
     @Override
     public String toString() {
-        return "{" + " type='" + getType() + "'" + ", status='" + getStatus() + "'" + ", position='" + getPosition()
-                + "'" + ", weight='" + getWeight() + "'" + ", id='" + getId() + "'" + ", date='" + getDate() + "'"
-                + "}";
+        return "{" + " type='" + getType() + "'" + ", rocketId='" + getRocketId() + "'" + ", status='" + getStatus()
+                + "'" + ", position='" + getPosition() + "'" + ", weight='" + getWeight() + "'" + ", id='" + getId()
+                + "'" + ", date='" + getDate() + "'" + "}";
     }
 
 }

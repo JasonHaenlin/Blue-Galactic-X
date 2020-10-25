@@ -12,7 +12,7 @@ public class AppLog {
     public final static AppLog LOGGER_INSTANCE = new AppLog();
 
     private static final int NORMAL = 0;
-    private static final int BLUE = 34;
+    private static final int RED = 31;
     private static final int MAGENTA = 35;
     private static final int CYAN = 36;
     private static final int YELLOW = 33;
@@ -49,8 +49,14 @@ public class AppLog {
         return LOGGER_INSTANCE;
     }
 
-    public void endSection() {
+    public AppLog error(String str) {
+        ROOT.info(PREFIX + NORMAL + SEPARATOR + RED + SUFFIX + "Error > " + str + END_COLOUR + NEWLINE);
+        return LOGGER_INSTANCE;
+    }
+
+    public AppLog endSection() {
         ROOT.info(SECTION + NEWLINE);
+        return LOGGER_INSTANCE;
     }
 
     public static AppLog getInstance() {

@@ -31,10 +31,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
@@ -63,7 +60,7 @@ class RocketRPCServiceTest {
 	private RestService restService;
 
 	@MockBean
-	private MissionProducer missionProducer;
+	private RocketStatusProducer missionProducer;
 
 	@MockBean
 	private BoosterRPCClient boosterRPCClient;
@@ -126,25 +123,6 @@ class RocketRPCServiceTest {
 
 		StatusException t = (StatusException) responseObserver.getError();
 		assertEquals(Status.NOT_FOUND.getCode(), t.getStatus().getCode());
-	}
-
-	@Test
-	@Order(4)
-	public void setSameRocketWithMultipleMissionErrorIfNotAtBaseTest() throws Exception {
-		Rocket r = RocketsMocked.find("1").orElse(null);
-		r.status(RocketStatus.IN_SERVICE);
-
-		MissionRequest request = MissionRequest.newBuilder().setMissionId("1").setRocketId("1").build();
-		StreamRecorder<Empty> responseObserver = StreamRecorder.create();
-		rocketRpcService.setReadyToLaunch(request, responseObserver);
-
-		if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
-			fail("The call did not terminate in time");
-		}
-		assertNotNull(responseObserver.getError());
-
-		StatusException t = (StatusException) responseObserver.getError();
-		assertEquals(Status.ABORTED.getCode(), t.getStatus().getCode());
 	}
 
 	@Test

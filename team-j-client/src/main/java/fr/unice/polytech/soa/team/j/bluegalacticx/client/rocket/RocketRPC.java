@@ -1,11 +1,12 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MissionRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.NextStageRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketGrpc.RocketBlockingStub;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -22,6 +23,11 @@ public class RocketRPC {
     public void setReadyToLaunch(String missionId, String rocketId) {
         MissionRequest request = MissionRequest.newBuilder().setMissionId(missionId).setRocketId(rocketId).build();
         stub.setReadyToLaunch(request);
+    }
+
+    public void destructionOrderOnRocket(String rocketId) {
+        DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setRocketId(rocketId).build();
+        stub.destructionOrderOnRocket(request);
     }
 
     public LaunchOrderReply LaunchOrderRequest(boolean launchRocket, String rocketId) {

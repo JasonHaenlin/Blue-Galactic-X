@@ -1,18 +1,18 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.payload;
+package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.PayloadNotFoundException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
 
 @Service
-public class PayloadConsumer {
+public class RocketStatusConsumer {
 
     @Autowired
-    private PayloadService payloadService;
+    private MissionService missionService;
 
     @KafkaListener(topics = "${kafka.topics.rocketstatus}", groupId = "${kafka.group.default}", containerFactory = "rocketStatusKafkaListenerContainerFactory")
     public void rocketStatusEvent(RocketStatusRequest request) {
@@ -20,25 +20,25 @@ public class PayloadConsumer {
         try {
             switch (request.getEventType()) {
                 case IN_SERVICE:
-                    payloadService.updatePayloadFromRocketState(PayloadStatus.ON_MISSION, id);
+                    missionService.updateMissionFromRocketState(MissionStatus.STARTED, id);
                     break;
                 case DESTROYED:
-                    payloadService.updatePayloadFromRocketState(PayloadStatus.DESTROYED, id);
+                    missionService.updateMissionFromRocketState(MissionStatus.FAILED, id);
                     break;
                 case AT_BASE:
-                    payloadService.updatePayloadFromRocketState(PayloadStatus.NOT_DELIVERED, id);
+                    missionService.updateMissionFromRocketState(MissionStatus.PENDING, id);
                     break;
                 case DONED:
-                    payloadService.updatePayloadFromRocketState(PayloadStatus.DELIVERED, id);
+                    missionService.updateMissionFromRocketState(MissionStatus.SUCCESSFUL, id);
                     break;
                 default:
                     // DO NOT PROCEED NOT WANTED EVENTS
                     break;
             }
-        } catch (PayloadNotFoundException e) {
+        } catch (MissionDoesNotExistException e) {
             // TODO : handle kafka exceptions
             e.printStackTrace();
         }
-
     }
+
 }

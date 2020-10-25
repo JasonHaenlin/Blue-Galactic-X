@@ -66,7 +66,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:6.0.0
     hostname: zookeeper
-    container_name: team-j-zookeeper
+    container_name: zookeeper
     ports:
       - "9091:9091"
     environment:
@@ -76,7 +76,7 @@ services:
   broker:
     image: confluentinc/cp-kafka:6.0.0
     hostname: broker
-    container_name: team-j-broker
+    container_name: broker
     depends_on:
       - zookeeper
     ports:
@@ -87,32 +87,35 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092,CONNECTIONS_FROM_HOST://localhost:19092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:9090
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
 
   schema-registry:
     image: confluentinc/cp-schema-registry:6.0.0
     hostname: schema-registry
-    container_name: team-j-schema-registry
+    container_name: schema-registry
     depends_on:
-      - zookeeper
       - broker
     ports:
-      - "9090:8081"
+      - "9090:9090"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:9091"
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "broker:9092"
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:9090
 
   kafka-setup:
     image: confluentinc/cp-kafka:6.0.0
     hostname: setup
-    container_name: team-j-setup
+    container_name: setup
     depends_on:
       - broker
       - schema-registry
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
-      cub kafka-ready -b broker:9092 1 20 && \
-      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic mission && \
-      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic payload \
+      cub kafka-ready -b broker:9092 1 60 && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.sample.0 \
+      && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.rocket-status.0 \
       '"
     environment:
       KAFKA_BROKER_ID: ignored

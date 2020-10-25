@@ -47,7 +47,7 @@ public class RocketControllerTest {
     @Test
     @Order(1)
     public void getRocketStatusShouldBeOkTest() throws Exception {
-        mvc.perform(get("/rocket/status/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+        mvc.perform(get("/rocket/telemetry/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(6)));
     }
 
