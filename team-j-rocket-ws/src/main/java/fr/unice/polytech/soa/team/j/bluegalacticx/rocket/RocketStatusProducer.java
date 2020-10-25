@@ -51,4 +51,11 @@ public class RocketStatusProducer {
 
         kafkaTemplate.send(RocketStatusTopic0, req);
     }
+
+    public void donedRocketEvent(String rocketId) {
+        RocketStatusRequest req = RocketStatusRequest.newBuilder().setRocketId(rocketId).setEventType(EventType.DONED)
+                .build();
+
+        kafkaTemplate.send(RocketStatusTopic0, req);
+    }
 }
