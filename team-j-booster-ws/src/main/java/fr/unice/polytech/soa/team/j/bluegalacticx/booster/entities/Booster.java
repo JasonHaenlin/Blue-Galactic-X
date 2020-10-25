@@ -3,13 +3,18 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.RestService;
 
 public class Booster {
     private String id;
     private BoosterStatus status;
     private BoosterLandingStep landingStep;
     private BoosterMetrics metrics;
-    
+
+    @Autowired
+    private RestService restService;
 
     private double previousSpeed;
     private double previousDistance;
