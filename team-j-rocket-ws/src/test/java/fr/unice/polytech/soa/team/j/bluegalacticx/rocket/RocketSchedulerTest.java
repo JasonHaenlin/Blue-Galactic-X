@@ -19,10 +19,12 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.client.RestTemplate;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.RocketStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.RocketScheduler;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.ScheduledConfig;
 
-@SpringJUnitConfig(value = { ScheduledConfig.class, RocketApi.class, RestService.class, RestTemplate.class })
+@SpringJUnitConfig(value = { ScheduledConfig.class, RocketApi.class, RestService.class, RestTemplate.class,
+        RocketStatusProducer.class })
 @Tags(value = { @Tag("scheduler"), @Tag("scheduler-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +35,9 @@ public class RocketSchedulerTest {
 
     @MockBean
     private RestService restService;
+
+    @MockBean
+    private RocketStatusProducer rocketStatusProducer;
 
     @Test
     @Order(1)

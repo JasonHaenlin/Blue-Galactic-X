@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.mission.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 
@@ -37,16 +36,6 @@ public class KafkaProducerConfig {
         configProps.put(KafkaProtobufSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG,
                 "http://" + schemaHost + ":" + schemaPort);
         return configProps;
-    }
-
-    @Bean
-    public ProducerFactory<String, RocketStatusRequest> producerRocketStatusFactory() {
-        return new DefaultKafkaProducerFactory<>(insertBaseConfig());
-    }
-
-    @Bean
-    public KafkaTemplate<String, RocketStatusRequest> kafkaTemplateRocket() {
-        return new KafkaTemplate<>(producerRocketStatusFactory());
     }
 
     @Bean

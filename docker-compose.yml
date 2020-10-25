@@ -116,6 +116,8 @@ services:
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.sample.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.rocket-status.0 \
+      && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.department-status.0 \
       '"
     environment:
       KAFKA_BROKER_ID: ignored

@@ -68,12 +68,12 @@ public class rocket_update_status_sequence implements En {
         Then("the mission status should be {string}", (String status) -> {
             Utils.assertEqualsWithRetry(MissionStatus.valueOf(status), () -> {
                 try {
-                    return missionREST.retrieveMissionStatus(missionId).getStatus();
+                    return missionREST.retrieveMission(missionId).getStatus();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return null;
-            }, 50, 500);
+            });
         });
         When("Richard send a destruction order to the rocket", () -> {
             rocketRPC.destructionOrderOnRocket(rocketId);

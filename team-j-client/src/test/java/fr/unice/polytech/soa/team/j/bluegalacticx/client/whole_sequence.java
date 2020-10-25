@@ -70,7 +70,8 @@ public class whole_sequence implements En {
         And("Elon from the rocket department check the rocket metrics and create a report for Richard", () -> {
             rocketReport = new RocketReport().fuelLevel(100)
                     .engine(new Engine(EngineState.INITIALIZATION, EngineState.READY)).overallResult("Good");
-            rocketREST.setReport(rocketReport, "1");
+            // TODO change
+            // rocketREST.setReport(rocketReport, "1");
 
             log.request("Post report to rocket ws").info("Report " + rocketReport.toString()).endSection();
         });
@@ -78,7 +79,8 @@ public class whole_sequence implements En {
         And("Tory from the weather department check the weather metrics and create a report for Richard", () -> {
             weatherReport = new WeatherReport().avgRainfall(50).avgHumidity(10).avgWind(20).avgVisibility(90)
                     .avgTemperature(25).weatherType(WeatherType.SUNNY).overallResult("Good");
-            weatherREST.setReport(weatherReport);
+            // TODO change
+            // weatherREST.setReport(weatherReport);
 
             log.request("Post report to weather ws").info("Report " + weatherReport.toString()).endSection();
         });
@@ -101,14 +103,16 @@ public class whole_sequence implements En {
         });
 
         And("the weather report is valid", () -> {
-            WeatherReport weatherReport = weatherREST.getReport();
+            // TODO change
+            // WeatherReport weatherReport = weatherREST.getReport();
             assertEquals(true, weatherReport.getOverallResult().contains("Good"));
 
             log.request("Get weather report from weather ws").info("Report " + weatherReport.toString()).endSection();
         });
 
         And("the rocket report is valid", () -> {
-            RocketReport rocketReport = rocketREST.getReport("1");
+            // TODO
+            // RocketReport rocketReport = rocketREST.getReport("1");
             assertEquals(true, rocketReport.getOverallResult().equals("Good"));
 
             log.request("Get rocket report from rocket ws").info("Report " + rocketReport.toString()).endSection();
@@ -185,7 +189,7 @@ public class whole_sequence implements En {
         Then("the mission is succesfull", () -> {
             // TODO : to change
             // missionREST.updateMissionStatus(MissionStatus.SUCCESSFUL, "1");
-            Mission mission = missionREST.retrieveMissionStatus("1");
+            Mission mission = missionREST.retrieveMission("1");
             System.out.println(mission);
             assertEquals(true, mission.getStatus().equals(MissionStatus.SUCCESSFUL));
             payloadREST.changePayloadStatus(PayloadStatus.DELIVERED, "4f6911a8-437a-43fc-adad-a0ed6c6f69a7");

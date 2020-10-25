@@ -1,5 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
@@ -9,9 +12,15 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.mocks.Mission
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.RocketDoesNotExistException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.kafka.DepartmentStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest.Department;
 
 @Service
 public class MissionService {
+
+    @Autowired
+    private DepartmentStatusProducer departmentStatusProducer;
 
     public Mission createMission(Mission mission) throws InvalidMissionException {
         mission.setStatus(MissionStatus.PENDING);
@@ -31,7 +40,26 @@ public class MissionService {
         return mission;
     }
 
-    public void updateMissionFromRocketState(MissionStatus status, String id) throws MissionDoesNotExistException {
+    public void updateMissionGoNogo(Department department, boolean status) {
+        MissionsMocked.missions.forEach(m -> m.updateGoNogo(department, status));
+    }
+
+    public Map<Department, Boolean> retrieveGoNogoStatus(String id) throws MissionDoesNotExistException {
+        return findMissionOrThrow(id).getGoNogos();
+    }
+
+    public void makeGoNogo(Boolean gonogo, String id) throws MissionDoesNotExistException {
+        Mission m = findMissionOrThrow(id);
+        m.updateGoNogo(Department.MISSION, gonogo);
+        departmentStatusProducer.notifyDepartmentStatus(m.getRocketId(), gonogo);
+    }
+
+    public void updateMissionGoNogo(Department department, boolean status, String id)
+            throws RocketDoesNotExistException {
+        findMissionByRocketOrThrow(id).updateGoNogo(department, status);
+    }
+
+    public void updateMissionFromRocketState(MissionStatus status, String id) throws RocketDoesNotExistException {
         findMissionByRocketOrThrow(id).setStatus(status);
     }
 
@@ -39,8 +67,8 @@ public class MissionService {
         return MissionsMocked.find(id).orElseThrow(() -> new MissionDoesNotExistException(id));
     }
 
-    private Mission findMissionByRocketOrThrow(String id) throws MissionDoesNotExistException {
-        return MissionsMocked.findByRocketId(id).orElseThrow(() -> new MissionDoesNotExistException(id));
+    private Mission findMissionByRocketOrThrow(String id) throws RocketDoesNotExistException {
+        return MissionsMocked.findByRocketId(id).orElseThrow(() -> new RocketDoesNotExistException(id));
     }
 
     public SpaceCoordinate retrieveDestination(String missionId) throws MissionDoesNotExistException {

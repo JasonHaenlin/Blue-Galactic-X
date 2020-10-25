@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.mission.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,6 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 
@@ -58,19 +57,5 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(consumerDepartmentStatusFactory());
         return factory;
     }
-
-    public ConsumerFactory<String, RocketStatusRequest> consumerRocketStatusFactory() {
-        Map<String, Object> props = baseConfig();
-        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, RocketStatusRequest.class.getName());
-        return new DefaultKafkaConsumerFactory<>(props);
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> rocketStatusKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerRocketStatusFactory());
-        return factory;
-    }
-
 
 }

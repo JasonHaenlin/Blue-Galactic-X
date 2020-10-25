@@ -1,6 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.booster.entities;
 
 import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,9 +10,7 @@ public class Booster {
     private BoosterStatus status;
     private BoosterLandingStep landingStep;
     private BoosterMetrics metrics;
-    
 
-    private double previousSpeed;
     private double previousDistance;
 
     private final static Logger LOG = LoggerFactory.getLogger(Booster.class);
@@ -29,11 +28,10 @@ public class Booster {
         this.metrics.setFuelLevel(fuelLevel);
     }
 
-    public void updateState(){
-        if(status == BoosterStatus.LANDING){
+    public void updateState() {
+        if (status == BoosterStatus.LANDING) {
             double currDistance = this.metrics.getDistanceFromEarth();
-            double currSpeed = this.metrics.getSpeed();
-            switch(landingStep){
+            switch (landingStep) {
                 case NOT_LANDING:
                     this.handleFlipManeuver(currDistance);
                     break;
@@ -52,7 +50,6 @@ public class Booster {
                 default:
                     break;
             }
-            this.previousSpeed = this.metrics.getSpeed();
             this.previousDistance = this.metrics.getDistanceFromEarth();
         }
     }
@@ -93,7 +90,7 @@ public class Booster {
         }
     }
 
-    public BoosterLandingStep getLandingStep(){
+    public BoosterLandingStep getLandingStep() {
         return this.landingStep;
     }
 
@@ -160,7 +157,7 @@ public class Booster {
         return this;
     }
 
-    public Booster metrics(BoosterMetrics metrics){
+    public Booster metrics(BoosterMetrics metrics) {
         this.metrics = metrics;
         return this;
     }
@@ -183,7 +180,8 @@ public class Booster {
 
     @Override
     public String toString() {
-        return "{" + "id='" + getId() + "'" + " status='" + getStatus() + "'" + ", fuelLevel='" + getFuelLevel() + "'" + "}";
+        return "{" + "id='" + getId() + "'" + " status='" + getStatus() + "'" + ", fuelLevel='" + getFuelLevel() + "'"
+                + "}";
     }
 
 }

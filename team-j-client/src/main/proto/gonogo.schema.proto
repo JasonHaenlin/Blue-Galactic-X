@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
+
+option java_multiple_files = true;
+option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
+
+message GoNogoRequest {
+  enum Department { WEATHER = 0; ROCKET = 1; MISSION = 2; }
+  Department department = 1;
+  oneof id {
+    bool id_null = 2; // always set this to "true" when null
+    string id_value = 3;
+  }
+  bool status = 4;
+}

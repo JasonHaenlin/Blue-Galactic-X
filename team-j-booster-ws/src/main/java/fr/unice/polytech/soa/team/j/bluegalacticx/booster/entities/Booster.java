@@ -1,11 +1,9 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities;
 
 import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.RestService;
 
 public class Booster {
     private String id;
@@ -13,10 +11,6 @@ public class Booster {
     private BoosterLandingStep landingStep;
     private BoosterMetrics metrics;
 
-    @Autowired
-    private RestService restService;
-
-    private double previousSpeed;
     private double previousDistance;
 
     private final static Logger LOG = LoggerFactory.getLogger(Booster.class);
@@ -37,7 +31,6 @@ public class Booster {
     public void updateState(){
         if(status == BoosterStatus.LANDING){
             double currDistance = this.metrics.getDistanceFromEarth();
-            double currSpeed = this.metrics.getSpeed();
             switch(landingStep){
                 case NOT_LANDING:
                     this.handleFlipManeuver(currDistance);
@@ -57,7 +50,6 @@ public class Booster {
                 default:
                     break;
             }
-            this.previousSpeed = this.metrics.getSpeed();
             this.previousDistance = this.metrics.getDistanceFromEarth();
         }
     }

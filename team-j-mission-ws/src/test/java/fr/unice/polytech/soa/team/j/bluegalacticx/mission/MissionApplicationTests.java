@@ -9,8 +9,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -48,18 +46,12 @@ class MissionApplicationTests {
 
 	private Mission mission;
 	private Mission missionReply;
-	private Date date;
-	private String rocketId;
 	private String missionId;
-	private String payloadId;
 	private SpaceCoordinate destination;
 
 	private void missionInit() {
 		mission = new Mission();
-		date = new Date();
-		rocketId = "100";
 		missionId = "1";
-		payloadId = "1";
 		destination = new SpaceCoordinate(1000, 100, 10);
 	}
 
