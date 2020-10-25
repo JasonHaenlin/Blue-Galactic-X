@@ -30,7 +30,7 @@ public class BoosterScheduler {
         boosterService.updateAllBoostersState();
         List<Booster> boosters = boosterApi.updateBoosterMetricsAndRetrieve();
         for(Booster b : boosters){
-            if(b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING){
+            if(b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING || b.getStatus() == BoosterStatus.LANDED){
                 restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
             }
         }
