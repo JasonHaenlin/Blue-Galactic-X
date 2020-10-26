@@ -87,7 +87,7 @@ public class RocketRPCService extends RocketImplBase {
 
             String message = "";
             if (request.getLaunchRocket()) {
-                rocketApi.launchWhenReady(r.retrieveObjectiveCoordinates(), r.getId());
+                r.prepareLaunch();
                 message = "Launch approved !";
                 r.launchSequenceActivated();
                 rocketProducer.launchRocketEvent(r.getId());

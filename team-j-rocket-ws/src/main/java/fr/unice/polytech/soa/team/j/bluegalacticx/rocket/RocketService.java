@@ -19,6 +19,14 @@ public class RocketService {
 
     private List<Rocket> rockets = RocketsMocked.rockets;
 
+    public void addNewRocket(Rocket rocket) throws CannotBeNullException {
+        if (rocket == null) {
+            throw new CannotBeNullException("rocket");
+        }
+        rocket.initStatus();
+        rockets.add(rocket);
+    }
+
     public RocketMetrics getLastMetrics(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
         return retrieveCorrespondingRocket(rocketId).retrieveLastMetrics();
     }

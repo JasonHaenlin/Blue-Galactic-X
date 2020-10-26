@@ -32,6 +32,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
@@ -70,6 +71,7 @@ class RocketRPCServiceTest {
 		Mockito.lenient().when(restService.getCoordinatesFromMission(any(String.class)))
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
 		Mockito.lenient().when(restService.getAvailableRocketID()).thenReturn(Mono.just("1"));
+		RocketsMocked.reset();
 	}
 
 	@Test
@@ -104,6 +106,22 @@ class RocketRPCServiceTest {
 		List<LaunchOrderReply> results = responseObserver.getValues();
 		LaunchOrderReply response = results.get(0);
 		assertEquals("Launch approved !", response.getReply());
+
+		// Launch a rocket already launched
+		LaunchOrderRequest requestAgain = LaunchOrderRequest.newBuilder().setRocketId("1").setLaunchRocket(true)
+				.build();
+
+		StreamRecorder<LaunchOrderReply> responseObserverAgain = StreamRecorder.create();
+		rocketRpcService.launchOrderRocket(requestAgain, responseObserverAgain);
+
+		if (!responseObserverAgain.awaitCompletion(5, TimeUnit.SECONDS)) {
+			fail("The call did not terminate in time");
+		}
+
+		assertNotNull(responseObserverAgain.getError());
+
+		assertEquals("ABORTED: Cannot trigger the same sequence twice : IN_SERVICE",
+				responseObserverAgain.getError().getMessage());
 	}
 
 	@Test
