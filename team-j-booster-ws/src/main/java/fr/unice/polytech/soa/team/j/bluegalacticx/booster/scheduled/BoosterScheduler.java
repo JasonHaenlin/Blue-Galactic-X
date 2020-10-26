@@ -32,6 +32,10 @@ public class BoosterScheduler {
         for(Booster b : boosters){
             if(b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING){
                 restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
+            } else if(b.getStatus() == BoosterStatus.LANDED){
+                restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(),
+                    b.getDistanceFromEarth(), b.getSpeed()));
+                b.setStatus(BoosterStatus.PENDING);
             }
         }
     }
