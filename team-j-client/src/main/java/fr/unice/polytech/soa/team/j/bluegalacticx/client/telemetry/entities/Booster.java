@@ -2,6 +2,8 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.client.telemetry.entities;
 
 import java.util.Objects;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.booster.entities.BoosterStatus;
+
 public class Booster {
     private BoosterStatus status;
     private int fuelLevel;

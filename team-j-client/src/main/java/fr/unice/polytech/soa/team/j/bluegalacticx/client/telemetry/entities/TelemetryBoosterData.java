@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.booster.entities.BoosterStatus;
+
 @Document(collection = "boosterTelemetry")
 public class TelemetryBoosterData {
 
