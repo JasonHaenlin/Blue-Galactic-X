@@ -1,15 +1,20 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest.Department;
 
 public class Mission {
 
     private String id;
     private String rocketId;
     private SpaceCoordinate destination;
+    private Map<Department, Boolean> goNogos = new HashMap<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
@@ -89,6 +94,14 @@ public class Mission {
     public Mission status(MissionStatus status) {
         this.status = status;
         return this;
+    }
+
+    public void updateGoNogo(Department department, boolean status) {
+        this.goNogos.put(department, status);
+    }
+
+    public Map<Department, Boolean> getGoNogos() {
+        return goNogos;
     }
 
     @Override

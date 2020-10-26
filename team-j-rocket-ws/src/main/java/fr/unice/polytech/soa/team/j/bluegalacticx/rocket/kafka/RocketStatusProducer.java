@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +47,13 @@ public class RocketStatusProducer {
 
     public void damagedRocketEvent(String rocketId) {
         RocketStatusRequest req = RocketStatusRequest.newBuilder().setRocketId(rocketId).setEventType(EventType.DAMAGED)
+                .build();
+
+        kafkaTemplate.send(RocketStatusTopic0, req);
+    }
+
+    public void donedRocketEvent(String rocketId) {
+        RocketStatusRequest req = RocketStatusRequest.newBuilder().setRocketId(rocketId).setEventType(EventType.DONE)
                 .build();
 
         kafkaTemplate.send(RocketStatusTopic0, req);

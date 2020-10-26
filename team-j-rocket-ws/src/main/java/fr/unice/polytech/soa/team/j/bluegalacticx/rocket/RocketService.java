@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
@@ -13,9 +14,13 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.Roc
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.DepartmentStatusProducer;
 
 @Service
 public class RocketService {
+
+    @Autowired
+    private DepartmentStatusProducer departmentStatusProducer;
 
     private List<Rocket> rockets = RocketsMocked.rockets;
 
@@ -31,13 +36,23 @@ public class RocketService {
         return retrieveCorrespondingRocket(rocketId).retrieveLastMetrics();
     }
 
-    public RocketStatus getRocketStatus(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
+    public RocketStatus getRocketStatus(String rocketId) throws RocketDoesNotExistException {
         return retrieveCorrespondingRocket(rocketId).getStatus();
+    }
+
+    public RocketStatus getRocketDepartmentStatus(String rocketId) throws RocketDoesNotExistException {
+        return getRocketStatus(rocketId);
     }
 
     public void submitNewReport(String rocketId, RocketReport rocketReport)
             throws RocketDoesNotExistException, CannotBeNullException {
         retrieveCorrespondingRocket(rocketId).replaceWithNewReport(rocketReport);
+    }
+
+    public void updateGoNogoForRocket(String idValue, boolean status)
+            throws RocketDestroyedException, RocketDoesNotExistException {
+        retrieveCorrespondingRocket(idValue)
+                .status(status ? RocketStatus.READY_FOR_LAUNCH : RocketStatus.NOT_READY_FOR_LAUNCH);
     }
 
     public RocketReport retrieveLastReport(String rocketId)
@@ -52,5 +67,9 @@ public class RocketService {
     private Rocket retrieveCorrespondingRocket(String id) throws RocketDoesNotExistException {
         return rockets.stream().filter(r -> r.getId().equals(id)).findFirst()
                 .orElseThrow(() -> new RocketDoesNotExistException(id));
+    }
+
+    public void setRocketDepartmentStatus(String rocketId, boolean go) {
+        departmentStatusProducer.notifyDepartmentStatus(rocketId, go);
     }
 }

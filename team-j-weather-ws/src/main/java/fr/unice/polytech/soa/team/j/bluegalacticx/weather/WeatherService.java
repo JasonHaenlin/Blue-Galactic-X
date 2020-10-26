@@ -1,38 +1,24 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.weather;
 
-import java.util.Calendar;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherReport;
-import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.mocks.WeatherBeaconsMocked;
-import fr.unice.polytech.soa.team.j.bluegalacticx.weather.exceptions.NoWeatherReportExceptions;
+import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.mocks.WeatherReportMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.weather.kafka.DepartmentStatusProducer;
 
 @Service
 public class WeatherService {
 
-    private WeatherReport report;
+    @Autowired
+    private DepartmentStatusProducer departmentStatusProducer;
 
-    public WeatherStatus getCurrentWeather() {
-        return new WeatherStatus().beacons(WeatherBeaconsMocked.beacons).date(Calendar.getInstance());
+    public WeatherReport getCurrentWeather() {
+        return WeatherReportMocked.reports;
     }
 
-    public WeatherReport getLastReport() throws NoWeatherReportExceptions {
-        checkReport(this.report);
-        return report;
-    }
-
-    public void setReport(WeatherReport report) throws NoWeatherReportExceptions {
-        checkReport(report);
-        report.setDate(Calendar.getInstance());
-        this.report = report;
-    }
-
-    private void checkReport(WeatherReport report) throws NoWeatherReportExceptions {
-        if (report == null) {
-            throw new NoWeatherReportExceptions();
-        }
+    public void setWeatherDepartmentStatus(boolean go) {
+        departmentStatusProducer.notifyDepartmentStatus(go);
     }
 
 }

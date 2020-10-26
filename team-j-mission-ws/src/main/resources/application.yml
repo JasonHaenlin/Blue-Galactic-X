@@ -24,3 +24,4 @@ kafka:
     default: blue-origin-mission
   topics:
     rocketstatus: teamj.rocket-status.0
+    departmentstatus: teamj.department-status.0

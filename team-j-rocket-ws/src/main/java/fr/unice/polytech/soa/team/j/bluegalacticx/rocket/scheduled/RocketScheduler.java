@@ -17,11 +17,18 @@ public class RocketScheduler {
     @Autowired
     private RestService restService;
 
+    // @Autowired
+    // private RocketStatusProducer rocketProducer;
+
     @Scheduled(fixedDelay = 1000)
     public void scheduleRocketMetricsTask() {
         for (Rocket r : RocketsMocked.rockets) {
             sm = r.getLastMetrics();
             restService.postTelemetry(sm);
+            // todo : pass the rocket at arrived
+            // if (sm.getDistance() <= 0) {
+            // rocketProducer.donedRocketEvent(sm.getRocketId());
+            // }
         }
     }
 
