@@ -3,6 +3,8 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.MaxQ;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
@@ -20,11 +23,14 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.SpaceMet
 public class RocketApiTest {
 
     private RocketApi api;
+    private int numberIterations;
 
     @BeforeEach
     public void init() {
         SpaceMetricsMocked.preset();
-        api = new RocketApi().withNumberOfIteration(10).withOriginCoordinate(new SpaceCoordinate(0, 0, 0));
+        numberIterations = 30;
+        api = new RocketApi().withNumberOfIteration(numberIterations)
+                .withOriginCoordinate(new SpaceCoordinate(0, 0, 0));
     }
 
     @Test
@@ -64,17 +70,44 @@ public class RocketApiTest {
 
         ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "");
 
-        for (int i = 0; i < 5; i++) {
-            ms = api.retrieveLastMetrics();
-        }
-
-        assertEquals(7.0, ms.getDistance(), 0.1);
-
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < numberIterations; i++) {
             ms = api.retrieveLastMetrics();
         }
 
         assertEquals(0.0, ms.getDistance(), 0.1);
+
+    }
+
+    @Test
+    public void shouldDetectMaxQWithAnyDistance() {
+
+        int nbTest = 1000;
+
+        for (int i = 0; i < nbTest; i++) {
+            init();
+            SpaceMetrics ms;
+            ms = api.retrieveLastMetrics();
+            assertEquals(SpaceMetricsMocked.onGround, ms);
+            int maxDistance = 10000;
+            int minDistance = 100;
+
+            int x = new Random().nextInt(maxDistance) + minDistance;
+            int y = new Random().nextInt(maxDistance) + minDistance;
+            int z = new Random().nextInt(maxDistance) + minDistance;
+
+            ms = api.launchWhenReady(new SpaceCoordinate(x, y, z), "1");
+            boolean inMaxQ = false;
+
+            for (int j = 0; j < numberIterations; j++) {
+                ms = api.retrieveLastMetrics();
+                if (ms.getDistance() <= ms.getTotalDistance() - MaxQ.MIN
+                        && ms.getTotalDistance() >= ms.getDistance() - MaxQ.MAX) {
+                    inMaxQ = true;
+                }
+            }
+            assertEquals(inMaxQ, true);
+
+        }
 
     }
 
