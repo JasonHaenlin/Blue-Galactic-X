@@ -7,10 +7,12 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.Boo
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.utils.RandomUtils;
 
 public class Rocket {
     private String id;
-    private RocketMetrics metrics;
+    private SpaceTelemetry inAir;
+    private SpaceTelemetry inGround;
     private RocketReport report;
     private RocketStatus status;
     private SpaceCoordinate objective;
@@ -29,9 +31,18 @@ public class Rocket {
         return id;
     }
 
-    public Rocket(String id, RocketMetrics metrics, RocketReport report, RocketStatus status) {
+    public SpaceTelemetry getMetricsInAir(){
+        return this.inAir;
+    }
+
+    public SpaceTelemetry getMetricsInGround(){
+        return this.inGround;
+    }
+
+    public Rocket(String id, SpaceTelemetry inAir,SpaceTelemetry inGround, RocketReport report, RocketStatus status) {
         this.id = id;
-        this.metrics = metrics;
+        this.inAir = inAir;
+        this.inGround=inGround;
         this.report = report;
         this.status = status;
         this.rocketApi = new RocketApi();
@@ -43,21 +54,37 @@ public class Rocket {
         return boosterId;
     }
 
-    public SpaceMetrics getLastMetrics() {
-        return rocketApi.retrieveLastMetrics();
+    public SpaceTelemetry getLastTelemetry() {
+        return rocketApi.retrieveLastTelemetry(this.id);
     }
 
-    public RocketMetrics retrieveLastMetrics() throws RocketDestroyedException {
-        throwIfRocketIsDestroyed();
-        return this.metrics;
+    public Rocket inAir(SpaceTelemetry inAir){
+        this.inAir=inAir;
+        return this;
     }
 
-    public void updateWithRecentMetrics(RocketMetrics metrics) throws CannotBeNullException {
-        if (metrics == null) {
-            throw new CannotBeNullException("metrics");
-        }
-        this.metrics = metrics;
+    public Rocket inGround(SpaceTelemetry inGround){
+        this.inGround=inGround;
+        return this;
     }
+
+    public SpaceTelemetry nextMetrics(double distStep, Double fuelStep) {
+        double newDistance = inAir.getDistance();
+        newDistance -= distStep;
+        this.inAir = new SpaceTelemetry()
+        .heatShield(RandomUtils.randomDouble(5, inAir.getHeatShield()))
+        .distance(newDistance <1 ? 0 : newDistance)
+        .speed(RandomUtils.randomDouble(20, inAir.getSpeed()))
+        .irradiance(RandomUtils.randomInt(10, inAir.getIrradiance()))
+        .velocityVariation(RandomUtils.randomInt(10, inAir.getVelocityVariation()))
+        .temperature(RandomUtils.randomInt(50, inAir.getTemperature()))
+        .vibration(RandomUtils.randomInt(5, inAir.getVibration()))
+        .boosterRGA(RandomUtils.randomInt(10, inAir.getBoosterRGA()))
+        .midRocketRGA(RandomUtils.randomInt(10, inAir.getMidRocketRGA()));
+
+        return this.inAir;
+    }
+
 
     public RocketReport retrieveLastReport() throws RocketDestroyedException {
         throwIfRocketIsDestroyed();
@@ -123,11 +150,6 @@ public class Rocket {
         return this;
     }
 
-    public Rocket metrics(RocketMetrics metrics) {
-        this.metrics = metrics;
-        return this;
-    }
-
     public Rocket report(RocketReport report) {
         this.report = report;
         return this;
@@ -164,13 +186,13 @@ public class Rocket {
             return false;
         }
         Rocket rocket = (Rocket) o;
-        return Objects.equals(id, rocket.id) && Objects.equals(metrics, rocket.metrics)
+        return Objects.equals(id, rocket.id) && Objects.equals(inAir, rocket.inAir) && Objects.equals(inGround,rocket.inGround)
                 && Objects.equals(report, rocket.report) && Objects.equals(status, rocket.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, metrics, report, status);
+        return Objects.hash(id, inAir,inGround, report, status);
     }
 
 }

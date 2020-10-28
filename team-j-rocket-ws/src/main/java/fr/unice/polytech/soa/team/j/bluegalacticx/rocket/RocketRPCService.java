@@ -12,7 +12,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.Boo
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.SpaceMetricsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.RocketStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
@@ -115,10 +114,10 @@ public class RocketRPCService extends RocketImplBase {
             String rocketId = request.getRocketId();
             Rocket r = findRocketOrThrow(rocketId);
             String detachedBoosterId = r.detachNextStage();
-            double distanceFromEarth = (SpaceMetricsMocked.inAir.getTotalDistance()
-                    - SpaceMetricsMocked.inAir.getDistance());
+            double distanceFromEarth = (r.getMetricsInAir().getTotalDistance()
+                    - r.getMetricsInAir().getDistance());
             boosterRpcClient.initiateLandingSequence(detachedBoosterId, distanceFromEarth,
-                    SpaceMetricsMocked.inAir.getSpeed());
+                    r.getMetricsInAir().getSpeed());
             NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
             responseObserver.onNext(nextStageReply);
             responseObserver.onCompleted();

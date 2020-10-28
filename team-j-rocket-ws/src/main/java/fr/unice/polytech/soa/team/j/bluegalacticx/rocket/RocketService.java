@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
@@ -32,8 +32,8 @@ public class RocketService {
         rockets.add(rocket);
     }
 
-    public RocketMetrics getLastMetrics(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
-        return retrieveCorrespondingRocket(rocketId).retrieveLastMetrics();
+    public SpaceTelemetry getLastTelemetry(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(rocketId).getLastTelemetry();
     }
 
     public RocketStatus getRocketStatus(String rocketId) throws RocketDoesNotExistException {

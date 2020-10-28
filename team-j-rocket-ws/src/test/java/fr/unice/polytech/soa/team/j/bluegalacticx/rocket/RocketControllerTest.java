@@ -25,7 +25,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.DepartmentStatusP
 
 @AutoConfigureMockMvc
 @WebMvcTest
-@ContextConfiguration(classes = { RocketController.class, RocketService.class, DepartmentStatusProducer.class })
+@ContextConfiguration(classes = { RocketController.class, RocketService.class, DepartmentStatusProducer.class})
 @Tags(value = { @Tag("mvc"), @Tag("mvc-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 public class RocketControllerTest {
@@ -45,7 +45,7 @@ public class RocketControllerTest {
     @Order(1)
     public void getRocketStatusShouldBeOkTest() throws Exception {
         mvc.perform(get("/rocket/telemetry/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(6)));
+                .andExpect(jsonPath("$.*", hasSize(11)));
     }
 
 }
