@@ -41,8 +41,8 @@ public class RocketSchedulerTest {
 
     @Test
     @Order(1)
-    public void MetricSchedulerTest() throws InterruptedException {
-        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> verify(sch, atLeast(5)).scheduleRocketMetricsTask());
+    public void TelemetrySchedulerTest() throws InterruptedException {
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> verify(sch, atLeast(5)).scheduleRocketTelemetryTask());
     }
 
 }

@@ -31,11 +31,11 @@ public class Rocket {
         return id;
     }
 
-    public SpaceTelemetry getMetricsInAir(){
+    public SpaceTelemetry getTelemetryInAir(){
         return this.inAir;
     }
 
-    public SpaceTelemetry getMetricsInGround(){
+    public SpaceTelemetry getTelemetryInGround(){
         return this.inGround;
     }
 
@@ -68,7 +68,7 @@ public class Rocket {
         return this;
     }
 
-    public SpaceTelemetry nextMetrics(double distStep, Double fuelStep) {
+    public SpaceTelemetry nextTelemetry(double distStep, Double fuelStep) {
         double newDistance = inAir.getDistance();
         newDistance -= distStep;
         this.inAir = new SpaceTelemetry()

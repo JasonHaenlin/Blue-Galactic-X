@@ -21,7 +21,7 @@ public class RocketScheduler {
     // private RocketStatusProducer rocketProducer;
 
     @Scheduled(fixedDelay = 1000)
-    public void scheduleRocketMetricsTask() {
+    public void scheduleRocketTelemetryTask() {
         for (Rocket r : RocketsMocked.rockets) {
             sm = r.getLastTelemetry();
             restService.postTelemetry(sm);

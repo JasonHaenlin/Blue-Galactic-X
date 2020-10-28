@@ -29,15 +29,15 @@ public class RocketApi {
         Rocket r = RocketsMocked.find(rocketId).get();
         double distance = computeDistance(origin, objectiveCoordinates);
         this.mockDistStep = distance / this.iteration;
-        return r.getMetricsInAir().totalDistance(distance).distance(distance).rocketId(rocketId);
+        return r.getTelemetryInAir().totalDistance(distance).distance(distance).rocketId(rocketId);
     }
 
     public SpaceTelemetry retrieveLastTelemetry(String rocketId) {
         Rocket r = RocketsMocked.find(rocketId).get();
         if (this.mockDistStep == null) {
-            return r.getMetricsInGround();
+            return r.getTelemetryInGround();
         }
-        return r.nextMetrics(this.mockDistStep, this.mockFuelStep);
+        return r.nextTelemetry(this.mockDistStep, this.mockFuelStep);
     }
 
     private int computeDistance(SpaceCoordinate from, SpaceCoordinate to) {

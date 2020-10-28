@@ -183,8 +183,8 @@ public class SpaceTelemetry {
         if (!(o instanceof SpaceTelemetry)) {
             return false;
         }
-        SpaceTelemetry rocketMetrics = (SpaceTelemetry) o;
-        return irradiance == rocketMetrics.irradiance && velocityVariation == rocketMetrics.velocityVariation && temperature == rocketMetrics.temperature && vibration == rocketMetrics.vibration && boosterRGA == rocketMetrics.boosterRGA && midRocketRGA == rocketMetrics.midRocketRGA && Objects.equals(rocketId, rocketMetrics.rocketId) && heatShield == rocketMetrics.heatShield && speed == rocketMetrics.speed && distance == rocketMetrics.distance && totalDistance == rocketMetrics.totalDistance;
+        SpaceTelemetry rocketTelemetry = (SpaceTelemetry) o;
+        return irradiance == rocketTelemetry.irradiance && velocityVariation == rocketTelemetry.velocityVariation && temperature == rocketTelemetry.temperature && vibration == rocketTelemetry.vibration && boosterRGA == rocketTelemetry.boosterRGA && midRocketRGA == rocketTelemetry.midRocketRGA && Objects.equals(rocketId, rocketTelemetry.rocketId) && heatShield == rocketTelemetry.heatShield && speed == rocketTelemetry.speed && distance == rocketTelemetry.distance && totalDistance == rocketTelemetry.totalDistance;
     }
 
     @Override
