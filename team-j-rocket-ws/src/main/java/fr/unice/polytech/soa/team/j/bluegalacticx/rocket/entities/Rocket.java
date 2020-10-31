@@ -64,6 +64,10 @@ public class Rocket {
         return false;
     }
 
+    public RocketApi getRocketApi(){
+        return rocketApi;
+    }
+
     public void updateSpeed(SpeedChange speedChange) {
         double speed = 0.0;
         if (speedChange == (SpeedChange.INCREASE)) {

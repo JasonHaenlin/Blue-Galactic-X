@@ -71,20 +71,19 @@ public class RocketSchedulerTest {
     @Order(2)
     public void rocketChangeStatusTest() throws InterruptedException {
         SpaceTelemetry ms;
-        ms = api.retrieveLastTelemetry("1");
+        Rocket r = RocketsMocked.find("1").get();
 
-        ms = api.launchWhenReady(new SpaceCoordinate(1000, 2000, 3000), "1");
+        ms = r.getRocketApi().launchWhenReady(new SpaceCoordinate(1000, 2000, 3000), "1");
         List<Double> variationSpeed = new ArrayList<>();
         for (int i = 0; i < numberIterations; i++) {
-            ms = api.retrieveLastTelemetry("1");
+            ms = r.getLastTelemetry();
             await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
                 sch.scheduleRocketTelemetryTask();
             });
-            Rocket r = RocketsMocked.find("1").get();
             variationSpeed.add(r.getTelemetryInAir().getSpeed());
             if (r.isRocketInMaxQ()) {
                 assertEquals(r.getStatus() == RocketStatus.ENTER_MAXQ, true);
-            } else if (!r.isRocketInMaxQ() && r.getStatus() != RocketStatus.AT_BASE) {
+            } else if (!r.isRocketInMaxQ() && (r.getStatus() != RocketStatus.AT_BASE && r.getStatus() != RocketStatus.ARRIVED) ) {
                 assertEquals(RocketsMocked.find("1").get().getStatus() == RocketStatus.QUIT_MAXQ, true);
             }
 
