@@ -141,6 +141,10 @@ public class Rocket {
         rocketApi.launchWhenReady(this.objective, this.id);
     }
 
+    public void arrivedAtDestination() {
+        this.status = RocketStatus.ARRIVED;
+    }
+
     public void launchSequenceActivated() throws NoSameStatusException, BoosterDestroyedException {
         if (status == RocketStatus.IN_SERVICE) {
             throw new NoSameStatusException(status.toString());
