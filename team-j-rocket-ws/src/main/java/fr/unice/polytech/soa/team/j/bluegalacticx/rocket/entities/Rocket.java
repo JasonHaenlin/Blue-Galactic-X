@@ -31,18 +31,18 @@ public class Rocket {
         return id;
     }
 
-    public SpaceTelemetry getTelemetryInAir(){
+    public SpaceTelemetry getTelemetryInAir() {
         return this.inAir;
     }
 
-    public SpaceTelemetry getTelemetryInGround(){
+    public SpaceTelemetry getTelemetryInGround() {
         return this.inGround;
     }
 
-    public Rocket(String id, SpaceTelemetry inAir,SpaceTelemetry inGround, RocketReport report, RocketStatus status) {
+    public Rocket(String id, SpaceTelemetry inAir, SpaceTelemetry inGround, RocketReport report, RocketStatus status) {
         this.id = id;
         this.inAir = inAir;
-        this.inGround=inGround;
+        this.inGround = inGround;
         this.report = report;
         this.status = status;
         this.rocketApi = new RocketApi();
@@ -58,34 +58,31 @@ public class Rocket {
         return rocketApi.retrieveLastTelemetry(this.id);
     }
 
-    public Rocket inAir(SpaceTelemetry inAir){
-        this.inAir=inAir;
+    public Rocket inAir(SpaceTelemetry inAir) {
+        this.inAir = inAir;
         return this;
     }
 
-    public Rocket inGround(SpaceTelemetry inGround){
-        this.inGround=inGround;
+    public Rocket inGround(SpaceTelemetry inGround) {
+        this.inGround = inGround;
         return this;
     }
 
     public SpaceTelemetry nextTelemetry(double distStep, Double fuelStep) {
         double newDistance = inAir.getDistance();
         newDistance -= distStep;
-        this.inAir = new SpaceTelemetry()
-        .heatShield(RandomUtils.randomDouble(5, inAir.getHeatShield()))
-        .distance(newDistance <1 ? 0 : newDistance)
-        .totalDistance(inAir.getTotalDistance())
-        .speed(RandomUtils.randomDouble(20, inAir.getSpeed()))
-        .irradiance(RandomUtils.randomInt(10, inAir.getIrradiance()))
-        .velocityVariation(RandomUtils.randomInt(10, inAir.getVelocityVariation()))
-        .temperature(RandomUtils.randomInt(50, inAir.getTemperature()))
-        .vibration(RandomUtils.randomInt(5, inAir.getVibration()))
-        .boosterRGA(RandomUtils.randomInt(10, inAir.getBoosterRGA()))
-        .midRocketRGA(RandomUtils.randomInt(10, inAir.getMidRocketRGA()));
+        this.inAir = new SpaceTelemetry().heatShield(RandomUtils.randomDouble(5, inAir.getHeatShield()))
+                .distance(newDistance < 1 ? 0 : newDistance).totalDistance(inAir.getTotalDistance())
+                .speed(RandomUtils.randomDouble(20, inAir.getSpeed()))
+                .irradiance(RandomUtils.randomInt(10, inAir.getIrradiance()))
+                .velocityVariation(RandomUtils.randomInt(10, inAir.getVelocityVariation()))
+                .temperature(RandomUtils.randomInt(50, inAir.getTemperature()))
+                .vibration(RandomUtils.randomInt(5, inAir.getVibration()))
+                .boosterRGA(RandomUtils.randomInt(10, inAir.getBoosterRGA()))
+                .midRocketRGA(RandomUtils.randomInt(10, inAir.getMidRocketRGA()));
 
         return this.inAir;
     }
-
 
     public RocketReport retrieveLastReport() throws RocketDestroyedException {
         throwIfRocketIsDestroyed();
@@ -122,6 +119,10 @@ public class Rocket {
 
     public void prepareLaunch() {
         rocketApi.launchWhenReady(this.objective, this.id);
+    }
+
+    public void arrivedAtDestination() {
+        this.status = RocketStatus.ARRIVED;
     }
 
     public void launchSequenceActivated() throws NoSameStatusException, BoosterDestroyedException {
@@ -187,13 +188,14 @@ public class Rocket {
             return false;
         }
         Rocket rocket = (Rocket) o;
-        return Objects.equals(id, rocket.id) && Objects.equals(inAir, rocket.inAir) && Objects.equals(inGround,rocket.inGround)
-                && Objects.equals(report, rocket.report) && Objects.equals(status, rocket.status);
+        return Objects.equals(id, rocket.id) && Objects.equals(inAir, rocket.inAir)
+                && Objects.equals(inGround, rocket.inGround) && Objects.equals(report, rocket.report)
+                && Objects.equals(status, rocket.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, inAir,inGround, report, status);
+        return Objects.hash(id, inAir, inGround, report, status);
     }
 
 }

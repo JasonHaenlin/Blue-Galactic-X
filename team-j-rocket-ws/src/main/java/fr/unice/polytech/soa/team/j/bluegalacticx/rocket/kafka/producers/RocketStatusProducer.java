@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

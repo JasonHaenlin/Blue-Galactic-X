@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.configs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
@@ -40,22 +39,12 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, RocketStatusRequest> producerRocketStatusFactory() {
-        return new DefaultKafkaProducerFactory<>(insertBaseConfig());
-    }
-
-    @Bean
     public KafkaTemplate<String, RocketStatusRequest> kafkaTemplateRocket() {
-        return new KafkaTemplate<>(producerRocketStatusFactory());
-    }
-
-    @Bean
-    public ProducerFactory<String, GoNogoRequest> producerDepartmentStatusFactory() {
-        return new DefaultKafkaProducerFactory<>(insertBaseConfig());
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(insertBaseConfig()));
     }
 
     @Bean
     public KafkaTemplate<String, GoNogoRequest> kafkaTemplateGoNoGo() {
-        return new KafkaTemplate<>(producerDepartmentStatusFactory());
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(insertBaseConfig()));
     }
 }
