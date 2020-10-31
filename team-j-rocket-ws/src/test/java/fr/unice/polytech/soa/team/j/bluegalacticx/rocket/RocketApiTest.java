@@ -105,7 +105,7 @@ public class RocketApiTest {
             for (int j = 0; j < numberIterations; j++) {
                 ms = api.retrieveLastTelemetry("1");
                 if (ms.getDistance() <= ms.getTotalDistance() - MaxQ.MIN
-                        && ms.getTotalDistance() >= ms.getDistance() - MaxQ.MAX) {
+                        && ms.getDistance() >= ms.getTotalDistance() - MaxQ.MAX) {
                     inMaxQ = true;
                 }
             }

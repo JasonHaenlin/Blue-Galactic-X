@@ -6,7 +6,10 @@ import org.springframework.stereotype.Component;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpeedChange;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 
 @Component
@@ -21,7 +24,7 @@ public class RocketScheduler {
     // private RocketStatusProducer rocketProducer;
 
     @Scheduled(fixedDelay = 1000)
-    public void scheduleRocketTelemetryTask() {
+    public void scheduleRocketTelemetryTask() throws RocketDestroyedException {
         for (Rocket r : RocketsMocked.rockets) {
             sm = r.getLastTelemetry();
             restService.postTelemetry(sm);
@@ -29,6 +32,13 @@ public class RocketScheduler {
             // if (sm.getDistance() <= 0) {
             // rocketProducer.donedRocketEvent(sm.getRocketId());
             // }
+            if (r.isRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
+                r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
+                r.updateSpeed(SpeedChange.DECREASE);
+            } else if (!r.isRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
+                r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
+                r.updateSpeed(SpeedChange.INCREASE);
+            }
         }
     }
 

@@ -18,6 +18,8 @@ public class Rocket {
     private SpaceCoordinate objective;
     private String boosterId;
     private RocketApi rocketApi;
+    // Increase or decrease speed by 20% (maxQ)
+    private static final double SPEED_UPDATE = 0.2;
 
     public Rocket() {
         this.rocketApi = new RocketApi();
@@ -31,18 +33,18 @@ public class Rocket {
         return id;
     }
 
-    public SpaceTelemetry getTelemetryInAir(){
+    public SpaceTelemetry getTelemetryInAir() {
         return this.inAir;
     }
 
-    public SpaceTelemetry getTelemetryInGround(){
+    public SpaceTelemetry getTelemetryInGround() {
         return this.inGround;
     }
 
-    public Rocket(String id, SpaceTelemetry inAir,SpaceTelemetry inGround, RocketReport report, RocketStatus status) {
+    public Rocket(String id, SpaceTelemetry inAir, SpaceTelemetry inGround, RocketReport report, RocketStatus status) {
         this.id = id;
         this.inAir = inAir;
-        this.inGround=inGround;
+        this.inGround = inGround;
         this.report = report;
         this.status = status;
         this.rocketApi = new RocketApi();
@@ -54,38 +56,53 @@ public class Rocket {
         return boosterId;
     }
 
+    public boolean isRocketInMaxQ() {
+        if (this.inAir.getDistance() <= this.inAir.getTotalDistance() - MaxQ.MIN
+                && this.inAir.getDistance() >= this.inAir.getTotalDistance() - MaxQ.MAX) {
+            return true;
+        }
+        return false;
+    }
+
+    public void updateSpeed(SpeedChange speedChange) {
+        double speed = 0.0;
+        if (speedChange == (SpeedChange.INCREASE)) {
+            speed = this.inAir.getSpeed() + (this.inAir.getSpeed() * (SPEED_UPDATE));
+        } else {
+            speed = this.inAir.getSpeed() + (this.inAir.getSpeed() * (-SPEED_UPDATE));
+        }
+        this.inAir.setSpeed(speed);
+    }
+
     public SpaceTelemetry getLastTelemetry() {
         return rocketApi.retrieveLastTelemetry(this.id);
     }
 
-    public Rocket inAir(SpaceTelemetry inAir){
-        this.inAir=inAir;
+    public Rocket inAir(SpaceTelemetry inAir) {
+        this.inAir = inAir;
         return this;
     }
 
-    public Rocket inGround(SpaceTelemetry inGround){
-        this.inGround=inGround;
+    public Rocket inGround(SpaceTelemetry inGround) {
+        this.inGround = inGround;
         return this;
     }
 
     public SpaceTelemetry nextTelemetry(double distStep, Double fuelStep) {
         double newDistance = inAir.getDistance();
         newDistance -= distStep;
-        this.inAir = new SpaceTelemetry()
-        .heatShield(RandomUtils.randomDouble(5, inAir.getHeatShield()))
-        .distance(newDistance <1 ? 0 : newDistance)
-        .totalDistance(inAir.getTotalDistance())
-        .speed(RandomUtils.randomDouble(20, inAir.getSpeed()))
-        .irradiance(RandomUtils.randomInt(10, inAir.getIrradiance()))
-        .velocityVariation(RandomUtils.randomInt(10, inAir.getVelocityVariation()))
-        .temperature(RandomUtils.randomInt(50, inAir.getTemperature()))
-        .vibration(RandomUtils.randomInt(5, inAir.getVibration()))
-        .boosterRGA(RandomUtils.randomInt(10, inAir.getBoosterRGA()))
-        .midRocketRGA(RandomUtils.randomInt(10, inAir.getMidRocketRGA()));
+        this.inAir = new SpaceTelemetry().heatShield(RandomUtils.randomDouble(5, inAir.getHeatShield()))
+                .distance(newDistance < 1 ? 0 : newDistance).totalDistance(inAir.getTotalDistance())
+                .speed(RandomUtils.randomDouble(20, inAir.getSpeed()))
+                .irradiance(RandomUtils.randomInt(10, inAir.getIrradiance()))
+                .velocityVariation(RandomUtils.randomInt(10, inAir.getVelocityVariation()))
+                .temperature(RandomUtils.randomInt(50, inAir.getTemperature()))
+                .vibration(RandomUtils.randomInt(5, inAir.getVibration()))
+                .boosterRGA(RandomUtils.randomInt(10, inAir.getBoosterRGA()))
+                .midRocketRGA(RandomUtils.randomInt(10, inAir.getMidRocketRGA()));
 
         return this.inAir;
     }
-
 
     public RocketReport retrieveLastReport() throws RocketDestroyedException {
         throwIfRocketIsDestroyed();
@@ -187,13 +204,14 @@ public class Rocket {
             return false;
         }
         Rocket rocket = (Rocket) o;
-        return Objects.equals(id, rocket.id) && Objects.equals(inAir, rocket.inAir) && Objects.equals(inGround,rocket.inGround)
-                && Objects.equals(report, rocket.report) && Objects.equals(status, rocket.status);
+        return Objects.equals(id, rocket.id) && Objects.equals(inAir, rocket.inAir)
+                && Objects.equals(inGround, rocket.inGround) && Objects.equals(report, rocket.report)
+                && Objects.equals(status, rocket.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, inAir,inGround, report, status);
+        return Objects.hash(id, inAir, inGround, report, status);
     }
 
 }
