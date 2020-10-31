@@ -74,6 +74,7 @@ public class Rocket {
         this.inAir = new SpaceTelemetry()
         .heatShield(RandomUtils.randomDouble(5, inAir.getHeatShield()))
         .distance(newDistance <1 ? 0 : newDistance)
+        .totalDistance(inAir.getTotalDistance())
         .speed(RandomUtils.randomDouble(20, inAir.getSpeed()))
         .irradiance(RandomUtils.randomInt(10, inAir.getIrradiance()))
         .velocityVariation(RandomUtils.randomInt(10, inAir.getVelocityVariation()))

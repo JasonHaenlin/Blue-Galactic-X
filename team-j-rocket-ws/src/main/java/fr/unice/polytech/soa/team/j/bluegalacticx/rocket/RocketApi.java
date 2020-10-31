@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.MaxQ;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
@@ -9,11 +10,14 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsM
 
 @Service
 public class RocketApi {
+
     // mocked data
     private int iteration = 40;
+    private Double mockDistStepFix = 2.0;
     private Double mockFuelStep = null;
     private Double mockDistStep = null;
     private SpaceCoordinate origin = new SpaceCoordinate(0, 0, 0);
+    private double distance;
 
     public RocketApi withOriginCoordinate(SpaceCoordinate origin) {
         this.origin = origin;
@@ -27,15 +31,27 @@ public class RocketApi {
 
     public SpaceTelemetry launchWhenReady(SpaceCoordinate objectiveCoordinates, String rocketId) {
         Rocket r = RocketsMocked.find(rocketId).get();
-        double distance = computeDistance(origin, objectiveCoordinates);
-        this.mockDistStep = distance / this.iteration;
+        this.distance = computeDistance(origin, objectiveCoordinates);
+        this.mockDistStep = mockDistStepFix;
         return r.getTelemetryInAir().totalDistance(distance).distance(distance).rocketId(rocketId);
+    }
+
+    private boolean isRocketNotPassedMaxQ(Rocket rocket) {
+        if (rocket.getTelemetryInAir().getDistance() >= rocket.getTelemetryInAir().getTotalDistance() - MaxQ.MAX) {
+            return true;
+        }
+        return false;
     }
 
     public SpaceTelemetry retrieveLastTelemetry(String rocketId) {
         Rocket r = RocketsMocked.find(rocketId).get();
         if (this.mockDistStep == null) {
             return r.getTelemetryInGround();
+        }
+        if (isRocketNotPassedMaxQ(r)) {
+            this.mockDistStep = this.mockDistStepFix;
+        } else {
+            this.mockDistStep = distance / this.iteration;
         }
         return r.nextTelemetry(this.mockDistStep, this.mockFuelStep);
     }
