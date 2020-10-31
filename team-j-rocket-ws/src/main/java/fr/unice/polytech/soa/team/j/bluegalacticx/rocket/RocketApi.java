@@ -2,9 +2,10 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.SpaceMetricsMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 
 @Service
 public class RocketApi {
@@ -24,17 +25,19 @@ public class RocketApi {
         return this;
     }
 
-    public SpaceMetrics launchWhenReady(SpaceCoordinate objectiveCoordinates, String rocketId) {
+    public SpaceTelemetry launchWhenReady(SpaceCoordinate objectiveCoordinates, String rocketId) {
+        Rocket r = RocketsMocked.find(rocketId).get();
         double distance = computeDistance(origin, objectiveCoordinates);
         this.mockDistStep = distance / this.iteration;
-        return SpaceMetricsMocked.inAir.totalDistance(distance).distance(distance).rocketId(rocketId);
+        return r.getTelemetryInAir().totalDistance(distance).distance(distance).rocketId(rocketId);
     }
 
-    public SpaceMetrics retrieveLastMetrics() {
+    public SpaceTelemetry retrieveLastTelemetry(String rocketId) {
+        Rocket r = RocketsMocked.find(rocketId).get();
         if (this.mockDistStep == null) {
-            return SpaceMetricsMocked.onGround;
+            return r.getTelemetryInGround();
         }
-        return SpaceMetricsMocked.nextMetrics(this.mockDistStep, this.mockFuelStep);
+        return r.nextTelemetry(this.mockDistStep, this.mockFuelStep);
     }
 
     private int computeDistance(SpaceCoordinate from, SpaceCoordinate to) {

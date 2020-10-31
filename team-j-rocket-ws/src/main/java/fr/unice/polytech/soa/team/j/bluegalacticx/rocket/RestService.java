@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketTelemetryRequestFailedException;
 import reactor.core.publisher.Mono;
 
@@ -38,13 +38,13 @@ public class RestService {
         return webClientMission.get().uri("/destination/" + id).retrieve().bodyToMono(SpaceCoordinate.class);
     }
 
-    public void postMissionStatus(SpaceMetrics telemetry) {
-        webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class).retrieve()
+    public void postMissionStatus(SpaceTelemetry telemetry) {
+        webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceTelemetry.class).retrieve()
                 .bodyToMono(Void.class).subscribe();
     }
 
-    public void postTelemetry(SpaceMetrics telemetry) {
-        webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class).retrieve()
+    public void postTelemetry(SpaceTelemetry telemetry) {
+        webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceTelemetry.class).retrieve()
                 .bodyToMono(Void.class).onErrorResume(e -> Mono.error(new RocketTelemetryRequestFailedException()))
                 .subscribe();
     }

@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.RestService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 
 @Component
 public class RocketScheduler {
 
-    private SpaceMetrics sm = new SpaceMetrics();
+    private SpaceTelemetry sm = new SpaceTelemetry();
 
     @Autowired
     private RestService restService;
@@ -21,9 +21,9 @@ public class RocketScheduler {
     // private RocketStatusProducer rocketProducer;
 
     @Scheduled(fixedDelay = 1000)
-    public void scheduleRocketMetricsTask() {
+    public void scheduleRocketTelemetryTask() {
         for (Rocket r : RocketsMocked.rockets) {
-            sm = r.getLastMetrics();
+            sm = r.getLastTelemetry();
             restService.postTelemetry(sm);
             // todo : pass the rocket at arrived
             // if (sm.getDistance() <= 0) {
