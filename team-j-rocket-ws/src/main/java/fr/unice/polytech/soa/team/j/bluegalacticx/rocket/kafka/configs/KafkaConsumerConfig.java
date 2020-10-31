@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.configs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest;
@@ -45,16 +44,12 @@ public class KafkaConsumerConfig {
         return props;
     }
 
-    public ConsumerFactory<String, GoNogoRequest> consumerDepartmentStatusFactory() {
-        Map<String, Object> props = baseConfig();
-        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, GoNogoRequest.class.getName());
-        return new DefaultKafkaConsumerFactory<>(props);
-    }
-
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, GoNogoRequest> DepartmentStatusKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, GoNogoRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerDepartmentStatusFactory());
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, GoNogoRequest.class.getName());
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
         return factory;
     }
 
