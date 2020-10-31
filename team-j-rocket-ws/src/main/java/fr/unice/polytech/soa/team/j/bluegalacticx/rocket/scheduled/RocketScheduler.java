@@ -29,19 +29,21 @@ public class RocketScheduler {
         for (Rocket r : RocketsMocked.rockets) {
             sm = r.getLastTelemetry();
             restService.postTelemetry(sm);
-            
+
             if (r.isRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
                 r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
                 r.updateSpeed(SpeedChange.DECREASE);
             } else if (!r.isRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
                 r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
                 r.updateSpeed(SpeedChange.INCREASE);
+            }
 
             if (sm.getDistance() <= 0 && r.getStatus() != RocketStatus.ARRIVED) {
                 r.arrivedAtDestination();
                 rocketProducer.donedRocketEvent(sm.getRocketId());
             }
-        }
-    }
 
+        }
+
+    }
 }

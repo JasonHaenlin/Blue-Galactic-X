@@ -90,8 +90,7 @@ public class RocketSchedulerTest {
 
         }
 
-        // the speed is generated randomly, so the variation of speed when it enter or
-        // quit maxQ is between 15-20%
+        // the speed is generated randomly, so the variation of speed when it enter or quit maxQ is between 15-20%
         double variationDecreasePourcentageSpeedChange = -0.15;
         double variationIncreasePourcentageSpeedChange = 0.15;
         boolean speedHasIncreased = false;
