@@ -27,3 +27,4 @@ kafka:
   topics:
     rocketstatus: teamj.rocket-status.0
     payloadstatus: teamj.payload-status.0
+    telemetrypayload: teamj.telemetry-payload.0
