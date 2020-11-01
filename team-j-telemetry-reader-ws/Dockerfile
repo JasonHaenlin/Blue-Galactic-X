@@ -2,7 +2,7 @@ FROM adoptopenjdk/openjdk11-openj9:alpine-slim
 
 COPY target/telemetry-reader-ws.jar /usr/spring/telemetry-reader-ws.jar
 
-ENV MONGODB_HOST="team-j-blue-galactic-telemetry-database"
+ENV MONGODB_HOST="team-j-blue-galactic-database"
 ENV MONGODB_PORT="27017"
 
 HEALTHCHECK  --interval=5s --timeout=3s \

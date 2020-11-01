@@ -1,0 +1,21 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jmx:
+    enabled: false
+  application:
+    name: Demo
+
+server:
+  port: 8110
+  error:
+    include-stacktrace: never
+
+grpc:
+  enable-reflection: true
+  port: 8111
+
+api:
+  mongodb:
+    host: ${MONGODB_HOST:localhost}
+    port: ${MONGODB_PORT:27017}
