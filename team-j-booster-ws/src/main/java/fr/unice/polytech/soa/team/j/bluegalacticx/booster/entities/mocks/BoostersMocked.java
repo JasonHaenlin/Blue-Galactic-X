@@ -36,9 +36,9 @@ public class BoostersMocked {
     }
 
     public static final void nextMetrics() {
-        for(Booster b : boosters){
+        for (Booster b : boosters) {
             double gainedSpeed = 0;
-            if(b.getStatus() == BoosterStatus.LANDING){
+            if (b.getStatus() == BoosterStatus.LANDING) {
                 gainedSpeed = randomDouble(-40, -20);
             }
             b.setSpeed(b.getSpeed() + gainedSpeed);
@@ -50,7 +50,7 @@ public class BoostersMocked {
         return boosters.stream().filter(b -> b.getId().equals(id)).findFirst();
     }
 
-    public static final List<Booster> getAll(){
+    public static final List<Booster> getAll() {
         return boosters;
     }
 

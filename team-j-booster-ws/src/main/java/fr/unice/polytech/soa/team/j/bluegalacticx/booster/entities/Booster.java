@@ -16,6 +16,7 @@ public class Booster {
     private final static Logger LOG = LoggerFactory.getLogger(Booster.class);
 
     public Booster() {
+        this.status = BoosterStatus.PENDING;
         this.landingStep = BoosterLandingStep.NOT_LANDING;
         this.metrics = new BoosterMetrics();
     }
@@ -28,10 +29,14 @@ public class Booster {
         this.metrics.setFuelLevel(fuelLevel);
     }
 
-    public void updateState(){
-        if(status == BoosterStatus.LANDING){
+    public void initStatus() {
+        this.status = BoosterStatus.PENDING;
+    }
+
+    public void updateState() {
+        if (status == BoosterStatus.LANDING) {
             double currDistance = this.metrics.getDistanceFromEarth();
-            switch(landingStep){
+            switch (landingStep) {
                 case NOT_LANDING:
                     this.handleFlipManeuver(currDistance);
                     break;
@@ -90,7 +95,7 @@ public class Booster {
         }
     }
 
-    public BoosterLandingStep getLandingStep(){
+    public BoosterLandingStep getLandingStep() {
         return this.landingStep;
     }
 
@@ -157,7 +162,7 @@ public class Booster {
         return this;
     }
 
-    public Booster metrics(BoosterMetrics metrics){
+    public Booster metrics(BoosterMetrics metrics) {
         this.metrics = metrics;
         return this;
     }
@@ -180,7 +185,8 @@ public class Booster {
 
     @Override
     public String toString() {
-        return "{" + "id='" + getId() + "'" + " status='" + getStatus() + "'" + ", fuelLevel='" + getFuelLevel() + "'" + "}";
+        return "{" + "id='" + getId() + "'" + " status='" + getStatus() + "'" + ", fuelLevel='" + getFuelLevel() + "'"
+                + "}";
     }
 
 }
