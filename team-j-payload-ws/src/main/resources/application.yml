@@ -26,3 +26,4 @@ kafka:
     default: blue-origin-payload
   topics:
     rocketstatus: teamj.rocket-status.0
+    payloadstatus: teamj.payload-status.0

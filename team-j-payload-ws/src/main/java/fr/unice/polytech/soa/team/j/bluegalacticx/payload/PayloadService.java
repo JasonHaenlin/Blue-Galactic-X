@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.payload;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
@@ -9,9 +10,13 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.mock.PayloadMock;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.InvalidPayloadException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.PayloadNotFoundException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.kafka.producers.PayloadStatusProducer;
 
 @Service
 public class PayloadService {
+
+    @Autowired
+    private PayloadStatusProducer payloadStatusProducer;
 
     Payload createPayload(Payload payload) throws InvalidPayloadException {
         if (payload == null) {
@@ -27,6 +32,8 @@ public class PayloadService {
 
     public void updatePayloadFromRocketState(PayloadStatus status, String id) throws PayloadNotFoundException {
         retrievePayloadByRocketId(id).setStatus(status);
+        // make the rollout (nothing right now)
+        payloadStatusProducer.notifyDeployedPayloadEvent(id);
     }
 
     Payload retrievePayload(String id) throws PayloadNotFoundException {

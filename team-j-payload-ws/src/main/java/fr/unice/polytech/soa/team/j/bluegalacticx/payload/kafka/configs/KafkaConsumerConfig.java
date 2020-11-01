@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.payload.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.payload.kafka.configs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
@@ -32,7 +31,7 @@ public class KafkaConsumerConfig {
     @Value("${kafka.group.default}")
     private String defaultGroupId;
 
-    public ConsumerFactory<String, RocketStatusRequest> consumerRocketStatusFactory() {
+    private Map<String, Object> baseConfig() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerHost + ":" + brokerPort);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, defaultGroupId);
@@ -42,14 +41,15 @@ public class KafkaConsumerConfig {
 
         props.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG,
                 "http://" + schemaHost + ":" + schemaPort);
-        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, RocketStatusRequest.class.getName());
-        return new DefaultKafkaConsumerFactory<>(props);
+        return props;
     }
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> rocketStatusKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerRocketStatusFactory());
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, RocketStatusRequest.class.getName());
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
         return factory;
     }
 
