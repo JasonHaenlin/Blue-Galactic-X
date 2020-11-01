@@ -28,6 +28,9 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.RocketScheduler;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.ScheduledConfig;
 
 @SpringJUnitConfig(value = { ScheduledConfig.class, RocketApi.class, RestService.class, RestTemplate.class,
         RocketStatusProducer.class })
