@@ -1,6 +1,6 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.repositories;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -10,6 +10,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryPa
 @Repository
 public interface TelemetryPayloadDataRepository extends MongoRepository<TelemetryPayloadData, String> {
 
-    public List<TelemetryPayloadData> findAllByPayloadId(String payloadId);
+    public Optional<TelemetryPayloadData> findByPayloadId(String payloadId);
 
 }

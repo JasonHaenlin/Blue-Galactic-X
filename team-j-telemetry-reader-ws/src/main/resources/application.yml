@@ -5,12 +5,13 @@ spring:
     enabled: false
   application:
     name: Demo
-
+  data:
+    mongodb:
+      host: ${MONGODB_HOST:localhost}
+      port: ${MONGODB_PORT:27017}
+      database: telemetry
+      username:
+      password:
 
 server:
   port: 8094
-
-api:
-  mongodb:
-    host: ${MONGODB_HOST:localhost}
-    port: ${MONGODB_PORT:27017}

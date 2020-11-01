@@ -1,7 +1,5 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.HttpStatus;
@@ -26,7 +24,7 @@ public class TelemetryController {
     private TelemetryService telemetryService;
 
     @GetMapping("/rocket/{rocketId}")
-    public List<TelemetryRocketData> retrieveRocketTelemetryData(@PathVariable String rocketId) {
+    public TelemetryRocketData retrieveRocketTelemetryData(@PathVariable String rocketId) {
         try {
             return telemetryService.retrieveRocketData(rocketId);
         } catch (DataAccessResourceFailureException e) {
@@ -37,7 +35,7 @@ public class TelemetryController {
     }
 
     @GetMapping("/payload/{payloadId}")
-    public List<TelemetryPayloadData> retrievePayloadTelemetryData(@PathVariable String payloadId) {
+    public TelemetryPayloadData retrievePayloadTelemetryData(@PathVariable String payloadId) {
         try {
             return telemetryService.retrievePayloadData(payloadId);
         } catch (DataAccessResourceFailureException e) {
@@ -48,7 +46,7 @@ public class TelemetryController {
     }
 
     @GetMapping("/booster/{boosterId}")
-    public List<TelemetryBoosterData> retrieveBoosterData(@PathVariable String boosterId) {
+    public TelemetryBoosterData retrieveBoosterData(@PathVariable String boosterId) {
         try {
             return telemetryService.retrieveBoosterData(boosterId);
         } catch (DataAccessResourceFailureException e) {

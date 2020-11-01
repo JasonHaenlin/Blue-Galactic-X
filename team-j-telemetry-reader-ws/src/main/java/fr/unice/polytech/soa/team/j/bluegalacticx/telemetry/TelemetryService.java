@@ -1,7 +1,5 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +25,25 @@ public class TelemetryService {
     @Autowired
     private TelemetryBoosterDataRepository telemetryBoosterDataRepository;
 
-    public List<TelemetryRocketData> retrieveRocketData(String rocketId) throws NoTelemetryRocketDataException {
-        List<TelemetryRocketData> data = telemetryRocketDataRepository.findAllByRocketId(rocketId);
-        if (data.size() <= 0) {
+    public TelemetryRocketData retrieveRocketData(String rocketId) throws NoTelemetryRocketDataException {
+        TelemetryRocketData data = telemetryRocketDataRepository.findByRocketId(rocketId).orElse(null);
+        if (data == null) {
             throw new NoTelemetryRocketDataException();
         }
         return data;
     }
 
-    public List<TelemetryBoosterData> retrieveBoosterData(String boosterId) throws NoTelemetryBoosterDataException {
-        List<TelemetryBoosterData> data = telemetryBoosterDataRepository.findAllByBoosterId(boosterId);
-        if (data.size() <= 0) {
+    public TelemetryBoosterData retrieveBoosterData(String boosterId) throws NoTelemetryBoosterDataException {
+        TelemetryBoosterData data = telemetryBoosterDataRepository.findByBoosterId(boosterId).orElse(null);
+        if (data == null) {
             throw new NoTelemetryBoosterDataException();
         }
         return data;
     }
 
-    public List<TelemetryPayloadData> retrievePayloadData(String payloadId) throws NoTelemetryPayloadDataException {
-        List<TelemetryPayloadData> data = telemetryPayloadDataRepository.findAllByPayloadId(payloadId);
-        if (data.size() <= 0) {
+    public TelemetryPayloadData retrievePayloadData(String payloadId) throws NoTelemetryPayloadDataException {
+        TelemetryPayloadData data = telemetryPayloadDataRepository.findByPayloadId(payloadId).orElse(null);
+        if (data == null) {
             throw new NoTelemetryPayloadDataException();
         }
         return data;

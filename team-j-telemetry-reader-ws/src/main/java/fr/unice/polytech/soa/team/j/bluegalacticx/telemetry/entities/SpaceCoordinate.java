@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.payload;
+package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
 import java.util.Objects;
 

@@ -1,14 +1,11 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.payload.PayloadStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.payload.PayloadType;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.payload.SpaceCoordinate;
 
 @Document(collection = "payloadTelemetry")
 public class TelemetryPayloadData {
@@ -17,23 +14,26 @@ public class TelemetryPayloadData {
     private String id;
 
     private String payloadId;
-    private PayloadType type;
-    private PayloadStatus status;
-    private SpaceCoordinate position;
-    private int weight; // kg
-    private Date date;
+    private int transactionCount;
+    private List<PayloadMeasurements> measurements = new ArrayList<>();
+
 
     public TelemetryPayloadData() {
     }
 
-    public TelemetryPayloadData(String payloadId, PayloadType type, PayloadStatus status, SpaceCoordinate position,
-            int weight, Date date) {
+    public TelemetryPayloadData(String id, String payloadId, int transactionCount, List<PayloadMeasurements> measurements) {
+        this.id = id;
         this.payloadId = payloadId;
-        this.type = type;
-        this.status = status;
-        this.position = position;
-        this.weight = weight;
-        this.date = date;
+        this.transactionCount = transactionCount;
+        this.measurements = measurements;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPayloadId() {
@@ -44,44 +44,25 @@ public class TelemetryPayloadData {
         this.payloadId = payloadId;
     }
 
-    public PayloadType getType() {
-        return this.type;
+    public int getTransactionCount() {
+        return this.transactionCount;
     }
 
-    public void setType(PayloadType type) {
-        this.type = type;
+    public void setTransactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
     }
 
-    public PayloadStatus getStatus() {
-        return this.status;
+    public List<PayloadMeasurements> getMeasurements() {
+        return this.measurements;
     }
 
-    public void setStatus(PayloadStatus status) {
-        this.status = status;
+    public void setMeasurements(List<PayloadMeasurements> measurements) {
+        this.measurements = measurements;
     }
 
-    public SpaceCoordinate getPosition() {
-        return this.position;
-    }
-
-    public void setPosition(SpaceCoordinate position) {
-        this.position = position;
-    }
-
-    public int getWeight() {
-        return this.weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public Date getDate() {
-        return this.date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
+    public TelemetryPayloadData id(String id) {
+        this.id = id;
+        return this;
     }
 
     public TelemetryPayloadData payloadId(String payloadId) {
@@ -89,28 +70,13 @@ public class TelemetryPayloadData {
         return this;
     }
 
-    public TelemetryPayloadData type(PayloadType type) {
-        this.type = type;
+    public TelemetryPayloadData transactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
         return this;
     }
 
-    public TelemetryPayloadData status(PayloadStatus status) {
-        this.status = status;
-        return this;
-    }
-
-    public TelemetryPayloadData position(SpaceCoordinate position) {
-        this.position = position;
-        return this;
-    }
-
-    public TelemetryPayloadData weight(int weight) {
-        this.weight = weight;
-        return this;
-    }
-
-    public TelemetryPayloadData date(Date date) {
-        this.date = date;
+    public TelemetryPayloadData measurements(List<PayloadMeasurements> measurements) {
+        this.measurements = measurements;
         return this;
     }
 
@@ -122,23 +88,22 @@ public class TelemetryPayloadData {
             return false;
         }
         TelemetryPayloadData telemetryPayloadData = (TelemetryPayloadData) o;
-        return Objects.equals(payloadId, telemetryPayloadData.payloadId)
-                && Objects.equals(type, telemetryPayloadData.type)
-                && Objects.equals(status, telemetryPayloadData.status)
-                && Objects.equals(position, telemetryPayloadData.position) && weight == telemetryPayloadData.weight
-                && Objects.equals(date, telemetryPayloadData.date);
+        return Objects.equals(id, telemetryPayloadData.id) && Objects.equals(payloadId, telemetryPayloadData.payloadId) && transactionCount == telemetryPayloadData.transactionCount && Objects.equals(measurements, telemetryPayloadData.measurements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(payloadId, type, status, position, weight, date);
+        return Objects.hash(id, payloadId, transactionCount, measurements);
     }
 
     @Override
     public String toString() {
-        return "{" + " payloadId='" + getPayloadId() + "'" + ", type='" + getType() + "'" + ", status='" + getStatus()
-                + "'" + ", position='" + getPosition() + "'" + ", weight='" + getWeight() + "'" + ", date='" + getDate()
-                + "'" + "}";
+        return "{" +
+            " id='" + getId() + "'" +
+            ", payloadId='" + getPayloadId() + "'" +
+            ", transactionCount='" + getTransactionCount() + "'" +
+            ", measurements='" + getMeasurements() + "'" +
+            "}";
     }
 
 }
