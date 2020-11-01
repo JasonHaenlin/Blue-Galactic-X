@@ -18,6 +18,8 @@ public class Rocket {
     private SpaceCoordinate objective;
     private String boosterId;
     private RocketApi rocketApi;
+    // Increase or decrease speed by 20% (maxQ)
+    private static final double SPEED_UPDATE = 0.2;
 
     public Rocket() {
         this.rocketApi = new RocketApi();
@@ -52,6 +54,28 @@ public class Rocket {
         String boosterId = this.boosterId;
         this.boosterId = "";
         return boosterId;
+    }
+
+    public boolean isRocketInMaxQ() {
+        if (this.inAir.getDistance() <= this.inAir.getTotalDistance() - MaxQ.MIN
+                && this.inAir.getDistance() >= this.inAir.getTotalDistance() - MaxQ.MAX) {
+            return true;
+        }
+        return false;
+    }
+
+    public RocketApi getRocketApi(){
+        return rocketApi;
+    }
+
+    public void updateSpeed(SpeedChange speedChange) {
+        double speed = 0.0;
+        if (speedChange == (SpeedChange.INCREASE)) {
+            speed = this.inAir.getSpeed() + (this.inAir.getSpeed() * (SPEED_UPDATE));
+        } else {
+            speed = this.inAir.getSpeed() + (this.inAir.getSpeed() * (-SPEED_UPDATE));
+        }
+        this.inAir.setSpeed(speed);
     }
 
     public SpaceTelemetry getLastTelemetry() {
