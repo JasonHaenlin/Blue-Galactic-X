@@ -36,7 +36,7 @@ public class Rocket {
         this.missionId = missionId;
     }
 
-    public String detachNextStage(){
+    public String detachNextStage() {
         String boosterId = this.boosterId;
         this.boosterId = "";
         return boosterId;
@@ -87,11 +87,11 @@ public class Rocket {
         return missionId;
     }
 
-    public String getBoosterId(){
+    public String getBoosterId() {
         return this.boosterId;
     }
 
-    public void setBoosterId(String id){
+    public void setBoosterId(String id) {
         this.boosterId = id;
     }
 
@@ -132,7 +132,7 @@ public class Rocket {
         return this;
     }
 
-    public Rocket report(String missionId) {
+    public Rocket missionId(String missionId) {
         this.missionId = missionId;
         return this;
     }
@@ -143,8 +143,13 @@ public class Rocket {
         return this;
     }
 
-    public Rocket spaceCoordinate(SpaceCoordinate objective) {
+    public Rocket objective(SpaceCoordinate objective) {
         this.objective = objective;
+        return this;
+    }
+
+    public Rocket boosterId(String boosterId) {
+        this.boosterId = boosterId;
         return this;
     }
 

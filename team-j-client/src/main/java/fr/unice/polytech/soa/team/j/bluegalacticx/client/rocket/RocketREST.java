@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.JsonUtils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.RestAPI;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketMetrics;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.weather.GoNg;
@@ -18,6 +19,12 @@ public class RocketREST extends RestAPI {
 
     public RocketREST(String uri) {
         super(uri);
+    }
+
+    public void createRocket(Rocket rocket) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder().POST(BodyPublishers.ofString(JsonUtils.toJson(rocket)))
+                .header("Content-Type", "application/json").uri(URI.create(uri)).build();
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     public RocketMetrics getMetrics(String rocketId) throws IOException, InterruptedException {
