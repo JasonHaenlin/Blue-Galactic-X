@@ -6,6 +6,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@ComponentScan("fr.unice.polytech.soa.team.j.bluegalacticx.booster.scheduled")
+@ComponentScan
 public class ScheduledConfig {
 }

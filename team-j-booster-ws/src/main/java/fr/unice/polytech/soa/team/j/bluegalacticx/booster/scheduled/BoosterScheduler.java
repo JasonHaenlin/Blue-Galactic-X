@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.BoosterApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.BoosterService;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.RestService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetryData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 
 @Component
 public class BoosterScheduler {
@@ -24,7 +24,7 @@ public class BoosterScheduler {
     private BoosterApi boosterApi;
 
     @Autowired
-    private RestService restService;
+    private TelemetryBoosterProducer telemetryBoosterProd;
 
     @Autowired
     BoosterStatusProducer boosterStatusProducer;
@@ -35,11 +35,11 @@ public class BoosterScheduler {
         List<Booster> boosters = boosterApi.updateBoosterMetricsAndRetrieve();
         for (Booster b : boosters) {
             if (b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING) {
-                restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(),
-                        b.getDistanceFromEarth(), b.getSpeed()));
+                telemetryBoosterProd.postTelemetryEvent(new BoosterTelemetryData(b.getFuelLevel(), b.getId(),
+                        b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
             } else if (b.getStatus() == BoosterStatus.LANDED) {
-                restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(),
-                        b.getDistanceFromEarth(), b.getSpeed()));
+                telemetryBoosterProd.postTelemetryEvent(new BoosterTelemetryData(b.getFuelLevel(), b.getId(),
+                        b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
                 if (b.getStatus() != BoosterStatus.PENDING) {
                     boosterStatusProducer.notifyBoosterLanded(b.getId());
                 }

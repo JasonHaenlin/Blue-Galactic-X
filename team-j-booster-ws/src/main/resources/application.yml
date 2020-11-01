@@ -15,11 +15,6 @@ grpc:
   enable-reflection: true
   port: 8031
 
-api:
-  telemetry:
-    host: ${TELEMETRY_HOST:localhost}
-    port: ${TELEMETRY_PORT:8090}
-
 kafka:
   broker:
     host: ${KAFKA_BROKER_HOST:localhost}
@@ -31,3 +26,4 @@ kafka:
     default: blue-origin-booster
   topics:
     boosterstatus: teamj.booster-status.0
+    telemetrybooster: teamj.telemetry-booster.0
