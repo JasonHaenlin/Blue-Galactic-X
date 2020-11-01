@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.rocket;
+
+option java_multiple_files = true;
+option java_package =
+    "fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.rocket.proto";
+
+message TelemetryRocketRequest {
+  string rocketId = 1;
+  int32 irradiance = 2;
+  int32 velocityVariation = 3; // accelerometers value in mm/s
+  int32 temperature = 4;       // temperature in °C
+  int32 vibration = 5;         // ground vibration in Hz
+  int32 boosterRGA = 6;        // RGA of booster in %
+  int32 midRocketRGA = 7;      // RGA of the middle of the rocket in %
+  double heatShield = 8;       // %
+  double speed = 9;            // m/s
+  double distance = 10;
+  double totalDistance = 11;
+}

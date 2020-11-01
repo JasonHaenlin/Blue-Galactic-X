@@ -29,6 +29,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinat
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.RocketScheduler;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.ScheduledConfig;
 
@@ -43,7 +44,7 @@ public class RocketSchedulerTest {
     private RocketScheduler sch;
 
     @MockBean
-    private RestService restService;
+	private TelemetryRocketProducer telemetryRocketProducer;
 
     @MockBean
     private RocketStatusProducer rocketStatusProducer;
