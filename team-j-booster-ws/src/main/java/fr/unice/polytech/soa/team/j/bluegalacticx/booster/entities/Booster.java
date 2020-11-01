@@ -10,6 +10,7 @@ public class Booster {
     private BoosterStatus status;
     private BoosterLandingStep landingStep;
     private BoosterMetrics metrics;
+    private static final double SPEED_UPDATE = 0.2;
 
     private double previousDistance;
 
@@ -31,6 +32,16 @@ public class Booster {
 
     public void initStatus() {
         this.status = BoosterStatus.PENDING;
+    }
+
+    public void updateSpeed(SpeedChange speedChange) {
+        double speed = 0.0;
+        if (speedChange == (SpeedChange.INCREASE)) {
+            speed = this.metrics.getSpeed() + (this.metrics.getSpeed() * (SPEED_UPDATE));
+        } else {
+            speed = this.metrics.getSpeed() + (this.metrics.getSpeed() * (-SPEED_UPDATE));
+        }
+        this.metrics.setSpeed(speed);
     }
 
     public void updateState() {
