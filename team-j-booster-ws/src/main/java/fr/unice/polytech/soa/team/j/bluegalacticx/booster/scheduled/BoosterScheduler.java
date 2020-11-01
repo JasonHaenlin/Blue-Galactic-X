@@ -12,6 +12,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.RestService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetryData;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 
 @Component
 public class BoosterScheduler {
@@ -25,16 +26,23 @@ public class BoosterScheduler {
     @Autowired
     private RestService restService;
 
+    @Autowired
+    BoosterStatusProducer boosterStatusProducer;
+
     @Scheduled(fixedDelay = 1000)
     public void scheduleBoosterMetricsTask() {
         boosterService.updateAllBoostersState();
         List<Booster> boosters = boosterApi.updateBoosterMetricsAndRetrieve();
-        for(Booster b : boosters){
-            if(b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING){
-                restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
-            } else if(b.getStatus() == BoosterStatus.LANDED){
+        for (Booster b : boosters) {
+            if (b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING) {
                 restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(),
-                    b.getDistanceFromEarth(), b.getSpeed()));
+                        b.getDistanceFromEarth(), b.getSpeed()));
+            } else if (b.getStatus() == BoosterStatus.LANDED) {
+                restService.postTelemetry(new BoosterTelemetryData(b.getFuelLevel(), b.getId(), b.getStatus(),
+                        b.getDistanceFromEarth(), b.getSpeed()));
+                if (b.getStatus() != BoosterStatus.PENDING) {
+                    boosterStatusProducer.notifyBoosterLanded(b.getId());
+                }
                 b.setStatus(BoosterStatus.PENDING);
             }
         }

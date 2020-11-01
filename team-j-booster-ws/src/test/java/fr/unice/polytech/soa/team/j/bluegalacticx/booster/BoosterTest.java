@@ -1,35 +1,32 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.concurrent.TimeUnit;
+
+import com.google.protobuf.Empty;
+
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import io.grpc.internal.testing.StreamRecorder;
-import com.google.protobuf.Empty;
-import java.util.concurrent.TimeUnit;
+import org.springframework.test.context.ContextConfiguration;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterLandingStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.mocks.BoostersMocked;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterMetrics;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.BoosterRPCService;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.LandingRequest;
+import io.grpc.internal.testing.StreamRecorder;
 
 @SpringBootTest
 @ContextConfiguration(classes = { BoosterRPCService.class })
@@ -52,8 +49,8 @@ public class BoosterTest {
     @Test
     @Order(1)
     public void initiateLandingSequenceTest() {
-        LandingRequest request = LandingRequest.newBuilder().setBoosterId(
-                boosterId).setDistanceFromEarth(500).setSpeed(200).build();
+        LandingRequest request = LandingRequest.newBuilder().setBoosterId(boosterId).setDistanceFromEarth(500)
+                .setSpeed(200).build();
 
         StreamRecorder<Empty> responseObserver = StreamRecorder.create();
         boosterRpcService.initiateLandingSequence(request, responseObserver);
@@ -62,7 +59,7 @@ public class BoosterTest {
             if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
                 fail("The call did not terminate in time");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
         assertNull(responseObserver.getError());
