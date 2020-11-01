@@ -12,6 +12,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.payload.proto.TelemetryPayloadRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 
@@ -39,6 +40,11 @@ public class KafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, PayloadStatusRequest> kafkaTemplateRocket() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(insertBaseConfig()));
+    }
+
+    @Bean
+    public KafkaTemplate<String, TelemetryPayloadRequest> kafkaTemplateTelemetryPayload() {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(insertBaseConfig()));
     }
 
