@@ -16,9 +16,6 @@ grpc:
   port: 8081
 
 api:
-  telemetry:
-    host: ${TELEMETRY_HOST:localhost}
-    port: ${TELEMETRY_PORT:8090}
   mission:
     host: ${MISSION_HOST:localhost}
     port: ${MISSION_PORT:8070}
@@ -40,3 +37,4 @@ kafka:
   topics:
     rocketstatus: teamj.rocket-status.0
     departmentstatus: teamj.department-status.0
+    telemetryrocket: teamj.telemetry-rocket.0

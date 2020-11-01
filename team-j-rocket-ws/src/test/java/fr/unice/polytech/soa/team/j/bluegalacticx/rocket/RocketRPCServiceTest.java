@@ -34,6 +34,7 @@ import org.springframework.web.client.RestTemplate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DestructionOrderRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.LaunchOrderReply;
@@ -63,6 +64,9 @@ class RocketRPCServiceTest {
 
 	@MockBean
 	private RocketStatusProducer missionProducer;
+
+	@MockBean
+	private TelemetryRocketProducer telemetryRocketProducer;
 
 	@MockBean
 	private BoosterRPCClient boosterRPCClient;
