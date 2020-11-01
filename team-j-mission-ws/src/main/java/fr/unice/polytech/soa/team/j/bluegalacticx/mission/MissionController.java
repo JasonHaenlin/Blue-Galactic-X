@@ -66,7 +66,7 @@ public class MissionController {
         }
     }
 
-    @PostMapping("/status/{missionId}")
+    @PostMapping("/{missionId}/status")
     public Mission setMissionStatus(@RequestBody MissionStatus missionStatus, @PathVariable String missionId) {
         try {
             return missionService.setMissionStatus(missionStatus, missionId);
@@ -75,8 +75,8 @@ public class MissionController {
         }
     }
 
-    @GetMapping("/status/{missionId}")
-    public Mission retrieveMissionStatus(@PathVariable String missionId) {
+    @GetMapping("/{missionId}")
+    public Mission retrieveMission(@PathVariable String missionId) {
         try {
             return missionService.getMissionStatus(missionId);
         } catch (MissionDoesNotExistException e) {

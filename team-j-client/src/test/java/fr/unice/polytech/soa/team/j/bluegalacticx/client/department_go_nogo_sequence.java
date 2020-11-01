@@ -6,16 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Map;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.MissionREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.RocketREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketMetrics;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.weather.GoNg;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.weather.WeatherREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.weather.entities.WeatherReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.MissionREST;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.RocketREST;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.WeatherREST;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.GoNg;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest.Department;
+import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherReport;
 import io.cucumber.java8.En;
 
 public class department_go_nogo_sequence implements En {
@@ -34,8 +33,9 @@ public class department_go_nogo_sequence implements En {
                 (String missionId, String rocketId) -> {
                     this.missionId = missionId;
                     this.rocketId = rocketId;
-                    Mission mission = new Mission().id(missionId).rocketId(rocketId)
-                            .destination(new SpaceCoordinate(100, 100, 100));
+                    Mission mission = new Mission().id(missionId).rocketId(rocketId).destination(
+                            new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate(100, 100,
+                                    100));
                     missionREST.createNewMission(mission);
                 });
         When("Richard has the weather and rocket department not ready", () -> {
@@ -43,7 +43,8 @@ public class department_go_nogo_sequence implements En {
             assertEquals(0, status.size());
         });
         Then("Richard make a no go for the mission department with id", () -> {
-            missionREST.updateMissionGoNg(missionId, new GoNg(false));
+            missionREST.updateMissionGoNg(missionId,
+                    new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.GoNg(false));
             Map<Department, Boolean> status = missionREST.getMissionGoNg(missionId);
             assertFalse(status.get(Department.MISSION));
         });
@@ -52,10 +53,10 @@ public class department_go_nogo_sequence implements En {
             assertNotNull(wr);
         });
         Then("Tory set the weather department to go", () -> {
-            weatherREST.setGoNoGo(new GoNg(true));
+            weatherREST.setGoNoGo(new fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.GoNg(true));
         });
         When("Elon see the rocket is ready", () -> {
-            RocketMetrics rm = rocketREST.getMetrics(rocketId);
+            SpaceTelemetry rm = rocketREST.getRocketTelemetry(rocketId);
             assertNotNull(rm);
         });
         Then("Elon set the rocket department to go with id", () -> {
@@ -80,7 +81,8 @@ public class department_go_nogo_sequence implements En {
             });
         });
         Then("Richard make a go for the mission department", () -> {
-            missionREST.updateMissionGoNg(missionId, new GoNg(true));
+            missionREST.updateMissionGoNg(missionId,
+                    new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.GoNg(true));
         });
         Then("Elon should see the corresponding validation on the rocket department", () -> {
             RocketStatus rs = rocketREST.getGoNoGo(rocketId);

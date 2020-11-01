@@ -2,17 +2,17 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.MissionREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.MissionStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.mission.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.payload.PayloadREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.payload.entities.Payload;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.payload.entities.PayloadStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.payload.entities.PayloadType;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.RocketREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.RocketRPC;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.rocket.entities.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.MissionREST;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.PayloadREST;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.RocketREST;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.RocketRPC;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import io.cucumber.java8.En;
 
 public class rocket_update_status_sequence implements En {

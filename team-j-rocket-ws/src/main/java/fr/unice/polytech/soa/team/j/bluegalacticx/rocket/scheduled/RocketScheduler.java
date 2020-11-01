@@ -11,7 +11,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpeedChange;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 
 @Component
 public class RocketScheduler {
@@ -21,26 +20,28 @@ public class RocketScheduler {
     @Autowired
     private RocketStatusProducer rocketProducer;
 
-    @Autowired
-    private TelemetryRocketProducer telemetryRocketProducer;
+    // @Autowired
+    // private TelemetryRocketProducer telemetryRocketProducer;
 
     @Scheduled(fixedDelay = 1000)
     public void scheduleRocketTelemetryTask() throws RocketDestroyedException {
         for (Rocket r : RocketsMocked.rockets) {
-            st = r.getLastTelemetry();
-            telemetryRocketProducer.sendTelemetryRocketEvent(st);
+            if (r.getStatus() != RocketStatus.DESTROYED) {
+                st = r.getLastTelemetry();
+                // telemetryRocketProducer.sendTelemetryRocketEvent(st);
 
-            if (r.isRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
-                r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
-                r.updateSpeed(SpeedChange.DECREASE);
-            } else if (!r.isRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
-                r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
-                r.updateSpeed(SpeedChange.INCREASE);
-            }
+                if (r.isRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
+                    r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
+                    r.updateSpeed(SpeedChange.DECREASE);
+                } else if (!r.isRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
+                    r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
+                    r.updateSpeed(SpeedChange.INCREASE);
+                }
 
-            if (st.getDistance() <= 0 && r.getStatus() != RocketStatus.ARRIVED) {
-                r.arrivedAtDestination();
-                rocketProducer.donedRocketEvent(st.getRocketId());
+                if (st.getDistance() <= 0 && r.getStatus() != RocketStatus.ARRIVED) {
+                    r.arrivedAtDestination();
+                    rocketProducer.donedRocketEvent(st.getRocketId());
+                }
             }
 
         }
