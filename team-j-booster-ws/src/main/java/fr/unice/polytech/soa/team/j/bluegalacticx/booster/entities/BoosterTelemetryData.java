@@ -9,11 +9,11 @@ public class BoosterTelemetryData {
     private double distanceFromEarth;
     private double speed;
 
-
     public BoosterTelemetryData() {
     }
 
-    public BoosterTelemetryData(int fuel, String boosterId, BoosterStatus boosterStatus, double distanceFromEarth, double speed) {
+    public BoosterTelemetryData(int fuel, String boosterId, BoosterStatus boosterStatus, double distanceFromEarth,
+            double speed) {
         this.fuel = fuel;
         this.boosterId = boosterId;
         this.boosterStatus = boosterStatus;
@@ -94,7 +94,9 @@ public class BoosterTelemetryData {
             return false;
         }
         BoosterTelemetryData boosterTelemetryData = (BoosterTelemetryData) o;
-        return fuel == boosterTelemetryData.fuel && Objects.equals(boosterId, boosterTelemetryData.boosterId) && Objects.equals(boosterStatus, boosterTelemetryData.boosterStatus) && distanceFromEarth == boosterTelemetryData.distanceFromEarth && speed == boosterTelemetryData.speed;
+        return fuel == boosterTelemetryData.fuel && Objects.equals(boosterId, boosterTelemetryData.boosterId)
+                && Objects.equals(boosterStatus, boosterTelemetryData.boosterStatus)
+                && distanceFromEarth == boosterTelemetryData.distanceFromEarth && speed == boosterTelemetryData.speed;
     }
 
     @Override
@@ -104,13 +106,9 @@ public class BoosterTelemetryData {
 
     @Override
     public String toString() {
-        return "{" +
-            " fuel='" + getFuel() + "'" +
-            ", boosterId='" + getBoosterId() + "'" +
-            ", boosterStatus='" + getBoosterStatus() + "'" +
-            ", distanceFromEarth='" + getDistanceFromEarth() + "'" +
-            ", speed='" + getSpeed() + "'" +
-            "}";
+        return "{" + " fuel='" + getFuel() + "'" + ", boosterId='" + getBoosterId() + "'" + ", boosterStatus='"
+                + getBoosterStatus() + "'" + ", distanceFromEarth='" + getDistanceFromEarth() + "'" + ", speed='"
+                + getSpeed() + "'" + "}";
     }
 
 }
