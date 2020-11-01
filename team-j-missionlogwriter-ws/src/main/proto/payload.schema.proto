@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package fr.unice.polytech.soa.team.j.bluegalacticx.payload;
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter;
 
 option java_multiple_files = true;
 option java_package =
-    "fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto";
+    "fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.proto";
 
 message PayloadStatusRequest {
   enum EventType {
