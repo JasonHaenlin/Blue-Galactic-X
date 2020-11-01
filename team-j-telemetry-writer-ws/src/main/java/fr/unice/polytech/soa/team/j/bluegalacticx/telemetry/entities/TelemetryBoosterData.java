@@ -1,55 +1,63 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.booster.BoosterStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.booster.proto.TelemetryBoosterRequest;
 
 @Document(collection = "boosterTelemetry")
 public class TelemetryBoosterData {
 
-    private int fuel;
+    @Id
+    private String id;
+
     private String boosterId;
-    private String rocketId;
-    private BoosterStatus boosterStatus;
-    private double distanceFromEarth;
-    private double speed;
+    private int transactionCount;
+    private List<BoosterMeasurements> measurements = new ArrayList<>();
 
     public TelemetryBoosterData() {
     }
 
-    public TelemetryBoosterData(int fuel, String boosterId, String rocketId, BoosterStatus boosterStatus,
-            double distanceFromEarth, double speed) {
-        this.fuel = fuel;
+    public TelemetryBoosterData(String boosterId) {
         this.boosterId = boosterId;
-        this.rocketId = rocketId;
-        this.boosterStatus = boosterStatus;
     }
 
-
-    public int getFuel() {
-        return this.fuel;
+    public int incrementeTransactionCount() {
+        this.transactionCount++;
+        return this.transactionCount;
     }
 
-    public void setFuel(int fuel) {
-        this.fuel = fuel;
+    public void addMeasurement(BoosterMeasurements m) {
+        this.measurements.add(m);
+        incrementeTransactionCount();
     }
 
-    public double getDistanceFromEarth() {
-        return this.distanceFromEarth;
+    public void addMeasurementFromRequest(TelemetryBoosterRequest m) {
+
+        // @formatter:off
+        this.measurements.add(new BoosterMeasurements()
+                        .boosterStatus(m.getBoosterStatus())
+                        .rocketId(m.getRocketId())
+                        .fuel(m.getFuel())
+                        .distanceFromEarth(m.getDistanceFromEarth())
+                        .speed(m.getSpeed())
+                        .time(ZonedDateTime.now(ZoneOffset.UTC)));
+        // @formatter:on
+        incrementeTransactionCount();
     }
 
-    public void setDistanceFromEarth(double distance) {
-        this.distanceFromEarth = distance;
+    public String getId() {
+        return this.id;
     }
 
-    public double getSpeed() {
-        return this.speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getBoosterId() {
@@ -60,24 +68,24 @@ public class TelemetryBoosterData {
         this.boosterId = boosterId;
     }
 
-    public String getRocketID() {
-        return this.rocketId;
+    public int getTransactionCount() {
+        return this.transactionCount;
     }
 
-    public void setRocketID(String rocketId) {
-        this.rocketId = rocketId;
+    public void setTransactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
     }
 
-    public BoosterStatus getBoosterStatus() {
-        return this.boosterStatus;
+    public List<BoosterMeasurements> getMeasurements() {
+        return this.measurements;
     }
 
-    public void setBoosterStatus(BoosterStatus boosterStatus) {
-        this.boosterStatus = boosterStatus;
+    public void setMeasurements(List<BoosterMeasurements> measurements) {
+        this.measurements = measurements;
     }
 
-    public TelemetryBoosterData fuel(int fuel) {
-        this.fuel = fuel;
+    public TelemetryBoosterData id(String id) {
+        this.id = id;
         return this;
     }
 
@@ -86,13 +94,13 @@ public class TelemetryBoosterData {
         return this;
     }
 
-    public TelemetryBoosterData rocketID(String rocketID) {
-        this.rocketId = rocketID;
+    public TelemetryBoosterData transactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
         return this;
     }
 
-    public TelemetryBoosterData boosterStatus(BoosterStatus boosterStatus) {
-        this.boosterStatus = boosterStatus;
+    public TelemetryBoosterData measurements(List<BoosterMeasurements> measurements) {
+        this.measurements = measurements;
         return this;
     }
 
@@ -104,23 +112,20 @@ public class TelemetryBoosterData {
             return false;
         }
         TelemetryBoosterData telemetryBoosterData = (TelemetryBoosterData) o;
-        return fuel == telemetryBoosterData.fuel && Objects.equals(boosterId, telemetryBoosterData.boosterId)
-                && Objects.equals(rocketId, telemetryBoosterData.rocketId)
-                && Objects.equals(boosterStatus, telemetryBoosterData.boosterStatus)
-                && Objects.equals(distanceFromEarth, telemetryBoosterData.distanceFromEarth)
-                && Objects.equals(speed, telemetryBoosterData.speed);
+        return Objects.equals(id, telemetryBoosterData.id) && Objects.equals(boosterId, telemetryBoosterData.boosterId)
+                && transactionCount == telemetryBoosterData.transactionCount
+                && Objects.equals(measurements, telemetryBoosterData.measurements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fuel, boosterId, rocketId, boosterStatus, distanceFromEarth, speed);
+        return Objects.hash(id, boosterId, transactionCount, measurements);
     }
 
     @Override
     public String toString() {
-        return "{" + " fuel='" + getFuel() + "'" + ", boosterId='" + getBoosterId() + "'" + ", rocketId='"
-                + getRocketID() + "'" + ", boosterStatus='" + getBoosterStatus() + "'" + ", distanceFromEarth='"
-                + getDistanceFromEarth() + "'" + ", speed='" + getSpeed() + "'" + "}";
+        return "{" + " id='" + getId() + "'" + ", boosterId='" + getBoosterId() + "'" + ", transactionCount='"
+                + getTransactionCount() + "'" + ", measurements='" + getMeasurements().toString() + "'" + "}";
     }
 
 }

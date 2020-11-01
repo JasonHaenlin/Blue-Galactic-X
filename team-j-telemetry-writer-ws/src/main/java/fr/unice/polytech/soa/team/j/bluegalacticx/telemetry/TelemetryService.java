@@ -1,22 +1,20 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.booster.proto.TelemetryBoosterRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryBoosterData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryPayloadData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryBoosterDataException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryPayloadDataException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.NoTelemetryRocketDataException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataBoosterIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.exceptions.TelemetryDataRocketIdException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.payload.proto.TelemetryPayloadRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.repositories.TelemetryBoosterDataRepository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.repositories.TelemetryPayloadDataRepository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.repositories.TelemetryRocketDataRepository;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.rocket.proto.TelemetryRocketRequest;
 
 @Service
 public class TelemetryService {
@@ -30,66 +28,37 @@ public class TelemetryService {
     @Autowired
     private TelemetryBoosterDataRepository telemetryBoosterDataRepository;
 
-
-    public void createRocketData(TelemetryRocketData rocketData) throws TelemetryDataRocketIdException {
-        if (!checkRocketIdExist(rocketData)) {
+    public void createRocketData(TelemetryRocketRequest rocketData) throws TelemetryDataRocketIdException {
+        String rocketId = rocketData.getRocketId();
+        if (rocketId == null) {
             throw new TelemetryDataRocketIdException();
         }
-        telemetryRocketDataRepository.save(rocketData);
+        TelemetryRocketData rocketSavedData = telemetryRocketDataRepository.findByRocketId(rocketId)
+                .orElse(new TelemetryRocketData(rocketId));
+        rocketSavedData.addMeasurementFromRequest(rocketData);
+        telemetryRocketDataRepository.save(rocketSavedData);
     }
 
-    public void createPayloadData(TelemetryPayloadData payloadData) throws TelemetryDataPayloadIdException {
-        if (payloadData.getPayloadId() == null) {
+    public void createPayloadData(TelemetryPayloadRequest payloadData) throws TelemetryDataPayloadIdException {
+        String payloadId = payloadData.getPayloadId();
+        if (payloadId == null) {
             throw new TelemetryDataPayloadIdException();
         }
-        telemetryPayloadDataRepository.save(payloadData);
+        TelemetryPayloadData payloadSavedData = telemetryPayloadDataRepository.findByPayloadId(payloadId)
+                .orElse(new TelemetryPayloadData(payloadId));
+        payloadSavedData.addMeasurementFromRequest(payloadData);
+        telemetryPayloadDataRepository.save(payloadSavedData);
     }
 
-    public void createBoosterData(TelemetryBoosterData boosterData) throws TelemetryDataBoosterIdException {
-        if (!checkBoosterIdExist(boosterData)) {
+    public void createBoosterData(TelemetryBoosterRequest boosterData) throws TelemetryDataBoosterIdException {
+        String boosterId = boosterData.getBoosterId();
+        if (boosterId == null) {
             throw new TelemetryDataBoosterIdException();
         }
-        telemetryBoosterDataRepository.save(boosterData);
-    }
-
-    public List<TelemetryRocketData> retrieveRocketData(String rocketId) throws NoTelemetryRocketDataException {
-        if (!(checkRocketTelemetryDataExist(rocketId))) {
-            throw new NoTelemetryRocketDataException();
-        }
-        return telemetryRocketDataRepository.findByRocketId(rocketId);
-    }
-
-    public List<TelemetryBoosterData> retrieveBoosterData(String boosterId) throws NoTelemetryBoosterDataException {
-        if (!(checkBoosterTelemetryDataExist(boosterId))) {
-            throw new NoTelemetryBoosterDataException();
-        }
-        return telemetryBoosterDataRepository.findByBoosterId(boosterId);
-    }
-
-    public TelemetryPayloadData retrievePayloadData(String payloadId) throws NoTelemetryPayloadDataException {
-        TelemetryPayloadData result = telemetryPayloadDataRepository.findById(payloadId).get();
-
-        if (result == null) {
-            throw new NoTelemetryPayloadDataException();
-        }
-
-        return result;
-    }
-
-    private boolean checkRocketTelemetryDataExist(String rocketId) {
-        return telemetryRocketDataRepository.findByRocketId(rocketId) != null;
-    }
-
-    private boolean checkBoosterTelemetryDataExist(String boosterId) {
-        return telemetryBoosterDataRepository.findByBoosterId(boosterId) != null;
-    }
-
-    private boolean checkRocketIdExist(TelemetryRocketData rocketData) {
-        return rocketData.getRocketId() != null;
-    }
-
-    private boolean checkBoosterIdExist(TelemetryBoosterData boosterData) {
-        return boosterData.getBoosterId() != null;
+        TelemetryBoosterData boosterSavedData = telemetryBoosterDataRepository.findByBoosterId(boosterId)
+                .orElse(new TelemetryBoosterData(boosterId));
+        boosterSavedData.addMeasurementFromRequest(boosterData);
+        telemetryBoosterDataRepository.save(boosterSavedData);
     }
 
 }

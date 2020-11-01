@@ -1,39 +1,68 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.rocket.proto.TelemetryRocketRequest;
 
 @Document(collection = "rocketTelemetry")
 public class TelemetryRocketData {
 
+    @Id
+    private String id;
+
     private String rocketId;
-    private int irradiance = 0; // sun sensors in nm
-    private int velocityVariation = 0; // accelerometers value in mm/s
-    private int temperature = 0; // temperature in °C
-    private int vibration = 0; // ground vibration in Hz
-    private int boosterRGA = 0; // RGA of booster in %
-    private int midRocketRGA = 0; // RGA of the middle of the rocket in %
-    private double heatShield; // %
-    private double speed; // m/s
-    private double distance;
-    private double totalDistance;
+    private int transactionCount;
+    private List<RocketMeasurements> measurements = new ArrayList<>();
 
     public TelemetryRocketData() {
     }
 
-    public TelemetryRocketData(String rocketId, int irradiance, int velocityVariation, int temperature, int vibration, int boosterRGA, int midRocketRGA, double heatShield, double speed, double distance,double totalDistance) {
+    public TelemetryRocketData(String rocketId) {
         this.rocketId = rocketId;
-        this.irradiance = irradiance;
-        this.velocityVariation = velocityVariation;
-        this.temperature = temperature;
-        this.vibration = vibration;
-        this.boosterRGA = boosterRGA;
-        this.midRocketRGA = midRocketRGA;
-        this.heatShield = heatShield;
-        this.speed = speed;
-        this.distance = distance;
-        this.totalDistance = totalDistance;
+    }
+
+    public int incrementeTransactionCount() {
+        this.transactionCount++;
+        return this.transactionCount;
+    }
+
+    public void addMeasurement(RocketMeasurements measurement) {
+        this.measurements.add(measurement);
+        incrementeTransactionCount();
+    }
+
+    public void addMeasurementFromRequest(TelemetryRocketRequest m) {
+
+        // @formatter:off
+        this.measurements.add(new RocketMeasurements()
+                        .irradiance(m.getIrradiance())
+                        .velocityVariation(m.getVelocityVariation())
+                        .temperature(m.getTemperature())
+                        .vibration(m.getVibration())
+                        .boosterRGA(m.getBoosterRGA())
+                        .midRocketRGA(m.getMidRocketRGA())
+                        .heatShield(m.getHeatShield())
+                        .speed(m.getSpeed())
+                        .distance(m.getDistance())
+                        .totalDistance(m.getTotalDistance())
+                        .time(ZonedDateTime.now(ZoneOffset.UTC)));
+        // @formatter:on
+        incrementeTransactionCount();
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getRocketId() {
@@ -44,84 +73,25 @@ public class TelemetryRocketData {
         this.rocketId = rocketId;
     }
 
-    public int getIrradiance() {
-        return this.irradiance;
+    public int getTransactionCount() {
+        return this.transactionCount;
     }
 
-    public void setIrradiance(int irradiance) {
-        this.irradiance = irradiance;
+    public void setTransactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
     }
 
-    public int getVelocityVariation() {
-        return this.velocityVariation;
+    public List<RocketMeasurements> getMeasurements() {
+        return this.measurements;
     }
 
-    public void setVelocityVariation(int velocityVariation) {
-        this.velocityVariation = velocityVariation;
+    public void setMeasurements(List<RocketMeasurements> measurements) {
+        this.measurements = measurements;
     }
 
-    public int getTemperature() {
-        return this.temperature;
-    }
-
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
-    }
-
-    public int getVibration() {
-        return this.vibration;
-    }
-
-    public void setVibration(int vibration) {
-        this.vibration = vibration;
-    }
-
-    public int getBoosterRGA() {
-        return this.boosterRGA;
-    }
-
-    public void setBoosterRGA(int boosterRGA) {
-        this.boosterRGA = boosterRGA;
-    }
-
-    public int getMidRocketRGA() {
-        return this.midRocketRGA;
-    }
-
-    public void setMidRocketRGA(int midRocketRGA) {
-        this.midRocketRGA = midRocketRGA;
-    }
-
-    public double getHeatShield() {
-        return this.heatShield;
-    }
-
-    public void setHeatShield(double heatShield) {
-        this.heatShield = heatShield;
-    }
-
-    public double getSpeed() {
-        return this.speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getDistance() {
-        return this.distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public double getTotalDistance() {
-        return this.totalDistance;
-    }
-
-    public void setTotalDistance(double totalDistance) {
-        this.totalDistance = totalDistance;
+    public TelemetryRocketData id(String id) {
+        this.id = id;
+        return this;
     }
 
     public TelemetryRocketData rocketId(String rocketId) {
@@ -129,56 +99,15 @@ public class TelemetryRocketData {
         return this;
     }
 
-    public TelemetryRocketData irradiance(int irradiance) {
-        this.irradiance = irradiance;
+    public TelemetryRocketData transactionCount(int transactionCount) {
+        this.transactionCount = transactionCount;
         return this;
     }
 
-    public TelemetryRocketData velocityVariation(int velocityVariation) {
-        this.velocityVariation = velocityVariation;
+    public TelemetryRocketData measurements(List<RocketMeasurements> measurements) {
+        this.measurements = measurements;
         return this;
     }
-
-    public TelemetryRocketData temperature(int temperature) {
-        this.temperature = temperature;
-        return this;
-    }
-
-    public TelemetryRocketData vibration(int vibration) {
-        this.vibration = vibration;
-        return this;
-    }
-
-    public TelemetryRocketData boosterRGA(int boosterRGA) {
-        this.boosterRGA = boosterRGA;
-        return this;
-    }
-
-    public TelemetryRocketData midRocketRGA(int midRocketRGA) {
-        this.midRocketRGA = midRocketRGA;
-        return this;
-    }
-
-    public TelemetryRocketData heatShield(double heatShield) {
-        this.heatShield = heatShield;
-        return this;
-    }
-
-    public TelemetryRocketData speed(double speed) {
-        this.speed = speed;
-        return this;
-    }
-
-    public TelemetryRocketData distance(double distance) {
-        this.distance = distance;
-        return this;
-    }
-
-    public TelemetryRocketData totalDistance(double totalDistance) {
-        this.totalDistance = totalDistance;
-        return this;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -188,27 +117,20 @@ public class TelemetryRocketData {
             return false;
         }
         TelemetryRocketData telemetryRocketData = (TelemetryRocketData) o;
-        return Objects.equals(rocketId, telemetryRocketData.rocketId) && irradiance == telemetryRocketData.irradiance
-                && velocityVariation == telemetryRocketData.velocityVariation
-                && temperature == telemetryRocketData.temperature && vibration == telemetryRocketData.vibration
-                && boosterRGA == telemetryRocketData.boosterRGA && midRocketRGA == telemetryRocketData.midRocketRGA
-                && heatShield == telemetryRocketData.heatShield && speed == telemetryRocketData.speed
-                && distance == telemetryRocketData.distance && Objects.equals(totalDistance, telemetryRocketData.totalDistance);
+        return Objects.equals(id, telemetryRocketData.id) && Objects.equals(rocketId, telemetryRocketData.rocketId)
+                && transactionCount == telemetryRocketData.transactionCount
+                && Objects.equals(measurements, telemetryRocketData.measurements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rocketId, irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA,
-                heatShield, speed, distance, totalDistance);
+        return Objects.hash(id, rocketId, transactionCount, measurements);
     }
 
     @Override
     public String toString() {
-        return "{" + " rocketId='" + getRocketId() + "'" + ", irradiance='" + getIrradiance() + "'"
-                + ", velocityVariation='" + getVelocityVariation() + "'" + ", temperature='" + getTemperature() + "'"
-                + ", vibration='" + getVibration() + "'" + ", boosterRGA='" + getBoosterRGA() + "'" + ", midRocketRGA='"
-                + getMidRocketRGA() + "'" + ", heatShield='" + getHeatShield() + "'" + ", speed='" + getSpeed() + "'"
-                + ", distance='" + getDistance() + "'" + ", totalDistance='" + getTotalDistance() + "'" + "}";
+        return "{" + " id='" + getId() + "'" + ", rocketId='" + getRocketId() + "'" + ", transactionCount='"
+                + getTransactionCount() + "'" + ", measurements='" + getMeasurements() + "'" + "}";
     }
 
 }
