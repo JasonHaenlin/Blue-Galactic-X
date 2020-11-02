@@ -1,6 +1,4 @@
-FROM alpine:edge
-
-RUN apk add --no-cache openjdk11
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim
 
 COPY target/weather-ws.jar /usr/spring/weather-ws.jar
 
@@ -14,6 +12,4 @@ HEALTHCHECK  --interval=5s --timeout=3s \
 
 EXPOSE 8060 8061
 
-ENTRYPOINT ["/usr/bin/java"]
-
-CMD ["-jar", "/usr/spring/weather-ws.jar"]
+CMD ["java","-Xscmx50M","-Xmx50m","-Xshareclasses","-Xtune:virtualized","-Xquickstart","-jar", "/usr/spring/weather-ws.jar"]

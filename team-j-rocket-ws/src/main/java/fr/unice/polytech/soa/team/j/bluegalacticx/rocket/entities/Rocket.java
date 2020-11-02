@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 
@@ -30,7 +31,7 @@ public class Rocket {
         return this;
     }
 
-    public Rocket withRocketApi(RocketApi api){
+    public Rocket withRocketApi(RocketApi api) {
         this.rocketApi = api;
         return this;
     }
@@ -52,7 +53,7 @@ public class Rocket {
         return boosterId;
     }
 
-    public boolean isRocketInMaxQ() {
+    public boolean checkRocketInMaxQ() {
         SpaceTelemetry telemetry = rocketApi.getAirTelemetry();
         if (telemetry.getDistance() <= telemetry.getTotalDistance() - MaxQ.MIN
                 && telemetry.getDistance() >= telemetry.getTotalDistance() - MaxQ.MAX) {
@@ -113,8 +114,8 @@ public class Rocket {
         this.boosterId = id;
     }
 
-    public void prepareLaunch() {
-        rocketApi.launchWhenReady(this.objective);
+    public void prepareLaunch() throws NoObjectiveSettedException {
+        rocketApi.launchWhenReady(this.objective, this.id);
     }
 
     public void arrivedAtDestination() {

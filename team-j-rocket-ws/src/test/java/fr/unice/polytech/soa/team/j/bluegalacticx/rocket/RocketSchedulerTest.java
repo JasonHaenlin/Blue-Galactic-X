@@ -28,6 +28,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
@@ -71,8 +72,8 @@ public class RocketSchedulerTest {
 
     @Test
     @Order(1)
-    public void rocketChangeStatusTest() throws InterruptedException {
-        rocket.getRocketApi().launchWhenReady(new SpaceCoordinate(1000, 2000, 3000));
+    public void rocketChangeStatusTest() throws InterruptedException, NoObjectiveSettedException {
+        rocket.getRocketApi().launchWhenReady(new SpaceCoordinate(1000, 2000, 3000), "1");
         List<Double> variationSpeed = new ArrayList<>();
         for (int i = 0; i < numberIterations; i++) {
             rocket.getLastTelemetry();
@@ -80,9 +81,9 @@ public class RocketSchedulerTest {
                 sch.scheduleRocketTelemetryTask();
             });
             variationSpeed.add(rocket.getRocketApi().getAirTelemetry().getSpeed());
-            if (rocket.isRocketInMaxQ()) {
+            if (rocket.checkRocketInMaxQ()) {
                 assertEquals(RocketStatus.ENTER_MAXQ, rocket.getStatus());
-            } else if (!rocket.isRocketInMaxQ()
+            } else if (!rocket.checkRocketInMaxQ()
                     && (rocket.getStatus() != RocketStatus.AT_BASE && rocket.getStatus() != RocketStatus.ARRIVED)) {
                 assertEquals(RocketStatus.QUIT_MAXQ, rocket.getStatus());
             }

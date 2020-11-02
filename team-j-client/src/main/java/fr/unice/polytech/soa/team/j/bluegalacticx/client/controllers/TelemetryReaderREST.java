@@ -1,15 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryBoosterData;
+import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryPayloadData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRocketData;
 
 public class TelemetryReaderREST extends RestAPI {
@@ -18,29 +11,16 @@ public class TelemetryReaderREST extends RestAPI {
         super(uri);
     }
 
-
-    public List<TelemetryRocketData> retrieveTelemetryRocketData(String rocketId)
-            throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri + "/rocket/" + rocketId)).build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        return mapper.readValue(response.body(), new TypeReference<List<TelemetryRocketData>>() {
-        });
-
+    public TelemetryRocketData retrieveTelemetryRocketData(String rocketId) {
+        return get("/rocket/" + rocketId, TelemetryRocketData.class);
     }
 
-    public List<TelemetryBoosterData> retrieveTelemetryBoosterData(String boosterId)
-            throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder().GET().header("accept", "application/json")
-                .uri(URI.create(uri + "/booster/" + boosterId)).build();
+    public TelemetryBoosterData retrieveTelemetryBoosterData(String boosterId) {
+        return get("/booster/" + boosterId, TelemetryBoosterData.class);
+    }
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        return mapper.readValue(response.body(), new TypeReference<List<TelemetryBoosterData>>() {
-        });
-
+    public TelemetryPayloadData retrieveTelemetryPayloadData(String payloadId) {
+        return get("/payload/" + payloadId, TelemetryPayloadData.class);
     }
 
 }

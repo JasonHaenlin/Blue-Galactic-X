@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities;
 
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.utils.RandomUtils;
 
 @Service
@@ -35,7 +36,11 @@ public class RocketApi {
         return this;
     }
 
-    public SpaceTelemetry launchWhenReady(SpaceCoordinate objectiveCoordinates) {
+    public SpaceTelemetry launchWhenReady(SpaceCoordinate objectiveCoordinates, String id)
+            throws NoObjectiveSettedException {
+        if (objectiveCoordinates == null) {
+            throw new NoObjectiveSettedException(id);
+        }
         this.distance = computeDistance(origin, objectiveCoordinates);
         this.mockDistStep = mockDistStepFix;
         return airTelemetry.totalDistance(distance).distance(distance);

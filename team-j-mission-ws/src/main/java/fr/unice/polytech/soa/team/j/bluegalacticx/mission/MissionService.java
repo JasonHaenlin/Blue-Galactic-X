@@ -1,10 +1,9 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.DepartmentGoNg;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
@@ -24,6 +23,7 @@ public class MissionService {
 
     public Mission createMission(Mission mission) throws InvalidMissionException {
         mission.setStatus(MissionStatus.PENDING);
+        mission.updateGoNogo(Department.MISSION, false);
         MissionsMocked.missions.add(mission);
         return mission;
     }
@@ -44,14 +44,15 @@ public class MissionService {
         MissionsMocked.missions.forEach(m -> m.updateGoNogo(department, status));
     }
 
-    public Map<Department, Boolean> retrieveGoNogoStatus(String id) throws MissionDoesNotExistException {
+    public DepartmentGoNg retrieveGoNogoStatus(String id) throws MissionDoesNotExistException {
         return findMissionOrThrow(id).getGoNogos();
     }
 
-    public void makeGoNogo(Boolean gonogo, String id) throws MissionDoesNotExistException {
+    public DepartmentGoNg makeGoNogo(Boolean gonogo, String id) throws MissionDoesNotExistException {
         Mission m = findMissionOrThrow(id);
         m.updateGoNogo(Department.MISSION, gonogo);
         departmentStatusProducer.notifyDepartmentStatus(m.getRocketId(), gonogo);
+        return m.getGoNogos();
     }
 
     public void updateMissionGoNogo(Department department, boolean status, String id)

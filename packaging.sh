@@ -50,6 +50,5 @@ else
     sh mvnw clean package -q -DskipTests
     cd ..
     printf "\n"
-    docker-compose build $CONTAINER
     printf "${grn}DONE${end} \n"
 fi

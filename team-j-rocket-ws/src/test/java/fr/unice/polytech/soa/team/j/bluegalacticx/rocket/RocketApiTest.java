@@ -17,6 +17,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
 
 @Tags(value = { @Tag("api"), @Tag("api-rocket") })
 @TestInstance(Lifecycle.PER_METHOD)
@@ -41,10 +42,10 @@ public class RocketApiTest {
     }
 
     @Test
-    public void iterationsOnAirSupposedToChangeTest() {
+    public void iterationsOnAirSupposedToChangeTest() throws NoObjectiveSettedException {
         SpaceTelemetry ms = api.retrieveLastTelemetry();
 
-        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0));
+        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
 
         double lDist;
 
@@ -56,10 +57,11 @@ public class RocketApiTest {
     }
 
     @Test
-    public void shouldBeZeroOfDistanceAfterIterationsTest() throws BoosterDestroyedException {
+    public void shouldBeZeroOfDistanceAfterIterationsTest()
+            throws BoosterDestroyedException, NoObjectiveSettedException {
         SpaceTelemetry ms;
 
-        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0));
+        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
 
         for (int i = 0; i < numberIterations; i++) {
             ms = api.retrieveLastTelemetry();
@@ -70,7 +72,7 @@ public class RocketApiTest {
     }
 
     @Test
-    public void shouldDetectMaxQWithAnyDistance() {
+    public void shouldDetectMaxQWithAnyDistance() throws NoObjectiveSettedException {
 
         int nbTest = 2;
 
@@ -84,7 +86,7 @@ public class RocketApiTest {
             int y = new Random().nextInt(maxDistance) + minDistance;
             int z = new Random().nextInt(maxDistance) + minDistance;
 
-            ms = api.launchWhenReady(new SpaceCoordinate(x, y, z));
+            ms = api.launchWhenReady(new SpaceCoordinate(x, y, z), "1");
 
             boolean inMaxQ = false;
 

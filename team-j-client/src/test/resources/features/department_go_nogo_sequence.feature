@@ -3,7 +3,8 @@ Feature: Department go nogo sequence
     Check the process of the go nogo
 
     Background: Given a mission and a rocket
-        Given Richard add a new mission with mission id "2" and rocket id "2"
+        Given Gwynne create a rocket with id "2"
+        And Richard add a mission with mission id "2" and rocket id "2"
 
     Scenario: Execute the go nogo process
         When Richard has the weather and rocket department not ready

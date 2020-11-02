@@ -54,6 +54,21 @@
             "name": "kafka.topics.telemetrypayload",
             "type": "java.lang.String",
             "description": "A description for 'kafka.topics.telemetrypayload'"
+        },
+        {
+            "name": "data.mongodb.host",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.host'"
+        },
+        {
+            "name": "data.mongodb.port",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.port'"
+        },
+        {
+            "name": "data.mongodb.database",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.database'"
         }
     ]
 }

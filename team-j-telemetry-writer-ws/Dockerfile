@@ -1,11 +1,10 @@
-FROM alpine:edge
-
-RUN apk add --no-cache openjdk11
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim
 
 COPY target/telemetry-writer-ws.jar /usr/spring/telemetry-writer-ws.jar
 
 ENV MONGODB_HOST="team-j-blue-galactic-telemetry-database"
 ENV MONGODB_PORT="27017"
+
 ENV KAFKA_BROKER_HOST="broker"
 ENV KAFKA_BROKER_PORT="9092"
 ENV SCHEMA_BROKER_HOST="schema-registry"
@@ -16,6 +15,4 @@ HEALTHCHECK  --interval=5s --timeout=3s \
 
 EXPOSE 8092
 
-ENTRYPOINT ["/usr/bin/java"]
-
-CMD ["-jar", "/usr/spring/telemetry-writer-ws.jar"]
+CMD ["java","-Xscmx50M","-Xmx50m","-Xshareclasses","-Xtune:virtualized","-Xquickstart","-jar", "/usr/spring/telemetry-writer-ws.jar"]

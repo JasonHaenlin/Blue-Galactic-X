@@ -1,6 +1,4 @@
-FROM alpine:edge
-
-RUN apk add --no-cache openjdk11
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim
 
 COPY target/mission-ws.jar /usr/spring/mission-ws.jar
 
@@ -18,6 +16,4 @@ HEALTHCHECK  --interval=5s --timeout=3s \
 
 EXPOSE 8070 8071
 
-ENTRYPOINT ["/usr/bin/java"]
-
-CMD ["-jar", "/usr/spring/mission-ws.jar"]
+CMD ["java","-Xscmx50M","-Xmx50m","-Xshareclasses","-Xtune:virtualized","-Xquickstart","-jar", "/usr/spring/mission-ws.jar"]

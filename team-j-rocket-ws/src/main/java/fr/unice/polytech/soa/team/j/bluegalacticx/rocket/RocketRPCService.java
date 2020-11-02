@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
@@ -98,9 +99,7 @@ public class RocketRPCService extends RocketImplBase {
 
         } catch (RocketDoesNotExistException e) {
             responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
-        } catch (NoSameStatusException e) {
-            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
-        } catch (BoosterDestroyedException e) {
+        } catch (NoSameStatusException | BoosterDestroyedException | NoObjectiveSettedException e) {
             responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         }
 

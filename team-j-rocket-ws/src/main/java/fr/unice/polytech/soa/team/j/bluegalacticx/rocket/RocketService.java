@@ -43,10 +43,10 @@ public class RocketService {
                 SpaceTelemetry st = r.getLastTelemetry();
                 // telemetryRocketProducer.sendTelemetryRocketEvent(st);
 
-                if (r.isRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
+                if (r.checkRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
                     r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
                     r.updateSpeed(SpeedChange.DECREASE);
-                } else if (!r.isRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
+                } else if (!r.checkRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
                     r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
                     r.updateSpeed(SpeedChange.INCREASE);
                 }

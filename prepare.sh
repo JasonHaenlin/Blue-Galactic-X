@@ -4,7 +4,7 @@ parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
 
 echo "Building JAR files"
-./build.sh
+sh packaging.sh
 
 echo "Building Docker images"
 docker-compose build
