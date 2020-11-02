@@ -10,7 +10,6 @@ public class SpaceTelemetry {
     private int vibration = 0; // ground vibration in Hz
     private int boosterRGA = 0; // RGA of booster in %
     private int midRocketRGA = 0; // RGA of the middle of the rocket in %mvn te
-    private String rocketId;
     private double heatShield; // %
     private double speed; // m/s
     private double distance;
@@ -19,14 +18,14 @@ public class SpaceTelemetry {
     public SpaceTelemetry() {
     }
 
-    public SpaceTelemetry(int irradiance, int velocityVariation, int temperature, int vibration, int boosterRGA, int midRocketRGA, String rocketId, double heatShield, double speed, double distance, double totalDistance) {
+    public SpaceTelemetry(int irradiance, int velocityVariation, int temperature, int vibration, int boosterRGA,
+            int midRocketRGA, double heatShield, double speed, double distance, double totalDistance) {
         this.irradiance = irradiance;
         this.velocityVariation = velocityVariation;
         this.temperature = temperature;
         this.vibration = vibration;
         this.boosterRGA = boosterRGA;
         this.midRocketRGA = midRocketRGA;
-        this.rocketId = rocketId;
         this.heatShield = heatShield;
         this.speed = speed;
         this.distance = distance;
@@ -79,14 +78,6 @@ public class SpaceTelemetry {
 
     public void setMidRocketRGA(int midRocketRGA) {
         this.midRocketRGA = midRocketRGA;
-    }
-
-    public String getRocketId() {
-        return this.rocketId;
-    }
-
-    public void setRocketId(String rocketId) {
-        this.rocketId = rocketId;
     }
 
     public double getHeatShield() {
@@ -151,11 +142,6 @@ public class SpaceTelemetry {
         return this;
     }
 
-    public SpaceTelemetry rocketId(String rocketId) {
-        this.rocketId = rocketId;
-        return this;
-    }
-
     public SpaceTelemetry heatShield(double heatShield) {
         this.heatShield = heatShield;
         return this;
@@ -184,31 +170,28 @@ public class SpaceTelemetry {
             return false;
         }
         SpaceTelemetry rocketTelemetry = (SpaceTelemetry) o;
-        return irradiance == rocketTelemetry.irradiance && velocityVariation == rocketTelemetry.velocityVariation && temperature == rocketTelemetry.temperature && vibration == rocketTelemetry.vibration && boosterRGA == rocketTelemetry.boosterRGA && midRocketRGA == rocketTelemetry.midRocketRGA && Objects.equals(rocketId, rocketTelemetry.rocketId) && heatShield == rocketTelemetry.heatShield && speed == rocketTelemetry.speed && distance == rocketTelemetry.distance && totalDistance == rocketTelemetry.totalDistance;
+        return irradiance == rocketTelemetry.irradiance && velocityVariation == rocketTelemetry.velocityVariation
+                && temperature == rocketTelemetry.temperature && vibration == rocketTelemetry.vibration
+                && boosterRGA == rocketTelemetry.boosterRGA && midRocketRGA == rocketTelemetry.midRocketRGA
+                && heatShield == rocketTelemetry.heatShield && speed == rocketTelemetry.speed
+                && distance == rocketTelemetry.distance && totalDistance == rocketTelemetry.totalDistance;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA, rocketId, heatShield, speed, distance, totalDistance);
+        return Objects.hash(irradiance, velocityVariation, temperature, vibration, boosterRGA, midRocketRGA, heatShield,
+                speed, distance, totalDistance);
     }
 
     @Override
     public String toString() {
-        return "{" +
-            " irradiance='" + getIrradiance() + "'" +
-            ", velocityVariation='" + getVelocityVariation() + "'" +
-            ", temperature='" + getTemperature() + "'" +
-            ", vibration='" + getVibration() + "'" +
-            ", boosterRGA='" + getBoosterRGA() + "'" +
-            ", midRocketRGA='" + getMidRocketRGA() + "'" +
-            ", rocketId='" + getRocketId() + "'" +
-            ", heatShield='" + getHeatShield() + "'" +
-            ", speed='" + getSpeed() + "'" +
-            ", distance='" + getDistance() + "'" +
-            ", totalDistance='" + getTotalDistance() + "'" +
-            "}";
+        return "{" + " irradiance='" + getIrradiance() + "'" + ", velocityVariation='" + getVelocityVariation() + "'"
+                + ", temperature='" + getTemperature() + "'" + ", vibration='" + getVibration() + "'" + ", boosterRGA='"
+                + getBoosterRGA() + "'" + ", midRocketRGA='" + getMidRocketRGA() + "'" + ", heatShield='"
+                + getHeatShield() + "'" + ", speed='" + getSpeed() + "'" + ", distance='" + getDistance() + "'"
+                + ", totalDistance='" + getTotalDistance() + "'" + "}";
     }
-  
+
     @Deprecated
     public String addAsciiArt() {
         return "\t        |\n" + "\t       / \\\n" + "\t      / _ \\\n" + "\t     |.o '.|\n" + "\t     |'._.'|\n"

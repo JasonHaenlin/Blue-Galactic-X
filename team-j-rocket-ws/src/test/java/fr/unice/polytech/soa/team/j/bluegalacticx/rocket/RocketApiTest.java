@@ -13,10 +13,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.MaxQ;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 
 @Tags(value = { @Tag("api"), @Tag("api-rocket") })
 @TestInstance(Lifecycle.PER_METHOD)
@@ -27,39 +27,30 @@ public class RocketApiTest {
 
     @BeforeEach
     public void init() {
-        RocketsMocked.reset();
         numberIterations = 30;
-        api = new RocketApi().withNumberOfIteration(numberIterations)
-                .withOriginCoordinate(new SpaceCoordinate(0, 0, 0));
+        api = new RocketApi().withNumberOfIteration(numberIterations).withOriginCoordinate(new SpaceCoordinate(0, 0, 0))
+                .withBasedTelemetry();
     }
 
     @Test
     public void iterationsNotSupposedToChangeOnGroundTest() {
-        SpaceTelemetry ms;
-        ms = api.retrieveLastTelemetry("1");
-        assertEquals(RocketsMocked.findSpaceTelemetryInGround("1").get(), ms);
-        ms = api.retrieveLastTelemetry("1");
-        assertEquals(RocketsMocked.findSpaceTelemetryInGround("1").get(), ms);
-        ms = api.retrieveLastTelemetry("1");
-        assertEquals(RocketsMocked.findSpaceTelemetryInGround("1").get(), ms);
+        SpaceTelemetry ms = api.retrieveLastTelemetry();
+        assertEquals(ms, api.retrieveLastTelemetry());
+        assertEquals(ms, api.retrieveLastTelemetry());
+        assertEquals(ms, api.retrieveLastTelemetry());
     }
 
     @Test
     public void iterationsOnAirSupposedToChangeTest() {
-        SpaceTelemetry ms;
-        ms = api.retrieveLastTelemetry("1");
-        assertEquals(RocketsMocked.findSpaceTelemetryInGround("1").get(), ms);
+        SpaceTelemetry ms = api.retrieveLastTelemetry();
 
-        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
-        
-        assertEquals(RocketsMocked.findSpaceTelemetryInAir("1").get(), ms);
-        assertEquals(RocketsMocked.findSpaceTelemetryInAir("1").get().getDistance(), ms.getDistance());
+        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0));
 
         double lDist;
 
         for (int i = 0; i < 5; i++) {
-            lDist = RocketsMocked.findSpaceTelemetryInAir("1").get().getDistance();
-            ms = api.retrieveLastTelemetry("1");
+            lDist = api.getAirTelemetry().getDistance();
+            ms = api.retrieveLastTelemetry();
             assertTrue(lDist > ms.getDistance());
         }
     }
@@ -67,13 +58,11 @@ public class RocketApiTest {
     @Test
     public void shouldBeZeroOfDistanceAfterIterationsTest() throws BoosterDestroyedException {
         SpaceTelemetry ms;
-        ms = api.retrieveLastTelemetry("1");
-        assertEquals(RocketsMocked.findSpaceTelemetryInGround("1").get(), ms);
 
-        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
+        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0));
 
         for (int i = 0; i < numberIterations; i++) {
-            ms = api.retrieveLastTelemetry("1");
+            ms = api.retrieveLastTelemetry();
         }
 
         assertEquals(0.0, ms.getDistance(), 0.1);
@@ -88,22 +77,19 @@ public class RocketApiTest {
         for (int i = 0; i < nbTest; i++) {
             init();
             SpaceTelemetry ms;
-            ms = api.retrieveLastTelemetry("1");
-            assertEquals(RocketsMocked.findSpaceTelemetryInGround("1").get(), ms);    
-             int maxDistance = 10000;
+            int maxDistance = 10000;
             int minDistance = 100;
-            
 
             int x = new Random().nextInt(maxDistance) + minDistance;
             int y = new Random().nextInt(maxDistance) + minDistance;
             int z = new Random().nextInt(maxDistance) + minDistance;
 
-            ms = api.launchWhenReady(new SpaceCoordinate(x, y, z), "1");
-             
+            ms = api.launchWhenReady(new SpaceCoordinate(x, y, z));
+
             boolean inMaxQ = false;
 
             for (int j = 0; j < numberIterations; j++) {
-                ms = api.retrieveLastTelemetry("1");
+                ms = api.retrieveLastTelemetry();
                 if (ms.getDistance() <= ms.getTotalDistance() - MaxQ.MIN
                         && ms.getDistance() >= ms.getTotalDistance() - MaxQ.MAX) {
                     inMaxQ = true;

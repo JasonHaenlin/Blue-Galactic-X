@@ -28,11 +28,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.web.client.RestTemplate;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.DesctructionOrderReply;
@@ -48,8 +47,6 @@ import io.grpc.internal.testing.StreamRecorder;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest
-@ContextConfiguration(classes = { RocketRPCService.class, RestService.class, RocketApi.class, RestTemplate.class,
-		BoosterRPCClient.class })
 @Tags(value = { @Tag("grpc"), @Tag("grpc-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -58,6 +55,9 @@ class RocketRPCServiceTest {
 
 	@Autowired
 	private RocketRPCService rocketRpcService;
+
+	@Autowired
+	private RocketService rocketService;
 
 	@MockBean
 	private RestService restService;
@@ -72,11 +72,12 @@ class RocketRPCServiceTest {
 	private BoosterRPCClient boosterRPCClient;
 
 	@BeforeAll
-	public void init() throws IOException {
+	public void init() throws IOException, CannotBeNullException {
 		Mockito.lenient().when(restService.getCoordinatesFromMission(any(String.class)))
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
 		Mockito.lenient().when(restService.getAvailableRocketID()).thenReturn(Mono.just("1"));
-		RocketsMocked.reset();
+
+		rocketService.addNewRocket(new Rocket().id("1"));
 	}
 
 	@Test

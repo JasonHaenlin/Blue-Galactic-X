@@ -2,8 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,79 +17,80 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.client.RestTemplate;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketApi;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.RocketScheduler;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.ScheduledConfig;
 
-@SpringJUnitConfig(value = { ScheduledConfig.class, RocketApi.class, RestService.class, RestTemplate.class,
-        RocketStatusProducer.class })
+@SpringJUnitConfig(value = { ScheduledConfig.class, RocketApi.class, RocketService.class, RestTemplate.class,
+        RocketStatusProducer.class, TelemetryRocketProducer.class, DepartmentStatusProducer.class })
 @Tags(value = { @Tag("scheduler"), @Tag("scheduler-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
 public class RocketSchedulerTest {
 
+    @Autowired
+    private RocketService rocketService;
+
     @SpyBean
     private RocketScheduler sch;
 
     @MockBean
-	private TelemetryRocketProducer telemetryRocketProducer;
+    private TelemetryRocketProducer telemetryRocketProducer;
+
+    @MockBean
+    private DepartmentStatusProducer departmentStatusProducedStatusProducer;
 
     @MockBean
     private RocketStatusProducer rocketStatusProducer;
 
-    private int numberIterations;
-
-    private RocketApi api;
+    private int numberIterations = 10;
+    private Rocket rocket;
 
     @BeforeEach
-    public void init() {
-        RocketsMocked.reset();
+    public void init() throws CannotBeNullException {
 
-        numberIterations = 10;
-        api = new RocketApi().withNumberOfIteration(numberIterations)
-                .withOriginCoordinate(new SpaceCoordinate(0, 0, 0));
+        RocketApi api = new RocketApi().withNumberOfIteration(numberIterations)
+                .withOriginCoordinate(new SpaceCoordinate(0, 0, 0)).withBasedTelemetry();
+        rocket = new Rocket().id("1").withRocketApi(api);
+        rocketService.addNewRocket(rocket);
+
     }
 
     @Test
     @Order(1)
-    public void TelemetrySchedulerTest() throws InterruptedException {
-        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> verify(sch, atLeast(5)).scheduleRocketTelemetryTask());
-    }
-
-    @Test
-    @Order(2)
     public void rocketChangeStatusTest() throws InterruptedException {
-        SpaceTelemetry ms;
-        Rocket r = RocketsMocked.find("1").get();
-
-        ms = r.getRocketApi().launchWhenReady(new SpaceCoordinate(1000, 2000, 3000), "1");
+        rocket.getRocketApi().launchWhenReady(new SpaceCoordinate(1000, 2000, 3000));
         List<Double> variationSpeed = new ArrayList<>();
         for (int i = 0; i < numberIterations; i++) {
-            ms = r.getLastTelemetry();
+            rocket.getLastTelemetry();
             await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
                 sch.scheduleRocketTelemetryTask();
             });
-            variationSpeed.add(r.getTelemetryInAir().getSpeed());
-            if (r.isRocketInMaxQ()) {
-                assertEquals(r.getStatus() == RocketStatus.ENTER_MAXQ, true);
-            } else if (!r.isRocketInMaxQ() && (r.getStatus() != RocketStatus.AT_BASE && r.getStatus() != RocketStatus.ARRIVED) ) {
-                assertEquals(RocketsMocked.find("1").get().getStatus() == RocketStatus.QUIT_MAXQ, true);
+            variationSpeed.add(rocket.getRocketApi().getAirTelemetry().getSpeed());
+            if (rocket.isRocketInMaxQ()) {
+                assertEquals(RocketStatus.ENTER_MAXQ, rocket.getStatus());
+            } else if (!rocket.isRocketInMaxQ()
+                    && (rocket.getStatus() != RocketStatus.AT_BASE && rocket.getStatus() != RocketStatus.ARRIVED)) {
+                assertEquals(RocketStatus.QUIT_MAXQ, rocket.getStatus());
             }
 
         }
 
-        // the speed is generated randomly, so the variation of speed when it enter or quit maxQ is between 15-20%
+        // the speed is generated randomly, so the variation of speed when it enter or
+        // quit maxQ is between 15-20%
         double variationDecreasePourcentageSpeedChange = -0.15;
         double variationIncreasePourcentageSpeedChange = 0.15;
         boolean speedHasIncreased = false;
@@ -106,8 +106,8 @@ public class RocketSchedulerTest {
             }
         }
 
-        assertEquals(speedHasDecreased, true);
-        assertEquals(speedHasIncreased, true);
+        assertTrue(speedHasDecreased);
+        assertTrue(speedHasIncreased);
 
     }
 
