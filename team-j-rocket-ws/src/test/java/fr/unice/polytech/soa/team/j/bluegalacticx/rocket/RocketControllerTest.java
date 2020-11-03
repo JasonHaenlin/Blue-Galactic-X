@@ -1,11 +1,8 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
@@ -20,12 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 
 @AutoConfigureMockMvc
 @WebMvcTest
-@ContextConfiguration(classes = { RocketController.class, RocketService.class, DepartmentStatusProducer.class})
+@ContextConfiguration(classes = { RocketController.class, RocketService.class, DepartmentStatusProducer.class,
+        RocketStatusProducer.class })
 @Tags(value = { @Tag("mvc"), @Tag("mvc-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 public class RocketControllerTest {
@@ -36,16 +34,13 @@ public class RocketControllerTest {
     @MockBean
     private DepartmentStatusProducer departmentStatusProducer;
 
-    @BeforeAll
-    public static void resetMocks() {
-        RocketsMocked.reset();
-    }
+    @MockBean
+    private RocketStatusProducer rocketStatusProducer;
 
     @Test
     @Order(1)
-    public void getRocketStatusShouldBeOkTest() throws Exception {
-        mvc.perform(get("/rocket/telemetry/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(11)));
+    public void getRocketStatusShouldNotOkTest() throws Exception {
+        mvc.perform(get("/rocket/telemetry/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
     }
 
 }

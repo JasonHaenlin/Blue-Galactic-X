@@ -14,10 +14,12 @@ import io.grpc.ManagedChannelBuilder;
 public class RocketRPC {
     private ManagedChannel channel;
     private RocketBlockingStub stub;
+    private final String source;
+    private final int port;
 
     public RocketRPC(String source, int port) {
-        this.channel = ManagedChannelBuilder.forAddress(source, port).usePlaintext().build();
-        this.stub = RocketGrpc.newBlockingStub(channel);
+        this.source = source;
+        this.port = port;
     }
 
     public void setReadyToLaunch(String missionId, String rocketId) {
@@ -39,6 +41,15 @@ public class RocketRPC {
     public NextStageReply nextStage(String rocketId) {
         NextStageRequest request = NextStageRequest.newBuilder().setRocketId(rocketId).build();
         return stub.nextStage(request);
+    }
+
+    public void shutDown() {
+        this.channel.shutdown();
+    }
+
+    public void create() {
+        this.channel = ManagedChannelBuilder.forAddress(source, port).usePlaintext().build();
+        this.stub = RocketGrpc.newBlockingStub(channel);
     }
 
 }

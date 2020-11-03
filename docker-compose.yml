@@ -4,6 +4,7 @@ services:
   weather:
     build: ./team-j-weather-ws
     container_name: team-j-blue-galactic-weather
+    mem_limit: 160m
     ports:
       - "8060:8060"
       - "8061:8061"
@@ -11,6 +12,7 @@ services:
   rocket:
     build: ./team-j-rocket-ws
     container_name: team-j-blue-galactic-rocket
+    mem_limit: 160m
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -22,6 +24,7 @@ services:
   mission:
     build: ./team-j-mission-ws
     container_name: team-j-blue-galactic-mission
+    mem_limit: 160m
     ports:
       - "8070:8070"
       - "8071:8071"
@@ -38,14 +41,18 @@ services:
 
   telemetry-writer:
     build: ./team-j-telemetry-writer-ws
+    mem_limit: 160m
     container_name: team-j-blue-galactic-telemetry-writer
     ports:
       - "8092:8092"
     links:
       - telemetry-database
+    depends_on:
+      - broker
 
   telemetry-reader:
     build: ./team-j-telemetry-reader-ws
+    mem_limit: 160m
     container_name: team-j-blue-galactic-telemetry-reader
     ports:
       - "8094:8094"
@@ -54,6 +61,7 @@ services:
 
   payload:
     build: ./team-j-payload-ws
+    mem_limit: 160m
     container_name: team-j-blue-galactic-payload
     ports:
       - "8050:8050"
@@ -63,10 +71,13 @@ services:
 
   booster:
     build: ./team-j-booster-ws
+    mem_limit: 160m
     container_name: team-j-blue-galactic-booster
     ports:
       - "8030:8030"
       - "8031:8031"
+    depends_on:
+      - broker
 
   # KAFKA
   zookeeper:

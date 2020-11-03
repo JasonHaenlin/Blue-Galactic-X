@@ -1,7 +1,5 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.DepartmentGoNg;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.GoNg;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
@@ -20,7 +19,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordina
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.BadPayloadIdException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.MissionDoesNotExistException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest.Department;
 
 @RestController
 @RequestMapping("/mission")
@@ -49,7 +47,7 @@ public class MissionController {
     }
 
     @GetMapping("/{missionId}/gonogo")
-    public Map<Department, Boolean> getGoNogoStatus(@PathVariable String missionId) {
+    public DepartmentGoNg getGoNogoStatus(@PathVariable String missionId) {
         try {
             return missionService.retrieveGoNogoStatus(missionId);
         } catch (MissionDoesNotExistException e) {
@@ -58,9 +56,9 @@ public class MissionController {
     }
 
     @PutMapping("/{missionId}/gonogo")
-    public void updateGoNogoStatus(@RequestBody GoNg gonogo, @PathVariable String missionId) {
+    public DepartmentGoNg updateGoNogoStatus(@RequestBody GoNg gonogo, @PathVariable String missionId) {
         try {
-            missionService.makeGoNogo(gonogo.getGong(), missionId);
+            return missionService.makeGoNogo(gonogo.getGong(), missionId);
         } catch (MissionDoesNotExistException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

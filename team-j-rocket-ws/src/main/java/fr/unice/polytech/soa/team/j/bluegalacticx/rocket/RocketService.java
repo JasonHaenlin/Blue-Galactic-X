@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,13 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpeedChange;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 
 @Service
 public class RocketService {
@@ -22,17 +24,44 @@ public class RocketService {
     @Autowired
     private DepartmentStatusProducer departmentStatusProducer;
 
-    private List<Rocket> rockets = RocketsMocked.rockets;
+    @Autowired
+    private RocketStatusProducer rocketProducer;
+
+    private List<Rocket> rockets = new ArrayList<>();
 
     public void addNewRocket(Rocket rocket) throws CannotBeNullException {
         if (rocket == null) {
             throw new CannotBeNullException("rocket");
         }
-        rocket.initStatus();
+        rocket.withBaseTelemetry().initStatus();
         rockets.add(rocket);
     }
 
-    public SpaceTelemetry getLastTelemetry(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
+    public void updateTelemetryToSend() throws RocketDestroyedException {
+        for (Rocket r : rockets) {
+            if (r.getStatus() != RocketStatus.DESTROYED) {
+                SpaceTelemetry st = r.getLastTelemetry();
+                // telemetryRocketProducer.sendTelemetryRocketEvent(st);
+
+                if (r.checkRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
+                    r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
+                    r.updateSpeed(SpeedChange.DECREASE);
+                } else if (!r.checkRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
+                    r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
+                    r.updateSpeed(SpeedChange.INCREASE);
+                }
+
+                if (st.getDistance() <= 0 && r.getStatus() != RocketStatus.ARRIVED) {
+                    r.arrivedAtDestination();
+                    rocketProducer.donedRocketEvent(r.getId());
+                }
+            }
+
+        }
+    }
+
+    public SpaceTelemetry getLastTelemetry(String rocketId)
+            throws RocketDestroyedException, RocketDoesNotExistException {
         return retrieveCorrespondingRocket(rocketId).getLastTelemetry();
     }
 
@@ -71,5 +100,9 @@ public class RocketService {
 
     public void setRocketDepartmentStatus(String rocketId, boolean go) {
         departmentStatusProducer.notifyDepartmentStatus(rocketId, go);
+    }
+
+    public Rocket retrieveRocket(String id) throws RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(id);
     }
 }

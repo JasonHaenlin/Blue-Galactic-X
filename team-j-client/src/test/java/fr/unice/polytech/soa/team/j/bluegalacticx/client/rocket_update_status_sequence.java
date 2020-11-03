@@ -2,81 +2,71 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.MissionREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.PayloadREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.RocketREST;
-import fr.unice.polytech.soa.team.j.bluegalacticx.client.controllers.RocketRPC;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.common.Context;
+import fr.unice.polytech.soa.team.j.bluegalacticx.client.common.Utils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import io.cucumber.java8.En;
 
 public class rocket_update_status_sequence implements En {
 
-    private RocketRPC rocketRPC = new RocketRPC("localhost", 8081);
-    private MissionREST missionREST = new MissionREST("http://localhost:8070/mission");
-    private RocketREST rocketREST = new RocketREST("http://localhost:8080/rocket");
-    private PayloadREST payloadREST = new PayloadREST("http://localhost:8050/payload");
-
-    private Mission mission;
-    private Payload payload;
-
-    private String payloadId;
-    private String missionId;
-    private String rocketId;
-
     AppLog log = AppLog.getInstance();
+    Context ctx = new Context();
 
     public rocket_update_status_sequence() {
 
-        Given("Richard add a new mission with payload id {string} and rocket id {string}",
+        Before(() -> {
+            ctx.rocketRPC.create();
+        });
+
+        After(() -> {
+            ctx.rocketRPC.shutDown();
+        });
+
+        Given("Gwynne create a new rocket with id {string}", (String rocketId) -> {
+            ctx.rocketId = rocketId;
+            ctx.rocket = new Rocket().id(rocketId);
+            ctx.rocketREST.createRocket(ctx.rocket);
+        });
+        Given("Richard add a new mission with mission id {string} and rocket id {string}",
                 (String missionId, String rocketId) -> {
-                    this.missionId = missionId;
-                    this.rocketId = rocketId;
-                    mission = new Mission().id(missionId).rocketId(rocketId)
-                            .destination(new SpaceCoordinate(100, 100, 100));
-                    missionREST.createNewMission(mission);
+                    ctx.missionId = missionId;
+                    ctx.mission = new Mission().id(missionId).rocketId(rocketId).destination(
+                            new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate(100, 100,
+                                    100));
+                    ctx.missionREST.createNewMission(ctx.mission);
                 });
         Given("Gwynne create a new payload with id {string} and rocket id {string}",
                 (String payloadId, String rocketId) -> {
-                    this.payloadId = payloadId;
-                    payload = new Payload().id(payloadId).rocketId(rocketId).type(PayloadType.SPACECRAFT).weight(10000);
-                    payloadREST.createNewPayload(payload);
+                    ctx.payloadId = payloadId;
+                    ctx.payload = new Payload().id(payloadId).rocketId(rocketId).type(PayloadType.SPACECRAFT)
+                            .weight(10000);
+                    ctx.payloadREST.createNewPayload(ctx.payload);
                 });
         When("Elon make the request for the launch order", () -> {
-            rocketRPC.setReadyToLaunch(missionId, rocketId);
-            rocketRPC.LaunchOrderRequest(true, rocketId);
+            ctx.rocketRPC.setReadyToLaunch(ctx.missionId, ctx.rocketId);
+            Utils.assertSuccessWithRetry(() -> ctx.rocketRPC.LaunchOrderRequest(true, ctx.rocketId), 10, 1000);
         });
         Then("the rocket status should be {string}", (String status) -> {
-            RocketStatus rs = rocketREST.getStatus(rocketId);
+            RocketStatus rs = ctx.rocketREST.getStatus(ctx.rocketId);
             assertEquals(RocketStatus.valueOf(status), rs);
         });
         Then("the payload status should be {string}", (String status) -> {
-            Utils.assertEqualsWithRetry(PayloadStatus.valueOf(status), () -> {
-                try {
-                    return payloadREST.retrievePayload(payloadId).getStatus();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            });
+            Utils.assertEqualsWithRetry(PayloadStatus.valueOf(status),
+                    () -> ctx.payloadREST.retrievePayload(ctx.payloadId).getStatus());
         });
         Then("the mission status should be {string}", (String status) -> {
-            Utils.assertEqualsWithRetry(MissionStatus.valueOf(status), () -> {
-                try {
-                    return missionREST.retrieveMission(missionId).getStatus();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            });
+            Utils.assertEqualsWithRetry(MissionStatus.valueOf(status),
+                    () -> ctx.missionREST.retrieveMission(ctx.missionId).getStatus());
         });
         When("Richard send a destruction order to the rocket", () -> {
-            rocketRPC.destructionOrderOnRocket(rocketId);
+            ctx.rocketRPC.destructionOrderOnRocket(ctx.rocketId);
         });
+
     }
 }

@@ -17,10 +17,10 @@ public class TelemetryRocketProducer {
     @Autowired
     private KafkaTemplate<String, TelemetryRocketRequest> kafkaTemplate;
 
-    public void sendTelemetryRocketEvent(SpaceTelemetry st) {
+    public void sendTelemetryRocketEvent(SpaceTelemetry st, String rocketId) {
         // @formatter:off
         TelemetryRocketRequest req = TelemetryRocketRequest.newBuilder()
-                                            .setRocketId(st.getRocketId())
+                                            .setRocketId(rocketId)
                                             .setIrradiance(st.getIrradiance())
                                             .setVelocityVariation(st.getVelocityVariation())
                                             .setTemperature(st.getTemperature())
