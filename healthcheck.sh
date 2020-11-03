@@ -16,7 +16,7 @@ while [ "$res" != "exited" ]; do
 done;
 printf "${grn}SETUP READY${end}  \n"
 
-for i in "team-j-blue-galactic-weather" "team-j-blue-galactic-rocket" "team-j-blue-galactic-mission" "team-j-blue-galactic-telemetry" "team-j-blue-galactic-payload" "team-j-blue-galactic-booster"
+for i in "team-j-blue-galactic-weather" "team-j-blue-galactic-rocket" "team-j-blue-galactic-mission" "team-j-blue-galactic-telemetry-writer" "team-j-blue-galactic-telemetry-reader" "team-j-blue-galactic-payload" "team-j-blue-galactic-booster"
 do
     printf "${mag}Healtcheck${end} ${blu}${i}${end} "
     res=`docker inspect -f {{.State.Health.Status}} $i`

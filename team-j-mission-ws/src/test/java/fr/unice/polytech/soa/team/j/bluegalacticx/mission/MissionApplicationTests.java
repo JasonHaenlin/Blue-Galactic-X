@@ -2,7 +2,6 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.mission;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,7 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils.JsonUtils;
@@ -116,20 +114,6 @@ class MissionApplicationTests {
 
 		verify(missionService, times(1)).createMission(any(Mission.class));
 
-	}
-
-	@Test
-	@Order(5)
-	void changeMissionStatusToSuccessFul() throws Exception {
-		mission.setStatus(MissionStatus.SUCCESSFUL);
-		when(missionService.setMissionStatus(any(MissionStatus.class), any())).thenReturn(mission);
-
-		mvc.perform(MockMvcRequestBuilders.post("/mission/status/" + missionId)
-				.content(JsonUtils.toJson(MissionStatus.SUCCESSFUL)).characterEncoding("utf-8")
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath(".status").value("SUCCESSFUL"));
-
-		verify(missionService, times(1)).setMissionStatus(eq(MissionStatus.SUCCESSFUL), eq("1"));
 	}
 
 	@Test

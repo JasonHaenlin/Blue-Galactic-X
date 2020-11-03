@@ -35,9 +35,6 @@ public class RocketRPCService extends RocketImplBase {
     private RestService service;
 
     @Autowired
-    private RocketApi rocketApi;
-
-    @Autowired
     private RocketStatusProducer rocketProducer;
 
     @Autowired
@@ -54,7 +51,7 @@ public class RocketRPCService extends RocketImplBase {
             service.getAvailableRocketID().subscribe(id -> {
                 r.setBoosterId(id);
             });
-            rocketProducer.atBaseRocketEvent(r.getId());
+            rocketProducer.launchRocketEvent(r.getId());
             responseObserver.onNext(null);
             responseObserver.onCompleted();
         } catch (RocketDoesNotExistException e) {
@@ -114,8 +111,7 @@ public class RocketRPCService extends RocketImplBase {
             String rocketId = request.getRocketId();
             Rocket r = findRocketOrThrow(rocketId);
             String detachedBoosterId = r.detachNextStage();
-            double distanceFromEarth = (r.getTelemetryInAir().getTotalDistance()
-                    - r.getTelemetryInAir().getDistance());
+            double distanceFromEarth = (r.getTelemetryInAir().getTotalDistance() - r.getTelemetryInAir().getDistance());
             boosterRpcClient.initiateLandingSequence(detachedBoosterId, distanceFromEarth,
                     r.getTelemetryInAir().getSpeed());
             NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
