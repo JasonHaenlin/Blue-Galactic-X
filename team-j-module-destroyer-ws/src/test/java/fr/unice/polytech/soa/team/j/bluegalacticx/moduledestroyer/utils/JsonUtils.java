@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.utils;
+package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

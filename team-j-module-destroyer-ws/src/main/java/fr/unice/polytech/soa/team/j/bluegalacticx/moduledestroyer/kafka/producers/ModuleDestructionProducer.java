@@ -1,12 +1,12 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.module_destroyer.kafka.producers;
+package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.kafka.producers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.module_destroyer.proto.DestroyModuleRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.module_destroyer.proto.DestroyModuleRequest.ModuleType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto.DestroyModuleRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto.DestroyModuleRequest.ModuleType;
 
 @Service
 public class ModuleDestructionProducer {

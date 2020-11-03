@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.module_destroyer.kafka.configs;
+package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.kafka.configs;
 
 import java.util.HashMap;
 import java.util.Map;

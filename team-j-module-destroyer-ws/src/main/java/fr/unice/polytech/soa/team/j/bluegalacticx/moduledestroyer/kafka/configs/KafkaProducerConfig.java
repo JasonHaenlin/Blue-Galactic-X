@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.module_destroyer.kafka.configs;
+package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.kafka.configs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.module_destroyer.proto.DestroyModuleRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto.DestroyModuleRequest;
 
 @Configuration
 public class KafkaProducerConfig {

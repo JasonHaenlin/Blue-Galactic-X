@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.module_destroyer;
+package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
