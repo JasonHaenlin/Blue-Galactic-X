@@ -1,44 +1,73 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
-import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.mocks.BoostersMocked;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetryData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterNotAvailableException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 
 @Service
 public class BoosterService {
+
+    private List<Booster> boosters = new ArrayList<Booster>();
+
+    @Autowired
+    private TelemetryBoosterProducer telemetryBoosterProd;
+
+    @Autowired
+    private BoosterStatusProducer boosterStatusProducer;
 
     public void addNewBooster(Booster booster) throws CannotBeNullException {
         if (booster == null) {
             throw new CannotBeNullException("Booster");
         }
-        booster.initStatus();
-        BoostersMocked.boosters.add(booster);
+        booster.initTelemetry().initStatus();
+        boosters.add(booster);
     }
 
     public Booster retrieveBooster(String boosterId) throws BoosterDoesNotExistException {
-        for (Booster b : BoostersMocked.boosters) {
-            if (b.getId().equals(boosterId)) {
-                return b;
+        return boosters.stream().filter(b -> b.getId().equals(boosterId)).findFirst()
+                .orElseThrow(() -> new BoosterDoesNotExistException(boosterId));
+    }
+
+    public void updateTelemetryToSend() {
+        for (Booster b : boosters) {
+            if (b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING) {
+                telemetryBoosterProd.postTelemetryEvent(new BoosterTelemetryData(b.getFuelLevel(), b.getId(),
+                        b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
+            } else if (b.getStatus() == BoosterStatus.LANDED) {
+                telemetryBoosterProd.postTelemetryEvent(new BoosterTelemetryData(b.getFuelLevel(), b.getId(),
+                        b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
+                if (b.getStatus() != BoosterStatus.PENDING) {
+                    boosterStatusProducer.notifyBoosterLanded(b.getId());
+                }
+                b.setStatus(BoosterStatus.PENDING);
             }
         }
-        throw new BoosterDoesNotExistException(boosterId);
+    }
+
+    public void updateAllBoostersTelemetry() {
+        for (Booster b : boosters) {
+            b.updateTelemetry();
+        }
     }
 
     public void updateAllBoostersState() {
-        List<Booster> boosters = BoostersMocked.getAll();
         for (Booster b : boosters) {
             b.updateState();
         }
     }
 
     public String getAvailableBoosterID() throws BoosterNotAvailableException {
-        List<Booster> boosters = BoostersMocked.getAll();
         for (Booster b : boosters) {
             if (b.getStatus() == BoosterStatus.READY) {
                 return b.getId();
