@@ -5,11 +5,14 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.BoosterApi;
+
 public class Booster {
     private String id;
     private BoosterStatus status;
     private BoosterLandingStep landingStep;
-    private BoosterMetrics metrics;
+    private BoosterTelemetry telemetry;
+    private BoosterApi boosterApi;
     private static final double SPEED_UPDATE = 0.2;
 
     private double previousDistance;
@@ -19,34 +22,43 @@ public class Booster {
     public Booster() {
         this.status = BoosterStatus.PENDING;
         this.landingStep = BoosterLandingStep.NOT_LANDING;
-        this.metrics = new BoosterMetrics();
+        this.telemetry = new BoosterTelemetry();
     }
 
     public Booster(String id, BoosterStatus status, int fuelLevel) {
         this.id = id;
         this.status = status;
         this.landingStep = BoosterLandingStep.NOT_LANDING;
-        this.metrics = new BoosterMetrics();
-        this.metrics.setFuelLevel(fuelLevel);
+        this.telemetry = new BoosterTelemetry();
+        this.telemetry.setFuelLevel(fuelLevel);
     }
 
     public void initStatus() {
         this.status = BoosterStatus.PENDING;
     }
 
+    public Booster initTelemetry() {
+        boosterApi = new BoosterApi().initTelemetry();
+        return this;
+    }
+
+    public void updateTelemetry() {
+        this.boosterApi.nextTelemetry(this);
+    }
+
     public void updateSpeed(SpeedChange speedChange) {
         double speed = 0.0;
         if (speedChange == (SpeedChange.INCREASE)) {
-            speed = this.metrics.getSpeed() + (this.metrics.getSpeed() * (SPEED_UPDATE));
+            speed = this.telemetry.getSpeed() + (this.telemetry.getSpeed() * (SPEED_UPDATE));
         } else {
-            speed = this.metrics.getSpeed() + (this.metrics.getSpeed() * (-SPEED_UPDATE));
+            speed = this.telemetry.getSpeed() + (this.telemetry.getSpeed() * (-SPEED_UPDATE));
         }
-        this.metrics.setSpeed(speed);
+        this.telemetry.setSpeed(speed);
     }
 
     public void updateState() {
         if (status == BoosterStatus.LANDING) {
-            double currDistance = this.metrics.getDistanceFromEarth();
+            double currDistance = this.telemetry.getDistanceFromEarth();
             switch (landingStep) {
                 case NOT_LANDING:
                     this.handleFlipManeuver(currDistance);
@@ -66,7 +78,7 @@ public class Booster {
                 default:
                     break;
             }
-            this.previousDistance = this.metrics.getDistanceFromEarth();
+            this.previousDistance = this.telemetry.getDistanceFromEarth();
         }
     }
 
@@ -126,36 +138,36 @@ public class Booster {
         this.status = status;
     }
 
-    public BoosterMetrics getMetrics() {
-        return this.metrics;
+    public BoosterTelemetry getMetrics() {
+        return this.telemetry;
     }
 
-    public void setMetrics(BoosterMetrics metrics) {
-        this.metrics = metrics;
+    public void setMetrics(BoosterTelemetry telemetry) {
+        this.telemetry = telemetry;
     }
 
     public double getDistanceFromEarth() {
-        return this.metrics.getDistanceFromEarth();
+        return this.telemetry.getDistanceFromEarth();
     }
 
     public void setDistanceFromEarth(double distance) {
-        this.metrics.setDistanceFromEarth(distance);
+        this.telemetry.setDistanceFromEarth(distance);
     }
 
     public double getSpeed() {
-        return this.metrics.getSpeed();
+        return this.telemetry.getSpeed();
     }
 
     public void setSpeed(double speed) {
-        this.metrics.setSpeed(speed);
+        this.telemetry.setSpeed(speed);
     }
 
     public int getFuelLevel() {
-        return this.metrics.getFuelLevel();
+        return this.telemetry.getFuelLevel();
     }
 
     public void setFuelLevel(int fuelLevel) {
-        this.metrics.setFuelLevel(fuelLevel);
+        this.telemetry.setFuelLevel(fuelLevel);
     }
 
     public Booster id(String id) {
@@ -173,8 +185,8 @@ public class Booster {
         return this;
     }
 
-    public Booster metrics(BoosterMetrics metrics) {
-        this.metrics = metrics;
+    public Booster telemetry(BoosterTelemetry telemetry) {
+        this.telemetry = telemetry;
         return this;
     }
 
