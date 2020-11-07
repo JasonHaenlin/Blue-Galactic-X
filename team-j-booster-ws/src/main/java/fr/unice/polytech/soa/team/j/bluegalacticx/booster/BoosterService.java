@@ -41,6 +41,7 @@ public class BoosterService {
 
     public void updateTelemetryToSend() {
         for (Booster b : boosters) {
+            b.updateTelemetry();
             if (b.getStatus() == BoosterStatus.RUNNING || b.getStatus() == BoosterStatus.LANDING) {
                 telemetryBoosterProd.postTelemetryEvent(new BoosterTelemetryData(b.getFuelLevel(), b.getId(),
                         b.getStatus(), b.getDistanceFromEarth(), b.getSpeed()));
@@ -55,11 +56,6 @@ public class BoosterService {
         }
     }
 
-    public void updateAllBoostersTelemetry() {
-        for (Booster b : boosters) {
-            b.updateTelemetry();
-        }
-    }
 
     public void updateAllBoostersState() {
         for (Booster b : boosters) {
