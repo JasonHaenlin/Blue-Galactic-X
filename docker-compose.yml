@@ -31,11 +31,11 @@ services:
     depends_on:
       - broker
 
-  telemetry-database:
+  database:
     image: mongo:latest
     volumes:
       - ./database:/data
-    container_name: team-j-blue-galactic-telemetry-database
+    container_name: team-j-blue-galactic-database
     ports:
       - 27017:27017
 
@@ -57,7 +57,7 @@ services:
     ports:
       - "8094:8094"
     links:
-      - telemetry-database
+      - database
 
   payload:
     build: ./team-j-payload-ws
@@ -78,6 +78,28 @@ services:
       - "8031:8031"
     depends_on:
       - broker
+  
+  missionlogwriter:
+    build: ./team-j-missionlogwriter-ws
+    container_name: team-j-blue-galactic-missionlogwriter
+    ports:
+      - "8010:8010"
+      - "8011:8011"
+    depends_on:
+      - broker
+    links:
+      - database
+
+  missionlogreader:
+    build: ./team-j-missionlogreader-ws
+    container_name: team-j-blue-galactic-missionlogreader
+    ports:
+      - "8110:8110"
+      - "8111:8111"
+    depends_on:
+      - broker
+    links:
+      - database
 
   # KAFKA
   zookeeper:
@@ -129,7 +151,7 @@ services:
       - broker
       - schema-registry
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
-      cub kafka-ready -b broker:9092 1 60 && \
+      cub kafka-ready -b broker:9092 1 240 && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.sample.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.rocket-status.0 \
@@ -137,6 +159,8 @@ services:
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.payload-status.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.department-status.0 \
+      && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.payload-status.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-booster.0 \
       && \

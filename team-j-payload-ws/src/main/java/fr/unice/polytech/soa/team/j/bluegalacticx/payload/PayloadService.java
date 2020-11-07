@@ -31,9 +31,10 @@ public class PayloadService {
     }
 
     public void updatePayloadFromRocketState(PayloadStatus status, String id) throws PayloadNotFoundException {
-        retrievePayloadByRocketId(id).setStatus(status);
+        Payload p = retrievePayloadByRocketId(id);
+        p.setStatus(status);
         // make the rollout (nothing right now)
-        payloadStatusProducer.notifyDeployedPayloadEvent(id);
+        payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), id);
     }
 
     Payload retrievePayload(String id) throws PayloadNotFoundException {
@@ -48,6 +49,9 @@ public class PayloadService {
         for (Payload p : PayloadMock.payloads) {
             if (p.getId().equals(id)) {
                 p.setStatus(status);
+                if(status == PayloadStatus.DELIVERED){
+                    payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), p.getRocketId());
+                }
                 return p;
             }
         }

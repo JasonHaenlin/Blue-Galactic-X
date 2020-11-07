@@ -17,8 +17,8 @@ public class PayloadStatusProducer {
     @Autowired
     private KafkaTemplate<String, PayloadStatusRequest> kafkaTemplate;
 
-    public void notifyDeployedPayloadEvent(String payloadId) {
-        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId)
+    public void notifyDeployedPayloadEvent(String payloadId, String rocketId) {
+        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setRocketId(rocketId)
                 .setEventType(EventType.DELIVERED).build();
 
         kafkaTemplate.send(statusTopic0, req);
