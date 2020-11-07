@@ -15,7 +15,6 @@ public class BoosterScheduler {
     @Scheduled(fixedDelay = 1000)
     public void scheduleBoosterMetricsTask() {
         boosterService.updateAllBoostersState();
-        boosterService.updateAllBoostersTelemetry();
         boosterService.updateTelemetryToSend();
 
     }
