@@ -3,10 +3,11 @@ syntax = "proto3";
 package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer;
 
 option java_multiple_files = true;
-option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto";
+option java_package =
+    "fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto";
 
 message DestroyModuleRequest {
-    enum ModuleType {ROCKET = 0; BOOSTER = 1;}
-    ModuleType moduleType = 1;
-    string moduleId = 2;
+  enum ModuleType { ROCKET = 0; BOOSTER = 1; }
+  ModuleType moduleType = 1;
+  string moduleId = 2;
 }

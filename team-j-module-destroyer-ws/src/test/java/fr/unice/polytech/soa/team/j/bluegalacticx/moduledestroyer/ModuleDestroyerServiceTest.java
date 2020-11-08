@@ -1,104 +1,61 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.anomaly.proto.AnomalyRequest;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.listener.MessageListener;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
-import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.utils.ContainerTestUtils;
-import org.springframework.kafka.test.utils.KafkaTestUtils;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import fr.unice.polytech.soa.team.j.bluegalacticx.anomaly.proto.AnomalyRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.kafka.producers.ModuleDestructionProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto.DestroyModuleRequest.ModuleType;
 
-@EmbeddedKafka
 @ExtendWith(SpringExtension.class)
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ModuleDestroyerServiceTest {
 
-    private static final String TOPIC = "teamj.module-destruction.0";
+    @Captor
+    ArgumentCaptor<ModuleType> moduleTypeCaptor;
 
-    @Autowired
+    @Captor
+    ArgumentCaptor<String> stringCaptor;
+
+    @Mock
+    ModuleDestructionProducer moduleDestructionProducer;
+
+    @InjectMocks
     ModuleDestroyerService moduleDestroyerService;
 
-    @Autowired
-    private EmbeddedKafkaBroker embeddedKafkaBroker;
+    @Test
+    void shouldDestroyRocketTest() throws InterruptedException {
+        AnomalyRequest req = AnomalyRequest.newBuilder().setAnomalyType(AnomalyRequest.AnomalyType.AWAY_FROM_TRAJECTORY)
+                .setModuleId("0").setModuleType(AnomalyRequest.ModuleType.ROCKET).build();
+        moduleDestroyerService.destroyModule(req);
 
-    BlockingQueue<ConsumerRecord<String, String>> records;
+        Mockito.verify(moduleDestructionProducer).notifyModuleEmergencyDestruction(stringCaptor.capture(),
+                moduleTypeCaptor.capture());
 
-    KafkaMessageListenerContainer<String, String> container;
-
-    @BeforeAll
-    void setUp() {
-        Map<String, Object> configs = new HashMap<>(KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker));
-        DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new StringDeserializer());
-        ContainerProperties containerProperties = new ContainerProperties(TOPIC);
-        container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
-        records = new LinkedBlockingQueue<>();
-        container.setupMessageListener((MessageListener<String, String>) records::add);
-        container.start();
-        ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
-    }
-
-    @AfterAll
-    void tearDown() {
-        container.stop();
+        assertEquals(ModuleType.ROCKET, moduleTypeCaptor.getValue());
+        assertEquals("0", stringCaptor.getValue());
     }
 
     @Test
-    public void kafkaSetup_withTopic_ensureSendMessageIsReceived() throws Exception {
-//         Arrange
-        Map<String, Object> configs = new HashMap<>(KafkaTestUtils.producerProps(embeddedKafkaBroker));
-        Producer<String, String> producer = new DefaultKafkaProducerFactory<>(configs, new StringSerializer(), new StringSerializer()).createProducer();
+    void shouldNotDestroyRocketTest() {
+        AnomalyRequest req = AnomalyRequest.newBuilder().setAnomalyType(AnomalyRequest.AnomalyType.OVERHEATING)
+                .setModuleId("0").setModuleType(AnomalyRequest.ModuleType.ROCKET).build();
+        moduleDestroyerService.destroyModule(req);
 
-        // Act
-        producer.send(new ProducerRecord<>(TOPIC, "my-aggregate-id", "{\"event\":\"Test Event\"}"));
-        producer.flush();
-
-//         Assert
-        ConsumerRecord<String, String> singleRecord = records.poll(100, TimeUnit.MILLISECONDS);
-        assertThat(singleRecord).isNotNull();
-        assertThat(singleRecord.key()).isEqualTo("my-aggregate-id");
-        assertThat(singleRecord.value()).isEqualTo("{\"event\":\"Test Event\"}");
+        verify(moduleDestructionProducer, never()).notifyModuleEmergencyDestruction(any(), any());
     }
-
-//    @Test
-//    void shouldDestroyRocketTest() throws InterruptedException {
-//        AnomalyRequest req = AnomalyRequest.newBuilder()
-//                .setAnomalyType(AnomalyRequest.AnomalyType.AWAY_FROM_TRAJECTORY)
-//                .setModuleId("0")
-//                .setModuleType(AnomalyRequest.ModuleType.ROCKET).build();
-//        moduleDestroyerService.destroyModule(req);
-//
-//        // Assert
-//        ConsumerRecord<String, String> singleRecord = records.poll(100, TimeUnit.MILLISECONDS);
-//        assertThat(singleRecord).isNotNull();
-//    }
-//
-//    @Test
-//    void shouldNotDestroyRocketTest() {
-//        AnomalyRequest req = AnomalyRequest.newBuilder()
-//                .setAnomalyType(AnomalyRequest.AnomalyType.OVERHEATING)
-//                .setModuleId("0")
-//                .setModuleType(AnomalyRequest.ModuleType.ROCKET).build();
-//        moduleDestroyerService.destroyModule(req);
-//
-//        //Test Producer
-//    }
 }
