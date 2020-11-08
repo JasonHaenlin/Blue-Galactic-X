@@ -174,6 +174,11 @@ public class Rocket {
         return this;
     }
 
+    public Rocket boosterId(String boosterId) {
+        this.boosterId = boosterId;
+        return this;
+    }
+
     private void throwIfRocketIsDestroyed() throws RocketDestroyedException {
         if (status == RocketStatus.DESTROYED) {
             throw new RocketDestroyedException();
