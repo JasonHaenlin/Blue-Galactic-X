@@ -44,7 +44,7 @@ services:
     ports:
       - "8092:8092"
     links:
-      - telemetry-database
+      - database
     depends_on:
       - broker
 
@@ -156,8 +156,6 @@ services:
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.payload-status.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.department-status.0 \
-      && \
-      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.payload-status.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-booster.0 \
       && \

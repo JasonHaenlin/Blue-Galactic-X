@@ -34,7 +34,7 @@ public class PayloadService {
         Payload p = retrievePayloadByRocketId(id);
         p.setStatus(status);
         // make the rollout (nothing right now)
-        payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), id);
+        payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), p.getRocketId(), p.getMissionId());
     }
 
     Payload retrievePayload(String id) throws PayloadNotFoundException {
@@ -50,7 +50,7 @@ public class PayloadService {
             if (p.getId().equals(id)) {
                 p.setStatus(status);
                 if(status == PayloadStatus.DELIVERED){
-                    payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), p.getRocketId());
+                    payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), p.getRocketId(), p.getMissionId());
                 }
                 return p;
             }

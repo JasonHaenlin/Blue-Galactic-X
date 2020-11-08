@@ -15,4 +15,5 @@ message PayloadStatusRequest {
   EventType eventType = 1;
   string payloadId = 2;
   string rocketId = 3;
+  string missionId = 4;
 }

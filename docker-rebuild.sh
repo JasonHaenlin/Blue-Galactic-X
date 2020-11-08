@@ -5,7 +5,7 @@ cd "$parent_path"
 
 if [[ $# -eq 0 ]]; then
     printf "${mag}Select a module...${end}\n"
-    printf "${blu}rocket, booster, mission, payload, weather, telemetry-writer, telemetry-reader${end}\n"
+    printf "${blu}rocket, booster, mission, payload, weather, telemetry-writer, telemetry-reader, missionlogwriter, missionlogreader${end}\n"
 fi
 printf "packaging and recreating the container ...\n"
 sh packaging.sh $1
