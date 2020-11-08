@@ -34,6 +34,11 @@ public class BoosterService {
         boosters.add(booster);
     }
 
+    public void updateBoosterState(String boosterId, BoosterStatus boosterStatus)
+            throws BoosterDoesNotExistException {
+        retrieveBooster(boosterId).setStatus(boosterStatus);
+    }
+
     public Booster retrieveBooster(String boosterId) throws BoosterDoesNotExistException {
         return boosters.stream().filter(b -> b.getId().equals(boosterId)).findFirst()
                 .orElseThrow(() -> new BoosterDoesNotExistException(boosterId));

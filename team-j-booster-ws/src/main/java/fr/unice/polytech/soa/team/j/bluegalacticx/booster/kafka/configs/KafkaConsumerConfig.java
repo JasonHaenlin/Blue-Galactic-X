@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.MaxQRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 
@@ -50,6 +52,19 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = baseConfig();
         props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, MaxQRequest.class.getName());
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
+        return factory;
+    }
+
+    public ConsumerFactory<String, RocketStatusRequest> consumerRocketStatusFactory() {
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, RocketStatusRequest.class.getName());
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> rocketStatusKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerRocketStatusFactory());
         return factory;
     }
 
