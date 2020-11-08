@@ -24,6 +24,11 @@
             "name": "kafka.topics.moduledestruction",
             "type": "java.lang.String",
             "description": "A description for 'kafka.topics.moduledestruction'"
+        },
+        {
+            "name": "kafka.topics.anomaly",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.anomaly'"
         }
     ]
 }

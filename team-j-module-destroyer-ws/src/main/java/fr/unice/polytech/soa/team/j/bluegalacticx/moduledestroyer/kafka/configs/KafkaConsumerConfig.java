@@ -3,14 +3,18 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.kafka.configs
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.anomaly.proto.AnomalyRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 @EnableKafka
 @Configuration
@@ -40,6 +44,16 @@ public class KafkaConsumerConfig {
         return props;
     }
 
-    // TODO add Anomaly consumer
+    public <T> ConcurrentKafkaListenerContainerFactory<String, T> consumerCustomFactory(String className) {
+        ConcurrentKafkaListenerContainerFactory<String, T> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, className);
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
+        return factory;
+    }
 
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, AnomalyRequest> anomalyKafkaListenerContainerFactory() {
+        return consumerCustomFactory(AnomalyRequest.class.getName());
+    }
 }

@@ -12,11 +12,15 @@ server:
     include-stacktrace: never
 
 kafka:
+  bootstrap-servers: ${spring.embedded.kafka.brokers}
   broker:
     host: ${KAFKA_BROKER_HOST:localhost}
     port: ${KAFKA_BROKER_PORT:19092}
   schema:
     host: ${SCHEMA_BROKER_HOST:localhost}
     port: ${SCHEMA_BROKER_PORT:9090}
+  group:
+    default: blue-origin-module-destruction
   topics:
     moduledestruction: teamj.module-destruction.0
+    anomaly: teamj.anomaly.0
