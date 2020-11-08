@@ -17,7 +17,8 @@
     <modules>
         <module>team-j-weather-ws</module>
         <module>team-j-telemetry-writer-ws</module>
-        <module>team-j-telemetry-reader-ws</module>
+		<module>team-j-telemetry-reader-ws</module>
+		<module>team-j-module-destroyer-ws</module>
         <module>team-j-rocket-ws</module>
         <module>team-j-payload-ws</module>
         <module>team-j-mission-ws</module>
