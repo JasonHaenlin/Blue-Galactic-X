@@ -12,6 +12,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
@@ -49,6 +50,15 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, PayloadStatusRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
         Map<String, Object> props = baseConfig();
         props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, PayloadStatusRequest.class.getName());
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, PayloadRequest> payloadKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, PayloadRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, PayloadRequest.class.getName());
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
         return factory;
     }

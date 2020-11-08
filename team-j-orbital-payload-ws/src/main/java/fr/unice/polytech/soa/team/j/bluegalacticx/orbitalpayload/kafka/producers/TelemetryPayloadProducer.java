@@ -23,11 +23,12 @@ public class TelemetryPayloadProducer {
         // @formatter:off
         TelemetryPayloadRequest req = TelemetryPayloadRequest.newBuilder()
                                 .setPayloadId(p.getPayloadId())
+                                .setMissionId(p.getMissionId())
                                 .setPayloadStatus(p.getStatus().toString())
                                 .setPosition(SpaceCoordinate.newBuilder()
-                                    .setX(p.getPosition().getX())
-                                    .setY(p.getPosition().getY())
-                                    .setZ(p.getPosition().getZ())
+                                    .setX(p.getX())
+                                    .setY(p.getY())
+                                    .setZ(p.getZ())
                                     .build())
                                 .build();
         // @formatter:on

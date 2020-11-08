@@ -6,15 +6,16 @@ option java_multiple_files = true;
 option java_package =
     "fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto";
 
-enum EventType {
+enum PayloadStatus {
   WAITING_FOR_MISSION = 0; ON_MISSION = 1; DESTROYED = 2; DELIVERED = 3;
   NOT_DELIVERED = 4;
   IN_ROLLOUT = 5;
 }
 
 message PayloadStatusRequest {
-  EventType eventType = 1;
+  PayloadStatus eventType = 1;
   string payloadId = 2;
+  string missionId = 3;
 }
 
 message PayloadRequest {
@@ -23,7 +24,7 @@ message PayloadRequest {
     uint32 y = 2;
     uint32 z = 3;
   }
-  EventType payloadStatus = 1;
+  PayloadStatus payloadStatus = 1;
   string payloadId = 2;
   string missionId = 3;
   SpaceCoordinate position = 4;

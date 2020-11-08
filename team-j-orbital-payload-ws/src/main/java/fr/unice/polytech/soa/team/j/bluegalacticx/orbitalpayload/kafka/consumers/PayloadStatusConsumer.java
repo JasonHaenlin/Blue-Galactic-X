@@ -5,11 +5,13 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.orbitalpayload.OrbitalPayloadService;
+import fr.unice.polytech.soa.team.j.bluegalacticx.orbitalpayload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.orbitalpayload.exceptions.PayloadNotFoundException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest;
 
 @Service
-public class RocketStatusConsumer {
+public class PayloadStatusConsumer {
 
     @Autowired
     private OrbitalPayloadService payloadService;
@@ -30,6 +32,13 @@ public class RocketStatusConsumer {
             // TODO : handle kafka exceptions
             e.printStackTrace();
         }
+    }
+
+    @KafkaListener(topics = "${kafka.topics.newpayload}", groupId = "${kafka.group.default}", containerFactory = "payloadKafkaListenerContainerFactory")
+    public void newPayloadEvent(PayloadRequest req) {
+        Payload p = new Payload().payloadId(req.getPayloadId()).missionId(req.getMissionId())
+                .position(req.getPosition()).status(req.getPayloadStatus());
+        payloadService.addPayload(p);
 
     }
 }

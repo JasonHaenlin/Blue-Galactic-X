@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.EventType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest;
 
 @Service
@@ -17,16 +17,16 @@ public class PayloadStatusProducer {
     @Autowired
     private KafkaTemplate<String, PayloadStatusRequest> kafkaTemplate;
 
-    public void notifyDeployedPayloadDelivered(String payloadId, String rocketId) {
-        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setRocketId(rocketId)
-                .setEventType(EventType.DELIVERED).build();
+    public void notifyDeployedPayloadDelivered(String payloadId, String missionId) {
+        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setMissionId(missionId)
+                .setEventType(PayloadStatus.DELIVERED).build();
 
         kafkaTemplate.send(statusTopic0, req);
     }
 
-    public void notifyDeployedPayloadNotDelivered(String payloadId, String rocketId) {
-        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setRocketId(rocketId)
-                .setEventType(EventType.NOT_DELIVERED).build();
+    public void notifyDeployedPayloadNotDelivered(String payloadId, String missionId) {
+        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setMissionId(missionId)
+                .setEventType(PayloadStatus.NOT_DELIVERED).build();
 
         kafkaTemplate.send(statusTopic0, req);
     }
