@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.weather;
+package fr.unice.polytech.soa.team.j.bluegalacticx.anomaly;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -22,3 +22,6 @@ kafka:
     default: blue-origin-anomaly
   topics:
     anomaly: teamj.anomaly.0
+    telemetryrocket: teamj.telemetry-rocket.0
+    telemetrybooster: teamj.telemetry-booster.0
+    telemetrypayload: teamj.telemetry-payload.0

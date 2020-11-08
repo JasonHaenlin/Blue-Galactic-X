@@ -1,5 +1,5 @@
-# team-j-weather-ws
-weather web service
+# team-j-anomaly-ws
+anomaly web service
 
 ## Start the project
 
