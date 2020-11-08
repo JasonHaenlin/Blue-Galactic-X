@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.TimeUnit;
@@ -25,6 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterLandingStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
@@ -57,6 +59,7 @@ public class BoosterTest {
     public void init() throws CannotBeNullException {
         boosterTest = new Booster().id("1").status(BoosterStatus.READY).fuelLevel(100);
         boosterService.addNewBooster(boosterTest);
+
     }
 
     @Test
@@ -101,5 +104,15 @@ public class BoosterTest {
         boosterTest.updateState();
         assertEquals(BoosterLandingStep.LANDED, boosterTest.getLandingStep());
         assertEquals(BoosterStatus.LANDED, boosterTest.getStatus());
+    }
+
+    @Test
+    @Order(3)
+    public void testUpdateState() throws BoosterDoesNotExistException {
+
+        boosterService.updateBoosterState(boosterTest.getId(), BoosterStatus.READY);
+
+        assertTrue(boosterService.retrieveBooster(boosterTest.getId()).getStatus() == BoosterStatus.READY);
+
     }
 }
