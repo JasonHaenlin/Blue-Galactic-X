@@ -45,6 +45,12 @@
             "type": "java.lang.String",
             "description": "A description for 'kafka.topics.telemetrybooster'"
         },
+        
+        {
+            "name": "kafka.topics.rocketstatus",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.rocketstatus'"
+        },
         {
             "name": "kafka.topics.maxq",
             "type": "java.lang.String",

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
+
+option java_multiple_files = true;
+option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
+
+message RocketStatusRequest {
+  enum EventType {
+    READY_TO_LAUNCH = 0; IN_SERVICE = 1; DESTROYED = 2; AT_BASE = 3; IN_REPAIR = 4; DAMAGED = 5;
+    DONED = 6;
+  }
+  EventType eventType = 1;
+  string rocketId = 2;
+  string boosterId = 3;
+}

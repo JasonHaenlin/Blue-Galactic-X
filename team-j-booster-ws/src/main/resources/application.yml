@@ -28,3 +28,4 @@ kafka:
     boosterstatus: teamj.booster-status.0
     telemetrybooster: teamj.telemetry-booster.0
     maxq: teamj.maxq.0
+    rocketstatus: teamj.rocket-status.0
