@@ -14,7 +14,7 @@ ENV MONGODB_PORT="27017"
 HEALTHCHECK  --interval=5s --timeout=3s \
     CMD wget --no-verbose --tries=1 --spider http://localhost:8010/missionlogwriter/ping/ || exit 1
 
-EXPOSE 8010 8011
+EXPOSE 8010
 
 ENTRYPOINT ["/usr/bin/java"]
 

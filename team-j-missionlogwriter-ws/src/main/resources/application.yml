@@ -11,10 +11,6 @@ server:
   error:
     include-stacktrace: never
 
-grpc:
-  enable-reflection: true
-  port: 8011
-
 api:
   mongodb:
     host: ${MONGODB_HOST:localhost}
