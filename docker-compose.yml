@@ -7,7 +7,6 @@ services:
     mem_limit: 160m
     ports:
       - "8060:8060"
-      - "8061:8061"
 
   rocket:
     build: ./team-j-rocket-ws
@@ -27,7 +26,6 @@ services:
     mem_limit: 160m
     ports:
       - "8070:8070"
-      - "8071:8071"
     depends_on:
       - broker
 
@@ -65,7 +63,6 @@ services:
     container_name: team-j-blue-galactic-payload
     ports:
       - "8050:8050"
-      - "8051:8051"
     depends_on:
       - broker
 
@@ -78,13 +75,13 @@ services:
       - "8031:8031"
     depends_on:
       - broker
-  
+
   missionlogwriter:
     build: ./team-j-missionlogwriter-ws
+    mem_limit: 160m
     container_name: team-j-blue-galactic-missionlogwriter
     ports:
       - "8010:8010"
-      - "8011:8011"
     depends_on:
       - broker
     links:
@@ -92,10 +89,10 @@ services:
 
   missionlogreader:
     build: ./team-j-missionlogreader-ws
+    mem_limit: 160m
     container_name: team-j-blue-galactic-missionlogreader
     ports:
       - "8110:8110"
-      - "8111:8111"
     depends_on:
       - broker
     links:

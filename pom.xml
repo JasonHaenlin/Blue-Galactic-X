@@ -22,6 +22,9 @@
         <module>team-j-payload-ws</module>
         <module>team-j-mission-ws</module>
         <module>team-j-booster-ws</module>
+        <module>team-j-anomaly-ws</module>
+        <module>team-j-missionlogwriter-ws</module>
+        <module>team-j-missionlogreader-ws</module>
     </modules>
 
     <properties>
@@ -93,6 +96,14 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Hamcrest library, used for regex testing -->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>1.3</version>
 			<scope>test</scope>
 		</dependency>
 

@@ -46,16 +46,6 @@ each task must be a US like
 
 the **Pts** correspond to the story points
 
-| Points | Equivalent in days |
-| ------ | ------------------ |
-| 1      | 3 hours            |
-| 2      | 5 hours            |
-| 3      | 8 hours            |
-| 5      | 10 hours           |
-| 8      | 15 hours           |
-
-It is set arbitrary for now and will be adapted throughout the project.
-
 #### Body :
 
 *User Story*

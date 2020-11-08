@@ -11,10 +11,6 @@ server:
   error:
     include-stacktrace: never
 
-grpc:
-  enable-reflection: true
-  port: 8061
-
 kafka:
   broker:
     host: ${KAFKA_BROKER_HOST:localhost}

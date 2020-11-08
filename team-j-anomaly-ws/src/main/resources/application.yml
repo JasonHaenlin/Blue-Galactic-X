@@ -7,7 +7,7 @@ spring:
     name: Demo
 
 server:
-  port: 8050
+  port: 8062
   error:
     include-stacktrace: never
 
@@ -19,8 +19,6 @@ kafka:
     host: ${SCHEMA_BROKER_HOST:localhost}
     port: ${SCHEMA_BROKER_PORT:9090}
   group:
-    default: blue-origin-payload
+    default: blue-origin-anomaly
   topics:
-    rocketstatus: teamj.rocket-status.0
-    payloadstatus: teamj.payload-status.0
-    telemetrypayload: teamj.telemetry-payload.0
+    anomaly: teamj.anomaly.0
