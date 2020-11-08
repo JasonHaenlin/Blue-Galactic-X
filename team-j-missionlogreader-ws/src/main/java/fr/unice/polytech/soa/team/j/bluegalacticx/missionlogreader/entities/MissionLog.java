@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.missionlogreader.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,26 +11,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class MissionLog {
 
     @Id
-    private String id;
-    private List<Log> logs;
+    private String missionId;
+    private List<Log> logs = new ArrayList<>();
 
     public MissionLog() {
     }
 
-    public MissionLog(String id) {
-        this.id = id;
+    public MissionLog(String missionId) {
+        this.missionId = missionId;
     }
 
     public void addLog(String text) {
         this.logs.add(new Log(text));
     }
 
-    public String getId() {
-        return this.id;
+    public String getMissionId() {
+        return this.missionId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setMissionId(String missionId) {
+        this.missionId = missionId;
     }
 
     public List<Log> getLogs() {
