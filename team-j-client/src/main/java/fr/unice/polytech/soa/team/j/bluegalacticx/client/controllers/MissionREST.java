@@ -11,8 +11,8 @@ public class MissionREST extends RestAPI {
         super(uri);
     }
 
-    public void createNewMission(Mission mission) {
-        post("/", null, mission);
+    public Mission createNewMission(Mission mission) {
+        return post("/", Mission.class, mission);
     }
 
     public Mission retrieveMission(String missionId) {
