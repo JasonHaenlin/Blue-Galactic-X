@@ -6,10 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
@@ -23,10 +21,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterLandingStepProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
@@ -52,14 +49,6 @@ public class BoosterControllerTest {
     @MockBean
     BoosterStatusProducer boosterStatusProducer;
 
-    @BeforeAll
-    public static void initBoosters() {
-        List<Booster> listBoosters = new ArrayList<>();
-        listBoosters.add(new Booster().id("1").status(BoosterStatus.PENDING).fuelLevel(100));
-        listBoosters.add(new Booster().id("2").status(BoosterStatus.RUNNING).fuelLevel(40)
-                .telemetry(new BoosterTelemetry(500, 200)));
-    }
-
     @Test
     @Order(1)
     public void getNotExistingBoosterShouldFailTest() throws Exception {
@@ -75,10 +64,15 @@ public class BoosterControllerTest {
     @Test
     @Order(3)
     public void createValidBoosterShouldSuccessTest() throws Exception {
-        mvc.perform(post("/booster").contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(JsonUtil.toJson(new Booster().id("42")))).andExpect(status().isOk());
+        MvcResult resp = mvc.perform(
+                post("/booster").contentType(MediaType.APPLICATION_JSON_VALUE).content(JsonUtil.toJson(new Booster())))
+                .andExpect(status().isOk()).andReturn();
 
-        mvc.perform(get("/booster/42").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", is("PENDING"))).andExpect(jsonPath("$.id", is("42")));
+        String json = resp.getResponse().getContentAsString();
+        Booster booster = new ObjectMapper().readValue(json, Booster.class);
+
+        mvc.perform(get("/booster/" + booster.getId()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.status", is("PENDING")))
+                .andExpect(jsonPath("$.id", is(booster.getId())));
     }
 }
