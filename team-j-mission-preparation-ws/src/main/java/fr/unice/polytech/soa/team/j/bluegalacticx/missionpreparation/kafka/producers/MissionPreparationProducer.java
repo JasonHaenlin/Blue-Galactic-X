@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.proto.MissionPreparationRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.proto.MissionPreparationRequest.Destination;
-import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.proto.MissionPreparationRequest.EventType;
 
 @Service
 public class MissionPreparationProducer {
@@ -25,8 +24,7 @@ public class MissionPreparationProducer {
                 .setBoosterId2(mission.getBoosterIds()[1]).setPayloadId(mission.getPayloadId())
                 .setDate(mission.getDate().toString())
                 .setDestination(Destination.newBuilder().setX(mission.getDestination().getX())
-                        .setY(mission.getDestination().getY()).setZ(mission.getDestination().getZ()))
-                .setEventType(EventType.READY).build();
+                        .setY(mission.getDestination().getY()).setZ(mission.getDestination().getZ())).build();
 
         kafkaTemplate.send(missionPreparationTopic0, req);
     }
