@@ -1,0 +1,51 @@
+package fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.kafka;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterStatusRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.MissionControlService;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.entities.BoosterStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.exceptions.BoosterDoesNotExistException;
+
+@Service
+public class BoosterStatusConsumer {
+
+    @Autowired
+    private MissionControlService missionControlService;
+
+    @KafkaListener(topics = "${kafka.topics.boosterstatus}", groupId = "${kafka.group.default}", containerFactory = "boosterStatusKafkaListenerContainerFactory")
+    public void rocketStatusEvent(BoosterStatusRequest request) {
+        String id = request.getBoosterId();
+        try {
+            switch (request.getEventType()) {
+                case PENDING:
+                    missionControlService.storeBoosterStatus(id, BoosterStatus.PENDING);
+                    break;
+                case READY:
+                    missionControlService.storeBoosterStatus(id, BoosterStatus.READY);
+                    break;
+                case RUNNING:
+                    missionControlService.storeBoosterStatus(id, BoosterStatus.RUNNING);
+                    break;
+                case DESTROYED:
+                    missionControlService.storeBoosterStatus(id, BoosterStatus.DESTROYED);
+                    break;
+                case LANDED:
+                    missionControlService.storeBoosterStatus(id, BoosterStatus.LANDED);
+                    break;
+                default:
+                    // DO NOT PROCEED NOT WANTED EVENTS
+                    break;
+            }
+            
+            missionControlService.updateMissionFromBoosterState(id);
+        } catch (BoosterDoesNotExistException e) {
+            // TODO : handle kafka exceptions
+            e.printStackTrace();
+        }
+
+    }
+
+}

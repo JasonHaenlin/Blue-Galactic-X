@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation;
+
+option java_multiple_files = true;
+option java_package =
+    "fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.proto";
+
+message MissionPreparationRequest {
+  enum EventType {
+    PENDING=0; READY=1; STARTED=2; SUCCESSFUL=3; FAILED=4; ABORTED=5;
+  }
+  EventType eventType = 1;
+  string id=2;
+  string rocketId = 3;
+  string boosterId=4;
+  string payloadId=5;
+  message Destination{
+      int32 x=6;
+      int32 y=7;
+      int32 z=8;
+  }
+  
+  Destination destination = 9;
+  string date=10;
+}

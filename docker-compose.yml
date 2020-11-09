@@ -97,7 +97,15 @@ services:
       - broker
     links:
       - database
-
+  mission-control:
+    build: ./team-j-mission-control-ws
+    mem_limit: 160m
+    container_name: team-j-blue-galactic-mission-control
+    ports:
+      - "8200:8200"
+    depends_on:
+      - broker
+      
   # KAFKA
   zookeeper:
     image: confluentinc/cp-zookeeper:6.0.0
@@ -155,6 +163,8 @@ services:
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.payload-status.0 \
       && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.booster-status.0 \
+      && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.department-status.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-booster.0 \
@@ -162,6 +172,8 @@ services:
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-rocket.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-payload.0 \
+      && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.mission-preparation.0 \
       '"
     environment:
       KAFKA_BROKER_ID: ignored
