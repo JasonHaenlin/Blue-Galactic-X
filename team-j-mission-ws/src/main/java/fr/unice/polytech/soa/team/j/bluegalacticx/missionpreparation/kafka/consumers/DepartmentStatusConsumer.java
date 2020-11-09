@@ -1,11 +1,11 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.mission.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.kafka.consumers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.MissionService;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.RocketDoesNotExistException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.MissionPreparationService;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.exceptions.RocketDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest.Department;
 
@@ -13,7 +13,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest.Dep
 public class DepartmentStatusConsumer {
 
     @Autowired
-    private MissionService missionService;
+    private MissionPreparationService missionService;
 
     @KafkaListener(topics = "${kafka.topics.departmentstatus}", groupId = "${kafka.group.default}", containerFactory = "DepartmentStatusKafkaListenerContainerFactory")
     public void updateGoNogo(GoNogoRequest req) {

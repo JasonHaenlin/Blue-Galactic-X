@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions;
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.exceptions;
 
 public class BadPayloadIdException extends Exception {
 

@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.mission.kafka;
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.kafka.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.proto.MissionPreparationRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializerConfig;
@@ -46,5 +47,15 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, GoNogoRequest> kafkaTemplateGoNoGo() {
         return new KafkaTemplate<>(producerDepartmentStatusFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, MissionPreparationRequest> producerMissionPreparationFactory() {
+        return new DefaultKafkaProducerFactory<>(insertBaseConfig());
+    }
+
+    @Bean
+    public KafkaTemplate<String, MissionPreparationRequest> kafkaTemplateMissionPreparation() {
+        return new KafkaTemplate<>(producerMissionPreparationFactory());
     }
 }

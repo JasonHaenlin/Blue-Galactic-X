@@ -8,10 +8,10 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	
-	<artifactId>teamj-mission</artifactId>
+	<artifactId>teamj-mission-preparation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<build>
-		<finalName>mission-ws</finalName>
+		<finalName>mission-preparation-ws</finalName>
 	</build>
 </project>

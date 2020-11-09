@@ -1,5 +1,5 @@
-# team-j-weather-ws
-weather web service
+# team-j-mission-preparation-ws
+mission preparation web service
 
 ## Start the project
 

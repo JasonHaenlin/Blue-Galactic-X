@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities;
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities;
 
 import java.util.HashMap;
 import java.util.Map;

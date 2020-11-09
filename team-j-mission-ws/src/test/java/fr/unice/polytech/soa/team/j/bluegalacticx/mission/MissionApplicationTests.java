@@ -24,14 +24,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.Mission;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.mission.exceptions.InvalidMissionException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.mission.utils.JsonUtils;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.MissionPreparationController;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.MissionPreparationService;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities.Mission;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities.SpaceCoordinate;
 
 @AutoConfigureMockMvc
-@WebMvcTest(MissionController.class)
-@ContextConfiguration(classes = { MissionController.class })
+@WebMvcTest(MissionPreparationController.class)
+@ContextConfiguration(classes = { MissionPreparationController.class })
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class MissionApplicationTests {
@@ -40,7 +41,7 @@ class MissionApplicationTests {
 	private MockMvc mvc;
 
 	@MockBean
-	private MissionService missionService;
+	private MissionPreparationService missionService;
 
 	private Mission mission;
 	private Mission missionReply;
@@ -48,9 +49,10 @@ class MissionApplicationTests {
 	private SpaceCoordinate destination;
 
 	private void missionInit() {
-		mission = new Mission();
 		missionId = "1";
 		destination = new SpaceCoordinate(1000, 100, 10);
+		mission = new Mission().id(missionId).rocketId("1").boosterIds(new String[] { "1", "2" }).payloadId("1")
+				.destination(destination);
 	}
 
 	@BeforeEach
@@ -63,7 +65,7 @@ class MissionApplicationTests {
 	void createMissionWithGoodParametersTest() throws Exception {
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
-		mvc.perform(MockMvcRequestBuilders.post("/mission/").content(JsonUtils.toJson(mission))
+		mvc.perform(MockMvcRequestBuilders.post("/missionPreparation/").content(JsonUtils.toJson(mission))
 				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 
@@ -77,8 +79,8 @@ class MissionApplicationTests {
 
 		when(missionService.createMission(any(Mission.class))).thenReturn(missionReply);
 
-		mvc.perform(MockMvcRequestBuilders.post("/mission/").content("Create a mission").characterEncoding("utf-8")
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+		mvc.perform(MockMvcRequestBuilders.post("/missionPreparation/").content("Create a mission")
+				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest());
 
 		verify(missionService, times(0)).createMission(any(Mission.class));
@@ -101,28 +103,12 @@ class MissionApplicationTests {
 
 	@Test
 	@Order(4)
-	void createInvalidMissionTest() throws Exception {
-
-		Mission invalidMission = new Mission();
-
-		when(missionService.createMission(any(Mission.class))).thenThrow(new InvalidMissionException());
-
-		mvc.perform(MockMvcRequestBuilders.post("/mission/").content(JsonUtils.toJson(invalidMission))
-				.characterEncoding("utf-8").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andExpect(status().reason(
-						"Invalid mission, give a correct date and an available rocket ID (positive and greather than 0)"));
-
-		verify(missionService, times(1)).createMission(any(Mission.class));
-
-	}
-
-	@Test
 	void getDestinationTest() throws Exception {
 		when(missionService.retrieveDestination(any(String.class))).thenReturn(destination);
 
-		mvc.perform(
-				MockMvcRequestBuilders.get("/mission/destination/" + missionId).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(jsonPath("$.x", is(1000))).andExpect(jsonPath("$.y", is(100)))
+		mvc.perform(MockMvcRequestBuilders.get("/missionPreparation/destination/" + missionId)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.x", is(1000))).andExpect(jsonPath("$.y", is(100)))
 				.andExpect(jsonPath("$.z", is(10)));
 	}
 
