@@ -5,9 +5,7 @@ cd "$parent_path"
 
 if [[ $# -eq 0 ]]; then
     printf "${mag}Select a module...${end}\n"
-    printf "${blu}rocket, booster, mission, payload, weather${end}\n"
-    printf "${blu}telemetry-writer, telemetry-reader, missionlogwriter, missionlogreader${end}\n"
-    printf "${blu}anomaly, module-destroyer, orbital-payload, mission-preparation, mission-control${end}\n"
+    ls -d * | grep "team-j-.*-ws" | cut -c8- | sed 's/.\{3\}$//'
 fi
 printf "packaging and recreating the container ...\n"
 sh packaging.sh $1

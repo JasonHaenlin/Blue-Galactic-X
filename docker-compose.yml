@@ -1,23 +1,23 @@
 version: "3.0"
 services:
   # BLUE ORIGIN
-  weather:
-    build: ./team-j-weather-ws
-    container_name: team-j-blue-galactic-weather
+  anomaly:
+    build: ./team-j-anomaly-ws
+    container_name: team-j-blue-galactic-anomaly
     mem_limit: 160m
     ports:
-      - "8060:8060"
-
-  rocket:
-    build: ./team-j-rocket-ws
-    container_name: team-j-blue-galactic-rocket
-    mem_limit: 160m
-    ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "8020:8020"
     depends_on:
-      - mission-preparation
-      - booster
+      - broker
+
+  booster:
+    build: ./team-j-booster-ws
+    mem_limit: 160m
+    container_name: team-j-blue-galactic-booster
+    ports:
+      - "8030:8030"
+      - "8031:8031"
+    depends_on:
       - broker
 
   mission-preparation:
@@ -29,50 +29,12 @@ services:
     depends_on:
       - broker
 
-  database:
-    image: mongo:latest
-    volumes:
-      - ./database:/data
-    container_name: team-j-blue-galactic-database
-    ports:
-      - 27017:27017
-
-  telemetry-writer:
-    build: ./team-j-telemetry-writer-ws
+  mission-control:
+    build: ./team-j-mission-control-ws
     mem_limit: 160m
-    container_name: team-j-blue-galactic-telemetry-writer
+    container_name: team-j-blue-galactic-mission-control
     ports:
-      - "8092:8092"
-    links:
-      - database
-    depends_on:
-      - broker
-
-  telemetry-reader:
-    build: ./team-j-telemetry-reader-ws
-    mem_limit: 160m
-    container_name: team-j-blue-galactic-telemetry-reader
-    ports:
-      - "8094:8094"
-    links:
-      - database
-
-  payload:
-    build: ./team-j-payload-ws
-    mem_limit: 160m
-    container_name: team-j-blue-galactic-payload
-    ports:
-      - "8050:8050"
-    depends_on:
-      - broker
-
-  booster:
-    build: ./team-j-booster-ws
-    mem_limit: 160m
-    container_name: team-j-blue-galactic-booster
-    ports:
-      - "8030:8030"
-      - "8031:8031"
+      - "8200:8200"
     depends_on:
       - broker
 
@@ -97,15 +59,81 @@ services:
       - broker
     links:
       - database
-  mission-control:
-    build: ./team-j-mission-control-ws
+
+  module-destroyer:
+    build: ./team-j-module-destroyer-ws
     mem_limit: 160m
-    container_name: team-j-blue-galactic-mission-control
+    container_name: team-j-blue-galactic-module-destroyer
     ports:
-      - "8200:8200"
+      - "8082:8082"
     depends_on:
       - broker
-      
+
+  orbital-payload:
+    build: ./team-j-orbital-payload-ws
+    mem_limit: 160m
+    container_name: team-j-blue-galactic-orbital-payload
+    ports:
+      - "8055:8055"
+    depends_on:
+      - broker
+
+  payload:
+    build: ./team-j-payload-ws
+    mem_limit: 160m
+    container_name: team-j-blue-galactic-payload
+    ports:
+      - "8050:8050"
+    depends_on:
+      - broker
+
+  rocket:
+    build: ./team-j-rocket-ws
+    container_name: team-j-blue-galactic-rocket
+    mem_limit: 160m
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - mission-preparation
+      - booster
+      - broker
+
+  telemetry-reader:
+    build: ./team-j-telemetry-reader-ws
+    mem_limit: 160m
+    container_name: team-j-blue-galactic-telemetry-reader
+    ports:
+      - "8094:8094"
+    links:
+      - database
+
+  telemetry-writer:
+    build: ./team-j-telemetry-writer-ws
+    mem_limit: 160m
+    container_name: team-j-blue-galactic-telemetry-writer
+    ports:
+      - "8092:8092"
+    links:
+      - database
+    depends_on:
+      - broker
+
+  weather:
+    build: ./team-j-weather-ws
+    container_name: team-j-blue-galactic-weather
+    mem_limit: 160m
+    ports:
+      - "8060:8060"
+
+  database:
+    image: mongo:latest
+    volumes:
+      - ./database:/data
+    container_name: team-j-blue-galactic-database
+    ports:
+      - 27017:27017
+
   # KAFKA
   zookeeper:
     image: confluentinc/cp-zookeeper:6.0.0
