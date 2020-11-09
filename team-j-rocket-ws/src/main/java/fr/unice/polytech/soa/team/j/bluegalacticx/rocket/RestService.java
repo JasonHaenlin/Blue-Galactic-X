@@ -32,7 +32,7 @@ public class RestService {
         return webClientMission.get().uri("/destination/" + id).retrieve().bodyToMono(SpaceCoordinate.class);
     }
 
-    public Mono<String> getAvailableRocketID() {
+    public Mono<String> getAvailableBoosterID() {
         return webClientBooster.get().uri("/available").retrieve().bodyToMono(String.class);
     }
 }

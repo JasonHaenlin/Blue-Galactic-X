@@ -52,7 +52,7 @@ public class RocketRPCService extends RocketImplBase {
             service.getCoordinatesFromMission(request.getMissionId()).subscribe(coor -> {
                 r.setMissionObjective(coor);
             });
-            service.getAvailableRocketID().subscribe(id -> {
+            service.getAvailableBoosterID().subscribe(id -> {
                 r.setBoosterId(id);
                 rocketProducer.readyToLaunchRocketEvent(r.getId(), r.getBoosterId());
 

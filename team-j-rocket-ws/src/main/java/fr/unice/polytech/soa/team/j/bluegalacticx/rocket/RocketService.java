@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class RocketService {
             throw new CannotBeNullException("rocket");
         }
         rocket.withBaseTelemetry().initStatus();
+        rocket.setId(UUID.randomUUID().toString());
         rockets.add(rocket);
         return rocket;
     }
