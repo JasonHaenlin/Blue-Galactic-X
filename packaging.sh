@@ -12,9 +12,7 @@ cd "$parent_path"
 
 if [[ $# -eq 0 ]]; then
     printf "${mag}No module selected...${end}\n"
-    printf "${blu}rocket, booster, mission, payload, weather${end}\n"
-    printf "${blu}telemetry-writer, telemetry-reader, missionlogwriter, missionlogreader${end}\n"
-    printf "${blu}anomaly, module-destroyer, orbital-payload${end}\n"
+    ls -d * | grep "team-j-.*-ws" | cut -c8- | sed 's/.\{3\}$//'
     printf "${mag}Building all${end}\n"
     ls -d * | grep "team-j-.*-ws" | while read line ; do
         printf "${mag}build${end} ${blu}${line}${end} ... \t"
