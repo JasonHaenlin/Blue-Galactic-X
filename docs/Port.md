@@ -7,6 +7,7 @@
 | 8030  | REST              | Booster            |
 | 8031  | gRPC              | Booster            |
 | 8050  | REST              | payload            |
+| 8055  | REST              | Orbital Payload    |
 | 8060  | REST              | Weather            |
 | 8070  | REST              | Mission            |
 | 8080  | REST              | Rocket             |
