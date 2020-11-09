@@ -26,6 +26,8 @@
         <module>team-j-anomaly-ws</module>
         <module>team-j-missionlogwriter-ws</module>
         <module>team-j-missionlogreader-ws</module>
+        <module>team-j-mission-preparation-ws</module>
+        <module>team-j-orbital-payload-ws</module>
     </modules>
 
     <properties>
