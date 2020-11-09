@@ -17,10 +17,16 @@ public class RocketStatusProducer {
     @Autowired
     private KafkaTemplate<String, RocketStatusRequest> kafkaTemplate;
 
-    public void launchRocketEvent(String rocketId) {
-        RocketStatusRequest req = RocketStatusRequest.newBuilder().setRocketId(rocketId)
-                .setEventType(EventType.IN_SERVICE).build();
+    public void readyToLaunchRocketEvent(String rocketId,String boosterId) {
+        RocketStatusRequest req = RocketStatusRequest.newBuilder().setRocketId(rocketId).setBoosterId(boosterId)
+                .setEventType(EventType.READY_FOR_LAUNCH).build();
 
+        kafkaTemplate.send(RocketStatusTopic0, req);
+    }
+
+    public void launchRocketEvent(String rocketId,String boosterId) {
+        RocketStatusRequest req = RocketStatusRequest.newBuilder().setRocketId(rocketId).setBoosterId(boosterId)
+                .setEventType(EventType.IN_SERVICE).build();
         kafkaTemplate.send(RocketStatusTopic0, req);
     }
 

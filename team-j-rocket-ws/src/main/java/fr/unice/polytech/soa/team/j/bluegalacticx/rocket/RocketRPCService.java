@@ -48,17 +48,27 @@ public class RocketRPCService extends RocketImplBase {
         String rId = request.getRocketId();
         try {
             Rocket r = rocketService.retrieveRocket(rId);
+            r.readyToLaunchActivated();
             service.getCoordinatesFromMission(request.getMissionId()).subscribe(coor -> {
                 r.setMissionObjective(coor);
             });
             service.getAvailableRocketID().subscribe(id -> {
                 r.setBoosterId(id);
+                rocketProducer.readyToLaunchRocketEvent(r.getId(), r.getBoosterId());
+
             });
-            rocketProducer.launchRocketEvent(r.getId());
+            service.getAvailableRocketID().subscribe(id -> {
+                r.setBoosterId2(id);
+                rocketProducer.readyToLaunchRocketEvent(r.getId(), r.getBoosterId2());
+                
+
+            });
             responseObserver.onNext(null);
             responseObserver.onCompleted();
         } catch (RocketDoesNotExistException e) {
             responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        } catch (NoSameStatusException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         }
     }
 
@@ -84,15 +94,13 @@ public class RocketRPCService extends RocketImplBase {
     public void launchOrderRocket(LaunchOrderRequest request, StreamObserver<LaunchOrderReply> responseObserver) {
         try {
             Rocket r = rocketService.retrieveRocket(request.getRocketId());
-
             String message = "";
             if (request.getLaunchRocket()) {
+                r.launchSequenceActivated();
                 r.prepareLaunch();
                 message = "Launch approved !";
-                r.launchSequenceActivated();
-                rocketProducer.launchRocketEvent(r.getId());
+                rocketProducer.launchRocketEvent(r.getId(), r.getBoosterId());
             }
-
             LaunchOrderReply launchOrderReply = LaunchOrderReply.newBuilder().setReply(message).build();
             responseObserver.onNext(launchOrderReply);
             responseObserver.onCompleted();

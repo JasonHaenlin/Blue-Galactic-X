@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,13 +31,14 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinat
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.MaxQProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.RocketScheduler;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.ScheduledConfig;
 
 @SpringJUnitConfig(value = { ScheduledConfig.class, RocketApi.class, RocketService.class, RestTemplate.class,
-        RocketStatusProducer.class, TelemetryRocketProducer.class, DepartmentStatusProducer.class })
+        RocketStatusProducer.class, TelemetryRocketProducer.class, DepartmentStatusProducer.class,MaxQProducer.class })
 @Tags(value = { @Tag("scheduler"), @Tag("scheduler-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +58,9 @@ public class RocketSchedulerTest {
 
     @MockBean
     private RocketStatusProducer rocketStatusProducer;
+
+    @MockBean 
+    private MaxQProducer maxQProducer;
 
     private int numberIterations = 10;
     private Rocket rocket;

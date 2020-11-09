@@ -18,11 +18,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.MaxQProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 
 @AutoConfigureMockMvc
 @WebMvcTest
-@ContextConfiguration(classes = { RocketController.class, RocketService.class, DepartmentStatusProducer.class,
+@ContextConfiguration(classes = { RocketController.class, RocketService.class, DepartmentStatusProducer.class,MaxQProducer.class,
         RocketStatusProducer.class })
 @Tags(value = { @Tag("mvc"), @Tag("mvc-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
@@ -36,6 +37,9 @@ public class RocketControllerTest {
 
     @MockBean
     private RocketStatusProducer rocketStatusProducer;
+
+    @MockBean 
+    private MaxQProducer maxQProducer;
 
     @Test
     @Order(1)

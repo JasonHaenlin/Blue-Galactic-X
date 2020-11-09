@@ -16,6 +16,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.Roc
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.MaxQProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
 
 @Service
@@ -27,6 +28,8 @@ public class RocketService {
     @Autowired
     private RocketStatusProducer rocketProducer;
 
+    @Autowired 
+    private MaxQProducer maxQProducer;
     private List<Rocket> rockets = new ArrayList<>();
 
     public void addNewRocket(Rocket rocket) throws CannotBeNullException {
@@ -46,9 +49,11 @@ public class RocketService {
                 if (r.checkRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
                     r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
                     r.updateSpeed(SpeedChange.DECREASE);
+                    maxQProducer.sendInMaxQ(r.getBoosterId());
                 } else if (!r.checkRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
                     r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
                     r.updateSpeed(SpeedChange.INCREASE);
+                    maxQProducer.sendInMaxQ(r.getBoosterId());
                 }
 
                 if (st.getDistance() <= 0 && r.getStatus() != RocketStatus.ARRIVED) {
