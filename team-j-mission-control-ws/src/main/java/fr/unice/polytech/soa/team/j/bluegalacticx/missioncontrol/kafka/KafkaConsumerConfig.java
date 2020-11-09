@@ -63,7 +63,7 @@ public class KafkaConsumerConfig {
 
     public ConsumerFactory<String, PayloadStatusRequest> consumerPayloadStatusFactory() {
         Map<String, Object> props = baseConfig();
-        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, RocketStatusRequest.class.getName());
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, PayloadStatusRequest.class.getName());
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -76,7 +76,7 @@ public class KafkaConsumerConfig {
 
     public ConsumerFactory<String, BoosterStatusRequest> consumerBoosterStatusFactory() {
         Map<String, Object> props = baseConfig();
-        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, RocketStatusRequest.class.getName());
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, BoosterStatusRequest.class.getName());
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
