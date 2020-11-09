@@ -49,14 +49,14 @@ public class MissionPreparationService {
     }
 
     public DepartmentGoNg retrieveGoNogoStatus(String id) throws MissionDoesNotExistException {
-        return findMissionOrThrow(id).getGoNogos();
+        return findMissionOrThrow(id).getGoNg();
     }
 
     public DepartmentGoNg makeGoNogo(Boolean gonogo, String id) throws MissionDoesNotExistException {
         Mission m = findMissionOrThrow(id);
         m.updateGoNogo(Department.MISSION, gonogo);
         departmentStatusProducer.notifyDepartmentStatus(m.getRocketId(), gonogo);
-        return m.getGoNogos();
+        return m.getGoNg();
     }
 
     public void updateMissionGoNogo(Department department, boolean status, String id)
