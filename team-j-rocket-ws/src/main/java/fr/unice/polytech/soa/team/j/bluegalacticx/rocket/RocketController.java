@@ -40,9 +40,9 @@ public class RocketController {
     }
 
     @PostMapping()
-    public void createRocket(@RequestBody Rocket rocket) {
+    public Rocket createRocket(@RequestBody Rocket rocket) {
         try {
-            service.addNewRocket(rocket);
+            return service.addNewRocket(rocket);
         } catch (CannotBeNullException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
