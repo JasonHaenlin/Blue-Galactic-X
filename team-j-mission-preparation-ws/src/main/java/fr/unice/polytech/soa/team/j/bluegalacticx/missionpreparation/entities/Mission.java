@@ -104,7 +104,7 @@ public class Mission {
         this.goNg.updateGoNogo(department, status);
     }
 
-    public DepartmentGoNg getGoNogos() {
+    public DepartmentGoNg getGoNg() {
         return goNg;
     }
 
@@ -151,7 +151,7 @@ public class Mission {
     public String toString() {
         return "{" + " id='" + getId() + "'" + ", rocketId='" + getRocketId() + "'" + ", boosterId='" + getBoosterIds()
                 + "'" + ", payloadId='" + getPayloadId() + "'" + ", destination='" + getDestination() + "'" + ", goNg='"
-                + getGoNogos() + "'" + ", date='" + getDate() + "'" + "}";
+                + getGoNg() + "'" + ", date='" + getDate() + "'" + "}"; 
     }
 
 }
