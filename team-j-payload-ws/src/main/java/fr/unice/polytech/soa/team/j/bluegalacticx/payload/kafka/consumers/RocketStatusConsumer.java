@@ -5,8 +5,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.PayloadService;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.PayloadNotFoundException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.RocketStatusRequest;
 
 @Service

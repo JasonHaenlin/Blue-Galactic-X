@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest.EventType;
 
 @Service
 public class PayloadStatusProducer {
@@ -17,9 +17,9 @@ public class PayloadStatusProducer {
     @Autowired
     private KafkaTemplate<String, PayloadStatusRequest> kafkaTemplate;
 
-    public void notifyDeployedPayloadEvent(String payloadId, String rocketId, String missionId) {
-        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setRocketId(rocketId).setMissionId(missionId)
-                .setEventType(EventType.DELIVERED).build();
+    public void notifyDeployedPayloadEvent(String payloadId, String missionId) {
+        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setMissionId(missionId)
+                .setEventType(PayloadStatus.IN_ROLLOUT).build();
 
         kafkaTemplate.send(statusTopic0, req);
     }

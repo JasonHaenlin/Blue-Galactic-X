@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Log {
-    
+
     private String text;
     private Date date;
 
@@ -55,11 +55,7 @@ public class Log {
 
     @Override
     public String toString() {
-        return "{" +
-            " text='" + getText() + "'" +
-            ", date='" + getDate() + "'" +
-            "}";
+        return "{" + " text='" + getText() + "'" + ", date='" + getDate() + "'" + "}";
     }
-    
 
 }

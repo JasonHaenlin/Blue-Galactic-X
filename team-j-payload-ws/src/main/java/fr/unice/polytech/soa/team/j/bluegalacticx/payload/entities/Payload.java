@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
+
 public class Payload {
 
     private PayloadType type;
@@ -140,7 +142,7 @@ public class Payload {
             return false;
         }
         Payload payload = (Payload) o;
-        return Objects.equals(type, payload.type) && Objects.equals(rocketId, payload.rocketId) 
+        return Objects.equals(type, payload.type) && Objects.equals(rocketId, payload.rocketId)
                 && Objects.equals(missionId, payload.missionId)
                 && Objects.equals(status, payload.status) && Objects.equals(position, payload.position)
                 && weight == payload.weight && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
