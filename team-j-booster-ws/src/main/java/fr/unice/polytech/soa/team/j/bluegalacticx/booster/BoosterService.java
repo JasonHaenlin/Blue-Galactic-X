@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTeleme
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterNotAvailableException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.CannotBeNullException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterLandingStepProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 
@@ -28,19 +28,17 @@ public class BoosterService {
     @Autowired
     private BoosterStatusProducer boosterStatusProducer;
 
-    @Autowired
-    private BoosterLandingStepProducer boosterLandingStepProducer;
-
-    public void addNewBooster(Booster booster) throws CannotBeNullException {
+    public Booster addNewBooster(Booster booster) throws CannotBeNullException {
         if (booster == null) {
             throw new CannotBeNullException("Booster");
         }
         booster.initTelemetry().initStatus();
+        booster.setId(UUID.randomUUID().toString());
         boosters.add(booster);
+        return booster;
     }
 
-    public void updateBoosterState(String boosterId, BoosterStatus boosterStatus)
-            throws BoosterDoesNotExistException {
+    public void updateBoosterState(String boosterId, BoosterStatus boosterStatus) throws BoosterDoesNotExistException {
         retrieveBooster(boosterId).setStatus(boosterStatus);
     }
 
@@ -66,13 +64,13 @@ public class BoosterService {
         }
     }
 
-
     public void updateAllBoostersState() {
         for (Booster b : boosters) {
             BoosterLandingStep step = b.getLandingStep();
             b.updateState();
-            if(step != b.getLandingStep()){
-                boosterLandingStepProducer.notifyBoosterLandingStepChanged(b.getId(), b.getMissionId(), b.getLandingStep());
+            if (step != b.getLandingStep()) {
+                boosterLandingStepProducer.notifyBoosterLandingStepChanged(b.getId(), b.getMissionId(),
+                        b.getLandingStep());
             }
         }
     }
