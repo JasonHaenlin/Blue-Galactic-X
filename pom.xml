@@ -21,12 +21,12 @@
 		<module>team-j-module-destroyer-ws</module>
         <module>team-j-rocket-ws</module>
         <module>team-j-payload-ws</module>
-        <module>team-j-mission-ws</module>
         <module>team-j-booster-ws</module>
         <module>team-j-anomaly-ws</module>
         <module>team-j-missionlogwriter-ws</module>
         <module>team-j-missionlogreader-ws</module>
         <module>team-j-mission-preparation-ws</module>
+        <module>team-j-mission-control-ws</module>
         <module>team-j-orbital-payload-ws</module>
     </modules>
 
