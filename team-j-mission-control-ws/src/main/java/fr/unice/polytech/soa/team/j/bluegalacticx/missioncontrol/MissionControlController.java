@@ -21,15 +21,6 @@ public class MissionControlController {
     @Autowired
     private MissionControlService missionControlService;
 
-    @PostMapping("/{missionId}/status")
-    public Mission setMissionStatus(@RequestBody MissionStatus missionStatus, @PathVariable String missionId) {
-        try {
-            return missionControlService.setMissionStatus(missionStatus, missionId);
-        } catch (MissionDoesNotExistException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    }
-
     @GetMapping("/{missionId}")
     public Mission retrieveMission(@PathVariable String missionId) {
         try {
