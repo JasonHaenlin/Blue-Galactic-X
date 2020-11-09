@@ -16,13 +16,13 @@ services:
       - "8080:8080"
       - "8081:8081"
     depends_on:
-      - mission
+      - mission-preparation
       - booster
       - broker
 
-  mission:
-    build: ./team-j-mission-ws
-    container_name: team-j-blue-galactic-mission
+  mission-preparation:
+    build: ./team-j-mission-preparation-ws
+    container_name: team-j-blue-galactic-mission-preparation
     mem_limit: 160m
     ports:
       - "8070:8070"
@@ -155,6 +155,8 @@ services:
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.payload-status.0 \
       && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.booster-status.0 \
+      && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.department-status.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-booster.0 \
@@ -162,6 +164,8 @@ services:
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-rocket.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.telemetry-payload.0 \
+      && \
+      kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.mission-preparation.0 \
       && \
       kafka-topics --create --if-not-exists --zookeeper zookeeper:9091 --partitions 1 --replication-factor 1 --topic teamj.new-payload.0 \
       '"
