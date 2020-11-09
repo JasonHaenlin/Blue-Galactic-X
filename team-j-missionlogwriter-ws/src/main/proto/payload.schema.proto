@@ -6,14 +6,15 @@ option java_multiple_files = true;
 option java_package =
     "fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.proto";
 
+enum PayloadStatus {
+  WAITING_FOR_MISSION = 0; ON_MISSION = 1; DESTROYED = 2; DELIVERED = 3;
+  NOT_DELIVERED = 4;
+  IN_ROLLOUT = 5;
+}
+
 message PayloadStatusRequest {
-  enum EventType {
-    WAITING_FOR_MISSION = 0; ON_MISSION = 1; DESTROYED = 2; DELIVERED = 3;
-    NOT_DELIVERED = 4;
-    IN_ROLLOUT = 5;
-  }
-  EventType eventType = 1;
+  PayloadStatus eventType = 1;
   string payloadId = 2;
-  string rocketId = 3;
-  string missionId = 4;
+  string missionId = 3;
+  string rocketId = 4;
 }
