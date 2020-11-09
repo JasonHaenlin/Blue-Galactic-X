@@ -30,7 +30,7 @@ public class RocketStatusConsumer {
                     payloadService.updatePayloadFromRocketState(PayloadStatus.NOT_DELIVERED, id);
                     break;
                 case DONED:
-                    payloadService.updatePayloadFromRocketState(PayloadStatus.DELIVERED, id);
+                    payloadService.updatePayloadFromRocketState(PayloadStatus.IN_ROLLOUT, id);
                     break;
                 default:
                     // DO NOT PROCEED NOT WANTED EVENTS
