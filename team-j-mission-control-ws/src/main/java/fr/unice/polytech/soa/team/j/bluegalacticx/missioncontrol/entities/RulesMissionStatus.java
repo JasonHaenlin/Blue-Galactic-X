@@ -18,7 +18,9 @@ public class RulesMissionStatus {
     }
 
     public void updateMissionStatus(Mission mission) {
-        if (boosterStatus == BoosterStatus.LANDED && payloadStatus == PayloadStatus.DELIVERED
+        if(rocketStatus == RocketStatus.DAMAGED){
+            mission.setStatus(MissionStatus.ABORTED);
+        }else if (boosterStatus == BoosterStatus.LANDED && payloadStatus == PayloadStatus.DELIVERED
                 && rocketStatus == RocketStatus.ARRIVED) {
             mission.setStatus(MissionStatus.SUCCESSFUL);
         } else if (boosterStatus == BoosterStatus.PENDING && payloadStatus == PayloadStatus.WAITING_FOR_MISSION
@@ -32,8 +34,6 @@ public class RulesMissionStatus {
             mission.setStatus(MissionStatus.STARTED);
         } else if (boosterStatus == BoosterStatus.READY && rocketStatus == RocketStatus.READY_FOR_LAUNCH) {
             mission.setStatus(MissionStatus.READY);
-        } else {
-            mission.setStatus(MissionStatus.ABORTED);
         }
     }
 

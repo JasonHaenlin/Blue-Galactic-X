@@ -10,25 +10,26 @@ public class Mission {
     private String id;
     private String rocketId;
     private String payloadId;
-    private String boosterId;
+    private String[] boosterIds;
     private SpaceCoordinate destination;
     private RulesMissionStatus rulesMissionStatus;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
     private MissionStatus status;
 
+
     public Mission() {
-        this.rulesMissionStatus = new RulesMissionStatus();
+        boosterIds = new String[2];
+        rulesMissionStatus = new RulesMissionStatus();
     }
 
-    public Mission(String id, String rocketId, String payloadId, String boosterId, SpaceCoordinate destination,
-            Date date, MissionStatus status) {
+    public Mission(String id, String rocketId, String payloadId, String[] boosterIds, SpaceCoordinate destination, RulesMissionStatus rulesMissionStatus, Date date, MissionStatus status) {
         this.id = id;
-        this.rulesMissionStatus = new RulesMissionStatus();
         this.rocketId = rocketId;
         this.payloadId = payloadId;
-        this.boosterId = boosterId;
+        this.boosterIds = boosterIds;
         this.destination = destination;
+        this.rulesMissionStatus = rulesMissionStatus;
         this.date = date;
         this.status = status;
     }
@@ -41,6 +42,14 @@ public class Mission {
         this.id = id;
     }
 
+    public String retrieveBoosterId(String id){
+        for(int i =0;i<boosterIds.length-1;i++){
+            if(id.equals(boosterIds[i])){
+                return boosterIds[i];
+            }
+        }
+        return null;
+    }
     public String getRocketId() {
         return this.rocketId;
     }
@@ -57,12 +66,12 @@ public class Mission {
         this.payloadId = payloadId;
     }
 
-    public String getBoosterId() {
-        return this.boosterId;
+    public String[] getBoosterIds() {
+        return this.boosterIds;
     }
 
-    public void setBoosterId(String boosterId) {
-        this.boosterId = boosterId;
+    public void setBoosterIds(String[] boosterIds) {
+        this.boosterIds = boosterIds;
     }
 
     public SpaceCoordinate getDestination() {
@@ -73,26 +82,12 @@ public class Mission {
         this.destination = destination;
     }
 
-    public void addBoosterStatusToRules(BoosterStatus boosterStatus) {
-        rulesMissionStatus.setBoosterStatus(boosterStatus);
+    public RulesMissionStatus getRulesMissionStatus() {
+        return this.rulesMissionStatus;
     }
 
-    public void addPayloadStatusToRules(PayloadStatus payloadStatus) {
-        rulesMissionStatus.setPayloadStatus(payloadStatus);
-    }
-
-    public void addRocketStatusToRules(RocketStatus rocketStatus) {
-        rulesMissionStatus.setRocketStatus(rocketStatus);
-    }
-
-    public boolean updateMissionStatus() {
-        boolean isMissionStatusUpdatable = rulesMissionStatus.getBoosterStatus() != null
-                && rulesMissionStatus.getRocketStatus() != null && rulesMissionStatus.getPayloadStatus() != null;
-        if (isMissionStatusUpdatable) {
-            rulesMissionStatus.updateMissionStatus(this);
-            return true;
-        }
-        return false;
+    public void setRulesMissionStatus(RulesMissionStatus rulesMissionStatus) {
+        this.rulesMissionStatus = rulesMissionStatus;
     }
 
     public Date getDate() {
@@ -126,13 +121,18 @@ public class Mission {
         return this;
     }
 
-    public Mission boosterId(String boosterId) {
-        this.boosterId = boosterId;
+    public Mission boosterIds(String[] boosterIds) {
+        this.boosterIds = boosterIds;
         return this;
     }
 
     public Mission destination(SpaceCoordinate destination) {
         this.destination = destination;
+        return this;
+    }
+
+    public Mission rulesMissionStatus(RulesMissionStatus rulesMissionStatus) {
+        this.rulesMissionStatus = rulesMissionStatus;
         return this;
     }
 
@@ -154,22 +154,51 @@ public class Mission {
             return false;
         }
         Mission mission = (Mission) o;
-        return Objects.equals(id, mission.id) && Objects.equals(rocketId, mission.rocketId)
-                && Objects.equals(payloadId, mission.payloadId) && Objects.equals(boosterId, mission.boosterId)
-                && Objects.equals(destination, mission.destination) && Objects.equals(date, mission.date)
-                && Objects.equals(status, mission.status);
+        return Objects.equals(id, mission.id) && Objects.equals(rocketId, mission.rocketId) && Objects.equals(payloadId, mission.payloadId) && Objects.equals(boosterIds, mission.boosterIds) && Objects.equals(destination, mission.destination) && Objects.equals(rulesMissionStatus, mission.rulesMissionStatus) && Objects.equals(date, mission.date) && Objects.equals(status, mission.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, rocketId, payloadId, boosterId, destination, date, status);
+        return Objects.hash(id, rocketId, payloadId, boosterIds, destination, rulesMissionStatus, date, status);
     }
 
     @Override
     public String toString() {
-        return "{" + " id='" + getId() + "'" + ", rocketId='" + getRocketId() + "'" + ", payloadId='" + getPayloadId()
-                + "'" + ", boosterId='" + getBoosterId() + "'" + ", destination='" + getDestination() + "'" + ", date='"
-                + getDate() + "'" + ", status='" + getStatus() + "'" + "}";
+        return "{" +
+            " id='" + getId() + "'" +
+            ", rocketId='" + getRocketId() + "'" +
+            ", payloadId='" + getPayloadId() + "'" +
+            ", boosterIds='" + getBoosterIds() + "'" +
+            ", destination='" + getDestination() + "'" +
+            ", rulesMissionStatus='" + getRulesMissionStatus() + "'" +
+            ", date='" + getDate() + "'" +
+            ", status='" + getStatus() + "'" +
+            "}";
     }
+   
+
+    public void addBoosterStatusToRules(BoosterStatus boosterStatus) {
+        rulesMissionStatus.setBoosterStatus(boosterStatus);
+    }
+
+    public void addPayloadStatusToRules(PayloadStatus payloadStatus) {
+        rulesMissionStatus.setPayloadStatus(payloadStatus);
+    }
+
+    public void addRocketStatusToRules(RocketStatus rocketStatus) {
+        rulesMissionStatus.setRocketStatus(rocketStatus);
+    }
+
+    public boolean updateMissionStatus() {
+        boolean isMissionStatusUpdatable = rulesMissionStatus.getBoosterStatus() != null
+                && rulesMissionStatus.getRocketStatus() != null && rulesMissionStatus.getPayloadStatus() != null;
+        if (isMissionStatusUpdatable) {
+            rulesMissionStatus.updateMissionStatus(this);
+            return true;
+        }
+        return false;
+    }
+
+    
 
 }

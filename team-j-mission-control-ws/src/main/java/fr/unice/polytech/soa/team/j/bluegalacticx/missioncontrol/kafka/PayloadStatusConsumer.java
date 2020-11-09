@@ -5,7 +5,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.MissionControlService;
-import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.entities.MissionStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.exceptions.PayloadDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatusRequest;

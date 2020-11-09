@@ -21,23 +21,14 @@ public class MissionPreparationConsumer {
     private MissionControlService missionControlService;
 
     @KafkaListener(topics = "${kafka.topics.missionpreparation}", groupId = "${kafka.group.default}", containerFactory = "missionPreparationKafkaListenerContainerFactory")
-    public void missionPreparationEvent(MissionPreparationRequest missionRequest) throws ParseException {
+    public void newMissionEvent(MissionPreparationRequest missionRequest) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
         Mission mission = new Mission().id(missionRequest.getId()).rocketId(missionRequest.getRocketId())
-                .boosterId(missionRequest.getBoosterId()).payloadId(missionRequest.getPayloadId())
-                .date(formatter.parse(missionRequest.getDate()))
+                .boosterIds(new String[] { missionRequest.getBoosterId1(), missionRequest.getBoosterId2()})
+                .payloadId(missionRequest.getPayloadId()).date(formatter.parse(missionRequest.getDate()))
                 .destination(new SpaceCoordinate(missionRequest.getDestination().getX(),
                         missionRequest.getDestination().getY(), missionRequest.getDestination().getZ()));
-        switch (missionRequest.getEventType()) {
-            case PENDING:
-                mission.setStatus(MissionStatus.PENDING);
-                break;
-            case READY:
-                mission.setStatus(MissionStatus.READY);
-                break;
-            default:
-                break;
-        }
+        mission.setStatus(MissionStatus.PENDING);
         missionControlService.storeMission(mission);
     }
 

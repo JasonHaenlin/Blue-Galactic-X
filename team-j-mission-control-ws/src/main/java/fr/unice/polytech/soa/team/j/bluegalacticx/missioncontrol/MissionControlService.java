@@ -82,19 +82,19 @@ public class MissionControlService {
     }
 
     private Optional<Mission> find(String id) {
-        return missions.stream().filter(r -> r.getId().equals(id)).findFirst();
+        return missions.stream().filter(m -> m.getId().equals(id)).findFirst();
     }
 
     public Optional<Mission> findByRocketId(String id) {
-        return missions.stream().filter(r -> r.getRocketId().equals(id)).findFirst();
+        return missions.stream().filter(m -> m.getRocketId().equals(id)).findFirst();
     }
 
     public Optional<Mission> findByBoosterId(String id) {
-        return missions.stream().filter(r -> r.getBoosterId().equals(id)).findFirst();
+        return missions.stream().filter(m -> m.retrieveBoosterId(id).equals(id)).findFirst();
     }
 
     public Optional<Mission> findByPayloadId(String id) {
-        return missions.stream().filter(r -> r.getPayloadId().equals(id)).findFirst();
+        return missions.stream().filter(m -> m.getPayloadId().equals(id)).findFirst();
     }
 
 }

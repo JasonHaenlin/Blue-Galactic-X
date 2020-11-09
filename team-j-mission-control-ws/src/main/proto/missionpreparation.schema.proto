@@ -7,20 +7,17 @@ option java_package =
     "fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.proto";
 
 message MissionPreparationRequest {
-  enum EventType {
-    PENDING=0; READY=1; STARTED=2; SUCCESSFUL=3; FAILED=4; ABORTED=5;
-  }
-  EventType eventType = 1;
   string id=2;
   string rocketId = 3;
-  string boosterId=4;
-  string payloadId=5;
+  string boosterId1=4;
+  string boosterId2=5;
+  string payloadId=6;
   message Destination{
-      int32 x=6;
-      int32 y=7;
-      int32 z=8;
+      int32 x=7;
+      int32 y=8;
+      int32 z=9;
   }
   
-  Destination destination = 9;
-  string date=10;
+  Destination destination = 10;
+  string date=11;
 }

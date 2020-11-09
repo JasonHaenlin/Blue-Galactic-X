@@ -16,7 +16,7 @@ public class BoosterStatusConsumer {
     private MissionControlService missionControlService;
 
     @KafkaListener(topics = "${kafka.topics.boosterstatus}", groupId = "${kafka.group.default}", containerFactory = "boosterStatusKafkaListenerContainerFactory")
-    public void rocketStatusEvent(BoosterStatusRequest request) {
+    public void boosterStatusEvent(BoosterStatusRequest request) {
         String id = request.getBoosterId();
         try {
             switch (request.getEventType()) {
