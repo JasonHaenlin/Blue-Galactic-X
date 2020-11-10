@@ -44,6 +44,10 @@ public class PayloadService {
         payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), p.getMissionId());
     }
 
+    public Payload retrievePayloadFromRocket(String id) throws PayloadNotFoundException {
+        return retrievePayloadByRocketId(id);
+    }
+
     public Payload retrievePayload(String id) throws PayloadNotFoundException {
         return find(id).orElseThrow(() -> new PayloadNotFoundException());
     }

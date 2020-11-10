@@ -24,4 +24,11 @@ public class PayloadStatusProducer {
         kafkaTemplate.send(statusTopic0, req);
     }
 
+    public void notifyOnMissionPayloadEvent(String payloadId, String missionId) {
+        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setMissionId(missionId)
+                .setEventType(PayloadStatus.ON_MISSION).build();
+
+        kafkaTemplate.send(statusTopic0, req);
+    }
+
 }
