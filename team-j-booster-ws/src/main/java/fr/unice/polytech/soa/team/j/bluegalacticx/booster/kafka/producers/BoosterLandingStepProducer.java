@@ -19,10 +19,10 @@ public class BoosterLandingStepProducer {
     private KafkaTemplate<String, BoosterLandingStepRequest> kafkaTemplate;
 
     public void notifyBoosterLandingStepChanged(String boosterId, String missionId, BoosterLandingStep step) {
-       BoosterLandingStepRequest req = BoosterLandingStepRequest.newBuilder().setBoosterId(boosterId).setMissionId(missionId)
-               .setEventType(EventType.values()[step.ordinal()]).build();
+        BoosterLandingStepRequest req = BoosterLandingStepRequest.newBuilder().setBoosterId(boosterId)
+                .setMissionId(missionId).setEventType(EventType.values()[step.ordinal()]).build();
 
-       kafkaTemplate.send(landingStepTopic0, req);
+        kafkaTemplate.send(landingStepTopic0, req);
     }
 
 }
