@@ -26,6 +26,34 @@ public class BoosterRPCClient {
         this.stub = BoosterGrpc.newStub(channel);
     }
 
+    public void initiateLaunchSequence(String boosterId, double distanceFromEarth, double speed) {
+        BoosterRequest req = BoosterRequest.newBuilder()
+            .setBoosterId(boosterId)
+            .setDistanceFromEarth(distanceFromEarth)
+            .setSpeed(speed)
+            .build();
+        StreamObserver<Empty> responseObserver = new StreamObserver<Empty>() {
+            @Override
+            public void onNext(Empty value) {
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                LOG.error("Could not init launch sequence : " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                LOG.info("Launch sequence started");
+            }
+        };
+        Context ctx = Context.current().fork();
+        ctx.run(() -> {
+            stub.initiateLandingSequence(req, responseObserver);
+        });
+    }
+
+
     public void initiateLandingSequence(String boosterId, double distanceFromEarth, double speed) {
         BoosterRequest req = BoosterRequest.newBuilder()
             .setBoosterId(boosterId)

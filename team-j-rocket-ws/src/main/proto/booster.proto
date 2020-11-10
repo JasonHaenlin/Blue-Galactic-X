@@ -9,6 +9,8 @@ option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto"
 
 service Booster {
   rpc initiateLandingSequence(BoosterRequest) returns (google.protobuf.Empty) {}
+  
+  rpc initiateLaunchSequence(BoosterRequest) returns (google.protobuf.Empty) {}
 }
 
 message BoosterRequest {

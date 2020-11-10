@@ -38,3 +38,4 @@ kafka:
     rocketstatus: teamj.rocket-status.0
     departmentstatus: teamj.department-status.0
     telemetryrocket: teamj.telemetry-rocket.0
+    maxq: teamj.maxq.0

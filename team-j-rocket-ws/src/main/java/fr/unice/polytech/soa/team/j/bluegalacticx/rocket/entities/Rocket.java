@@ -14,6 +14,7 @@ public class Rocket {
     private RocketStatus status;
     private SpaceCoordinate objective;
     private String boosterId;
+    private String boosterId2;
     private RocketApi rocketApi;
     // Increase or decrease speed by 20% (maxQ)
     private static final double SPEED_UPDATE = 0.2;
@@ -36,6 +37,20 @@ public class Rocket {
         return this;
     }
 
+    public Rocket boosterId2(String boosterId2){
+        this.boosterId2=boosterId2;
+        return this;
+    }
+
+    public String getBoosterId2(){
+        return boosterId2;
+    }
+
+    
+    public void setBoosterId2(String boosterId2){
+        this.boosterId2 =  boosterId2;
+    }
+
     public String getId() {
         return id;
     }
@@ -53,6 +68,9 @@ public class Rocket {
         return boosterId;
     }
 
+    public void setStatus(RocketStatus rocketStatus){
+        this.status=rocketStatus;
+    }
     public boolean checkRocketInMaxQ() {
         SpaceTelemetry telemetry = rocketApi.getAirTelemetry();
         if (telemetry.getDistance() <= telemetry.getTotalDistance() - MaxQ.MIN
@@ -137,7 +155,13 @@ public class Rocket {
         }
         this.status = RocketStatus.IN_SERVICE;
     }
-
+    public void readyToLaunchActivated() throws NoSameStatusException {
+        if (status == RocketStatus.READY_FOR_LAUNCH) {
+            throw new NoSameStatusException(status.toString());
+        }
+        
+        this.status = RocketStatus.READY_FOR_LAUNCH;
+    }
     public void initiateTheSelfDestructSequence() throws RocketDestroyedException {
         if (status == RocketStatus.DESTROYED) {
             throw new RocketDestroyedException();
