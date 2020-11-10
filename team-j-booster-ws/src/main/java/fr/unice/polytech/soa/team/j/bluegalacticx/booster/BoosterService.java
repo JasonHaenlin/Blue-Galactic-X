@@ -14,6 +14,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTeleme
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterNotAvailableException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterLandingStepProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 
@@ -28,6 +29,9 @@ public class BoosterService {
     @Autowired
     private BoosterStatusProducer boosterStatusProducer;
 
+    @Autowired
+    private BoosterLandingStepProducer boosterLandingStepProducer;
+
     public Booster addNewBooster(Booster booster) throws CannotBeNullException {
         if (booster == null) {
             throw new CannotBeNullException("Booster");
@@ -35,6 +39,7 @@ public class BoosterService {
         booster.initTelemetry().initStatus();
         booster.setId(UUID.randomUUID().toString());
         boosters.add(booster);
+        boosterStatusProducer.notifyBoosterPending(booster.getId());
         return booster;
     }
 
