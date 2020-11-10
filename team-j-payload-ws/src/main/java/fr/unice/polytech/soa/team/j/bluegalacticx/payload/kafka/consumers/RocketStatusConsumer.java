@@ -28,7 +28,6 @@ public class RocketStatusConsumer {
                 case IN_SERVICE:
                     payloadService.updatePayloadFromRocketState(PayloadStatus.ON_MISSION, id);
                     Payload p = payloadService.retrievePayloadByRocketId(id);
-                    p.setStatus(PayloadStatus.ON_MISSION);
                     payloadStatusProducer.notifyOnMissionPayloadEvent(p.getId(), p.getMissionId());
 
                     break;
