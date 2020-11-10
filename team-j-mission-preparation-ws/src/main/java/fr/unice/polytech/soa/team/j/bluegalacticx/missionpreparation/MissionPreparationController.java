@@ -19,7 +19,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.exceptions.
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.exceptions.MissionDoesNotExistException;
 
 @RestController
-@RequestMapping("/missionPreparation")
+@RequestMapping("/mission-preparation")
 public class MissionPreparationController {
 
     @Autowired

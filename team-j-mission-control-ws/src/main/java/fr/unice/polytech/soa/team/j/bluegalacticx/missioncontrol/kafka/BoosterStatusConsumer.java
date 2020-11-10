@@ -20,27 +20,24 @@ public class BoosterStatusConsumer {
         String id = request.getBoosterId();
         try {
             switch (request.getEventType()) {
-                case PENDING:
-                    missionControlService.storeBoosterStatus(id, BoosterStatus.PENDING);
-                    break;
-                case READY:
-                    missionControlService.storeBoosterStatus(id, BoosterStatus.READY);
-                    break;
                 case RUNNING:
                     missionControlService.storeBoosterStatus(id, BoosterStatus.RUNNING);
+                    missionControlService.updateMissionFromBoosterState(id);
                     break;
                 case DESTROYED:
                     missionControlService.storeBoosterStatus(id, BoosterStatus.DESTROYED);
+                    missionControlService.updateMissionFromBoosterState(id);
                     break;
                 case LANDED:
                     missionControlService.storeBoosterStatus(id, BoosterStatus.LANDED);
+                    missionControlService.updateMissionFromBoosterState(id);
                     break;
                 default:
                     // DO NOT PROCEED NOT WANTED EVENTS
                     break;
             }
+
             
-            missionControlService.updateMissionFromBoosterState(id);
         } catch (BoosterDoesNotExistException e) {
             // TODO : handle kafka exceptions
             e.printStackTrace();
