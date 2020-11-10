@@ -13,6 +13,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.proto.PayloadStatusRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.proto.BoosterLandingStepRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 
@@ -42,6 +43,15 @@ public class KafkaConsumerConfig {
         props.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG,
                 "http://" + schemaHost + ":" + schemaPort);
         return props;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, BoosterLandingStepRequest> boosterLandingStepKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, BoosterLandingStepRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, BoosterLandingStepRequest.class.getName());
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
+        return factory;
     }
 
     @Bean
