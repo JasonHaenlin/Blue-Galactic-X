@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.db.MissionLogRepository;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.entities.MissionLog;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.exceptions.MissionNotFoundException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.proto.PayloadStatusRequest;
 
 @Service
 public class MissionLogService {
@@ -14,9 +13,7 @@ public class MissionLogService {
     @Autowired
     private MissionLogRepository missionLogRepository;
 
-    public void createMissionLogData(PayloadStatusRequest payloadStatusData, String log)
-            throws MissionNotFoundException {
-        String missionId = payloadStatusData.getMissionId();
+    public void createMissionLogData(String missionId, String log) throws MissionNotFoundException {
         if (missionId == null) {
             throw new MissionNotFoundException();
         }
