@@ -24,4 +24,40 @@ public class BoosterStatusProducer {
         kafkaTemplate.send(statusTopic0, req);
     }
 
+    public void notifyBoosterPending(String boosterId) {
+        BoosterStatusRequest req = BoosterStatusRequest.newBuilder().setBoosterId(boosterId)
+                .setEventType(EventType.PENDING).build();
+
+        kafkaTemplate.send(statusTopic0, req);
+    }
+
+    public void notifyBoosterReady(String boosterId) {
+        BoosterStatusRequest req = BoosterStatusRequest.newBuilder().setBoosterId(boosterId)
+                .setEventType(EventType.READY).build();
+
+        kafkaTemplate.send(statusTopic0, req);
+    }
+
+    public void notifyBoosterRunning(String boosterId) {
+        BoosterStatusRequest req = BoosterStatusRequest.newBuilder().setBoosterId(boosterId)
+                .setEventType(EventType.RUNNING).build();
+
+        kafkaTemplate.send(statusTopic0, req);
+    }
+
+    public void notifyBoosterLanding(String boosterId) {
+        BoosterStatusRequest req = BoosterStatusRequest.newBuilder().setBoosterId(boosterId)
+                .setEventType(EventType.LANDING).build();
+
+        kafkaTemplate.send(statusTopic0, req);
+    }
+
+    public void notifyBoosterDroped(String boosterId) {
+        BoosterStatusRequest req = BoosterStatusRequest.newBuilder().setBoosterId(boosterId)
+                .setEventType(EventType.DROPED).build();
+
+        kafkaTemplate.send(statusTopic0, req);
+    }
+
+
 }

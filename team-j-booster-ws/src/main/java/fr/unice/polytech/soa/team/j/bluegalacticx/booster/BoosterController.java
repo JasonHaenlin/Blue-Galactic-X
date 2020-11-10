@@ -14,6 +14,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterNotAvailableException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 
 @RestController
 @RequestMapping("/booster")
@@ -21,6 +22,9 @@ public class BoosterController {
 
     @Autowired
     private BoosterService boosterService;
+
+    @Autowired
+    private BoosterStatusProducer boosterStatusProducer;
 
     @GetMapping("/available")
     public String getAvailableBoosterID() {
@@ -35,6 +39,8 @@ public class BoosterController {
     public void createBooster(@RequestBody Booster booster) {
         try {
             boosterService.addNewBooster(booster);
+            boosterStatusProducer.notifyBoosterPending(booster.getId());
+
         } catch (CannotBeNullException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
