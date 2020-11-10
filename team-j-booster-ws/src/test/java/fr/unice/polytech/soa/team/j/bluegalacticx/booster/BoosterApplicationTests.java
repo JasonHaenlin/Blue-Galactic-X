@@ -10,15 +10,20 @@ import org.springframework.test.context.ContextConfiguration;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.SpeedChange;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 
 @AutoConfigureMockMvc
 @WebMvcTest(BoosterController.class)
-@ContextConfiguration(classes = { BoosterController.class, BoosterService.class })
+@ContextConfiguration(classes = { BoosterController.class, BoosterService.class, BoosterStatusProducer.class })
+
+
 class BoosterApplicationTests {
 
     @MockBean
     BoosterService boosterService;
-
+        
+    @MockBean
+    private BoosterStatusProducer BoosterStatusProducer;
     @Test
     public void testUpdateSpeedBooster() {
         Booster b = new Booster().fuelLevel(100);

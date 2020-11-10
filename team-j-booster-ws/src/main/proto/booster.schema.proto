@@ -8,7 +8,7 @@ option java_package =
 
 message BoosterStatusRequest {
   enum EventType {
-    PENDING = 0; READY = 1; RUNNING = 2; DESTROYED = 3; LANDING = 4; LANDED = 5;
+    PENDING = 0; READY = 1;  RUNNING = 2; DESTROYED = 3; LANDING = 4; LANDED = 5;
     DROPED = 6;
   }
   EventType eventType = 1;

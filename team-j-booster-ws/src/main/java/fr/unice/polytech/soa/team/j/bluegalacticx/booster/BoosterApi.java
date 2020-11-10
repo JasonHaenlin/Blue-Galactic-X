@@ -21,6 +21,12 @@ public class BoosterApi {
         if (b.getStatus() == BoosterStatus.LANDING) {
             gainedSpeed = RandomUtils.randomDouble(-40, -20);
         }
+        if (b.getStatus() == BoosterStatus.RUNNING) {
+            gainedSpeed = RandomUtils.randomDouble(40, 20);
+        }
+        if(b.getStatus()== BoosterStatus.LANDED){
+            gainedSpeed = -b.getSpeed();
+        }
         b.setSpeed(b.getSpeed() + gainedSpeed);
         b.setDistanceFromEarth(b.getDistanceFromEarth() + gainedSpeed);
 

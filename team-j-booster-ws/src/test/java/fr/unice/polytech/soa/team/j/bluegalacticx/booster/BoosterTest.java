@@ -31,7 +31,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.Ca
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterLandingStepProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.LandingRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterRequest;
 import io.grpc.internal.testing.StreamRecorder;
 
 @SpringBootTest
@@ -69,7 +69,7 @@ public class BoosterTest {
     @Test
     @Order(1)
     public void initiateLandingSequenceTest() {
-        LandingRequest request = LandingRequest.newBuilder().setBoosterId(boosterTest.getId()).setDistanceFromEarth(500)
+        BoosterRequest request = BoosterRequest.newBuilder().setBoosterId(boosterTest.getId()).setDistanceFromEarth(500)
                 .setSpeed(200).build();
 
         StreamRecorder<Empty> responseObserver = StreamRecorder.create();

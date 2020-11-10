@@ -79,7 +79,8 @@ public class BoosterService {
 
     public String getAvailableBoosterID() throws BoosterNotAvailableException {
         for (Booster b : boosters) {
-            if (b.getStatus() == BoosterStatus.READY) {
+            if (b.getStatus() == BoosterStatus.PENDING) {
+                b.setStatus(BoosterStatus.NOT_AVAILABLE);
                 return b.getId();
             }
         }
