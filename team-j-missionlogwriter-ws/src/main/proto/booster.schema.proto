@@ -1,20 +1,10 @@
 syntax = "proto3";
 
-package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter;
 
 option java_multiple_files = true;
 option java_package =
-    "fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto";
-
-message BoosterStatusRequest {
-  enum EventType {
-    PENDING = 0; READY = 1; RUNNING = 2; DESTROYED = 3; LANDING = 4; LANDED = 5;
-    DROPED = 6;
-  }
-  EventType eventType = 1;
-  string boosterId = 2;
-  string missionId = 3;
-}
+    "fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.proto";
 
 message BoosterLandingStepRequest {
   enum EventType {

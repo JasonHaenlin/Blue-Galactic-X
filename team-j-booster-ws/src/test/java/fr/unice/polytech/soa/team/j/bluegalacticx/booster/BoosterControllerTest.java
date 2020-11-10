@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetry;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterLandingStepProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.utils.JsonUtil;
@@ -34,7 +35,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.utils.JsonUtil;
 @AutoConfigureMockMvc
 @WebMvcTest
 @ContextConfiguration(classes = { BoosterController.class, BoosterService.class, TelemetryBoosterProducer.class,
-        BoosterStatusProducer.class })
+        BoosterStatusProducer.class, BoosterLandingStepProducer.class })
 @Tags(value = { @Tag("mvc"), @Tag("mvc-booster") })
 @TestMethodOrder(OrderAnnotation.class)
 public class BoosterControllerTest {
@@ -44,6 +45,9 @@ public class BoosterControllerTest {
 
     @MockBean
     TelemetryBoosterProducer telemetryBoosterProducer;
+
+    @MockBean
+    BoosterLandingStepProducer boosterLandingStepProducer;
 
     @MockBean
     BoosterStatusProducer boosterStatusProducer;

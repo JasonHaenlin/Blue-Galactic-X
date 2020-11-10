@@ -17,7 +17,6 @@ public class MissionLogReaderService {
     private MissionLogRepository missionLogRepository;
 
     List<Log> getLogsForMission(String missionId) throws MissionNotFoundException{
-        System.out.println("mission id " + missionId);
         MissionLog missionLog = missionLogRepository.findById(missionId).orElse(null);
         if(missionLog == null){
             throw new MissionNotFoundException();
