@@ -13,6 +13,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto.GoNogoRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto.DestroyModuleRequest;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 
@@ -49,6 +50,15 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, GoNogoRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
         Map<String, Object> props = baseConfig();
         props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, GoNogoRequest.class.getName());
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, DestroyModuleRequest> ModuleDestroyerKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, DestroyModuleRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, DestroyModuleRequest.class.getName());
         factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
         return factory;
     }
