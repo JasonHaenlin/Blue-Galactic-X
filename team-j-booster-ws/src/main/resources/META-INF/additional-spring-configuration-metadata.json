@@ -1,60 +1,64 @@
 {
-    "properties": [
-        {
-            "name": "api.telemetry.host",
-            "type": "java.lang.String",
-            "description": "A description for 'api.telemetry.host'"
-        },
-        {
-            "name": "api.telemetry.port",
-            "type": "java.lang.String",
-            "description": "A description for 'api.telemetry.port'"
-        },
-        {
-            "name": "kafka.broker.host",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.broker.host'"
-        },
-        {
-            "name": "kafka.broker.port",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.broker.port'"
-        },
-        {
-            "name": "kafka.schema.host",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.schema.host'"
-        },
-        {
-            "name": "kafka.schema.port",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.schema.port'"
-        },
-        {
-            "name": "kafka.group.default",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.group.default'"
-        },
-        {
-            "name": "kafka.topics.boosterstatus",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.topics.boosterstatus'"
-        },
-        {
-            "name": "kafka.topics.telemetrybooster",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.topics.telemetrybooster'"
-        },
-        
-        {
-            "name": "kafka.topics.rocketstatus",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.topics.rocketstatus'"
-        },
-        {
-            "name": "kafka.topics.maxq",
-            "type": "java.lang.String",
-            "description": "A description for 'kafka.topics.maxq'"
-        }
-    ]
+  "properties": [
+    {
+      "name": "api.telemetry.host",
+      "type": "java.lang.String",
+      "description": "A description for 'api.telemetry.host'"
+    },
+    {
+      "name": "api.telemetry.port",
+      "type": "java.lang.String",
+      "description": "A description for 'api.telemetry.port'"
+    },
+    {
+      "name": "kafka.broker.host",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.broker.host'"
+    },
+    {
+      "name": "kafka.broker.port",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.broker.port'"
+    },
+    {
+      "name": "kafka.schema.host",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.schema.host'"
+    },
+    {
+      "name": "kafka.schema.port",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.schema.port'"
+    },
+    {
+      "name": "kafka.group.default",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.group.default'"
+    },
+    {
+      "name": "kafka.topics.boosterstatus",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.boosterstatus'"
+    },
+    {
+      "name": "kafka.topics.telemetrybooster",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.telemetrybooster'"
+    },
+    {
+      "name": "kafka.topics.rocketstatus",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.rocketstatus'"
+    },
+    {
+      "name": "kafka.topics.maxq",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.maxq'"
+    },
+    {
+      "name": "kafka.topics.boosterlandingstep",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.boosterlandingstep'"
+    }
+  ]
 }

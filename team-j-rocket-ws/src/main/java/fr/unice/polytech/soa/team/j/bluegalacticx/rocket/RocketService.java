@@ -28,16 +28,17 @@ public class RocketService {
     @Autowired
     private RocketStatusProducer rocketProducer;
 
-    @Autowired 
+    @Autowired
     private MaxQProducer maxQProducer;
     private List<Rocket> rockets = new ArrayList<>();
 
-    public void addNewRocket(Rocket rocket) throws CannotBeNullException {
+    public Rocket addNewRocket(Rocket rocket) throws CannotBeNullException {
         if (rocket == null) {
             throw new CannotBeNullException("rocket");
         }
         rocket.withBaseTelemetry().initStatus();
         rockets.add(rocket);
+        return rocket;
     }
 
     public void updateTelemetryToSend() throws RocketDestroyedException {

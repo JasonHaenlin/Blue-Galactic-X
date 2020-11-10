@@ -17,12 +17,12 @@ done;
 printf "${grn}SETUP READY${end}  \n"
 
 ls -d * | grep "team-j-.*-ws" | cut -c8- | sed 's/.\{3\}$//' | while read line ; do
-    printf "${mag}Healtcheck${end} ${blu}${i}${end} "
-    res=`docker inspect -f {{.State.Health.Status}} team-j-blue-galactic-$i`
+    printf "${mag}Healtcheck${end} ${blu}${line}${end} "
+    res=`docker inspect -f {{.State.Health.Status}} team-j-blue-galactic-$line`
     while [ "$res" != "healthy" ]; do
         sleep 0.5;
         printf "${grn}.${end}"
-        res=`docker inspect -f {{.State.Health.Status}} team-j-blue-galactic-$i`
+        res=`docker inspect -f {{.State.Health.Status}} team-j-blue-galactic-$line`
     done;
     printf "${grn}DONE${end}  \n"
 done

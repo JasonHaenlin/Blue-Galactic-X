@@ -26,9 +26,9 @@ public class MissionPreparationController {
     private MissionPreparationService missionPreparationService;
 
     @PostMapping("/")
-    public void createNewMission(@RequestBody Mission mission) {
+    public Mission createNewMission(@RequestBody Mission mission) {
         try {
-            missionPreparationService.createMission(mission);
+            return missionPreparationService.createMission(mission);
         } catch (InvalidMissionException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
