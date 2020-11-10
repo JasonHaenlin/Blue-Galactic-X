@@ -28,6 +28,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterLandin
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterLandingStepProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterRequest;
@@ -35,7 +36,7 @@ import io.grpc.internal.testing.StreamRecorder;
 
 @SpringBootTest
 @ContextConfiguration(classes = { BoosterRPCService.class, BoosterService.class, TelemetryBoosterProducer.class,
-        BoosterStatusProducer.class })
+        BoosterStatusProducer.class, BoosterLandingStepProducer.class })
 @TestMethodOrder(OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
 @Tags(value = { @Tag("grpc"), @Tag("grpc-booster") })
@@ -46,6 +47,9 @@ public class BoosterTest {
 
     @MockBean
     TelemetryBoosterProducer telemetryBoosterProducer;
+
+    @MockBean
+    BoosterLandingStepProducer boosterLandingStepProducer;
 
     @MockBean
     BoosterStatusProducer boosterStatusProducer;
