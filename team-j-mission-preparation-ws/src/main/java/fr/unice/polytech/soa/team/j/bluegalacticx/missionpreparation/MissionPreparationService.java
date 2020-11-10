@@ -3,6 +3,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class MissionPreparationService {
         if (invalidMission(mission))
             throw new InvalidMissionException();
         mission.updateGoNogo(Department.MISSION, false);
+        mission.setId(UUID.randomUUID().toString());
         missions.add(mission);
         missionPreparationProducer.notifyNewMission(mission);
         return mission;

@@ -12,8 +12,8 @@ public class RocketREST extends RestAPI {
         super(uri);
     }
 
-    public void createRocket(Rocket rocket) {
-        post("/", null, rocket);
+    public Rocket createRocket(Rocket rocket) {
+        return post("/", Rocket.class, rocket);
     }
 
     public SpaceTelemetry getRocketTelemetry(String rocketId) {

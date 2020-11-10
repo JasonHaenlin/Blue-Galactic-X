@@ -32,7 +32,6 @@ public class PayloadService {
         }
         payload.setStatus(PayloadStatus.WAITING_FOR_MISSION);
         payload.setDate(new Date());
-
         payloads.add(payload);
         payloadProducer.notifyNewPayload(payload);
         return payload;

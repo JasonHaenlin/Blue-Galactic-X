@@ -3,9 +3,9 @@ Feature: rocket update status sequence
     Check rocket status changements when the rocket start and is destroyed. verify the payload and mission are updated correctly
 
     Background: Given a created mission and a payload
-        Given Gwynne create a new rocket with id "1"
-        And Richard add a new mission with mission id "1" and rocket id "1"
-        And Gwynne create a new payload with id "1" and rocket id "1"
+        Given Gwynne create a new rocket
+        And Richard add a new mission
+        And Gwynne create a new payload
 
     Scenario: Execute a mission with a rocket and a payload and should begin but end up destroyed
         When Elon make the request for the launch order

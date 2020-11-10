@@ -1,10 +1,10 @@
 @functional @gonogo
 Feature: Department go nogo sequence
     Check the process of the go nogo
-
+sh
     Background: Given a mission and a rocket
-        Given Gwynne create a rocket with id "2"
-        And Richard add a mission with mission id "2" and rocket id "2"
+        Given Gwynne create a rocket
+        And Richard add a mission
 
     Scenario: Execute the go nogo process
         When Richard has the weather and rocket department not ready
