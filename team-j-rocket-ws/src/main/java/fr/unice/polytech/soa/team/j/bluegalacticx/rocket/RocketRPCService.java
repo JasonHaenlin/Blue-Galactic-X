@@ -63,6 +63,7 @@ public class RocketRPCService extends RocketImplBase {
                 
 
             });
+            
             responseObserver.onNext(null);
             responseObserver.onCompleted();
         } catch (RocketDoesNotExistException e) {
@@ -100,6 +101,7 @@ public class RocketRPCService extends RocketImplBase {
                 r.prepareLaunch();
                 message = "Launch approved !";
                 rocketProducer.launchRocketEvent(r.getId(), r.getBoosterId());
+                boosterRpcClient.initiateLaunchSequence(r.getBoosterId(),r.distanceFromEarth(), r.currentSpeed());
             }
             LaunchOrderReply launchOrderReply = LaunchOrderReply.newBuilder().setReply(message).build();
             responseObserver.onNext(launchOrderReply);
@@ -120,7 +122,10 @@ public class RocketRPCService extends RocketImplBase {
             String rId = request.getRocketId();
             Rocket r = rocketService.retrieveRocket(rId);
             String detachedBoosterId = r.detachNextStage();
+
             boosterRpcClient.initiateLandingSequence(detachedBoosterId, r.distanceFromEarth(), r.currentSpeed());
+            boosterRpcClient.initiateLaunchSequence(r.getBoosterId2(),r.distanceFromEarth(), r.currentSpeed());
+
             NextStageReply nextStageReply = NextStageReply.newBuilder().setMovedToNextStage(true).build();
             responseObserver.onNext(nextStageReply);
             responseObserver.onCompleted();
