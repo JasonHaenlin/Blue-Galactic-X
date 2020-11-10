@@ -1,6 +1,4 @@
 
-def modules = ["team-j-rocket-ws", "team-j-weather-ws","team-j-telemetry-reader-ws","team-j-telemetry-writer-ws","team-j-booster-ws", "team-j-payload-ws", "team-j-anomaly-ws", "team-j-missionlogreader-ws", "team-j-missionlogwriter-ws", "team-j-module-destroyer-ws", "team-j-orbital-payload-ws", "team-j-mission-preparation-ws", "team-j-mission-control-ws"]
-def gates = ""
 def results = ""
 
 pipeline{
@@ -16,6 +14,9 @@ pipeline{
         stage('Proceed with the modules') {
             steps {
                 script {
+                    def modules = sh(
+                        script: "git diff --name-only ${env.GIT_COMMIT} ${env.GIT_PREVIOUS_COMMIT} | grep 'team-j-.*-ws' | cut -d'/' -f1 | sort -u",
+                        returnStdout: true).split('\n') as List
                     for(int i=0; i < modules.size(); i++) {
                         gate = "\n - Quality gate was not proceed due to build error"
                         try {
@@ -32,34 +33,14 @@ pipeline{
                                     sh "./mvnw test"
                                 }
                             }
-                            stage('Sonarqube') {
-                                withSonarQubeEnv('Sonarqube_env') {
-                                    dir("./${modules[i]}") {
-                                        echo 'Sonar Analysis'
-                                        sh './mvnw sonar:sonar -Dsonar.pitest.mode=reuseReport'
-                                    }
-                                }
-                            }
-                            try {
-                                timeout(time: 1, unit: "HOURS") {
-                                    waitForQualityGate true
-                                }
-                                script {
-                                    gate = "\n - Quality gate was successful"
-                                }
-                            } catch(Exception e) {
-                                script {
-                                    gate = "\n - Quality gate was failed"
-                                }
-                            }
                             stage('Result') {
                                 script {
-                                    results += "\n[${modules[i]}] : SUCCESS" + gate
+                                    results += "\n[${modules[i]}] : SUCCESS"
                                 }
                             }
                         } catch(Exception e) {
                             script {
-                                results += "\n[${modules[i]}] : FAILURE" + gate
+                                results += "\n[${modules[i]}] : FAILURE"
                             }
                         }
                     }
