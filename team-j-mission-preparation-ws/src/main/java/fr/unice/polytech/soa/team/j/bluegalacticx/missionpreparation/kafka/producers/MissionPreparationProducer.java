@@ -18,14 +18,13 @@ public class MissionPreparationProducer {
     @Autowired
     private KafkaTemplate<String, MissionPreparationRequest> kafkaTemplate;
 
-    public void notifyNewMissionReady(Mission mission) {
+    public void notifyNewMission(Mission mission) {
         MissionPreparationRequest req = MissionPreparationRequest.newBuilder().setId(mission.getId())
                 .setRocketId(mission.getRocketId()).setBoosterId1(mission.getBoosterIds()[0])
                 .setBoosterId2(mission.getBoosterIds()[1]).setPayloadId(mission.getPayloadId())
                 .setDate(mission.getDate().toString())
                 .setDestination(Destination.newBuilder().setX(mission.getDestination().getX())
-                        .setY(mission.getDestination().getY()).setZ(mission.getDestination().getZ())).build();
-
+                        .setY(mission.getDestination().getY()).setZ(mission.getDestination().getZ()).build()).build();
         kafkaTemplate.send(missionPreparationTopic0, req);
     }
 

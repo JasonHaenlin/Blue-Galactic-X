@@ -23,7 +23,7 @@ public class RestService {
             @Value("${api.booster.host}") String hostBooster,
             @Value("${api.booster.port}") String portBooster
             ) {
-        webClientMission = WebClient.create("http://" + hostMission + ":" + portMission + "/mission/");
+        webClientMission = WebClient.create("http://" + hostMission + ":" + portMission + "/mission-preparation/");
         webClientBooster = WebClient.create("http://" + hostBooster + ":" + portBooster + "/booster/");
     }
      // @formatter:on

@@ -20,26 +20,23 @@ public class RocketStatusConsumer {
         String id = request.getRocketId();
         try {
             switch (request.getEventType()) {
-                case READY_FOR_LAUNCH:
-                    missionControlService.storeRocketStatus(id, RocketStatus.READY_FOR_LAUNCH);
-                case IN_SERVICE:
+                case IN_SERVICE:    
                     missionControlService.storeRocketStatus(id, RocketStatus.IN_SERVICE);
+                    missionControlService.updateMissionFromRocketState(id);
                     break;
                 case DESTROYED:
                     missionControlService.storeRocketStatus(id, RocketStatus.DESTROYED);
-                    break;
-                case AT_BASE:
-                    missionControlService.storeRocketStatus(id, RocketStatus.AT_BASE);
+                    missionControlService.updateMissionFromRocketState(id);
                     break;
                 case DONED:
                     missionControlService.storeRocketStatus(id, RocketStatus.ARRIVED);
+                    missionControlService.updateMissionFromRocketState(id);
                     break;
                 default:
                     // DO NOT PROCEED NOT WANTED EVENTS
                     break;
             }
             
-            missionControlService.updateMissionFromRocketState(id);
         } catch (RocketDoesNotExistException e) {
             // TODO : handle kafka exceptions
             e.printStackTrace();

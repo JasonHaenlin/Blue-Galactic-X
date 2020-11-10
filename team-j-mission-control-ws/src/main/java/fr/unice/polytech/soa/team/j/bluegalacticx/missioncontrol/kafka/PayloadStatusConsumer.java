@@ -20,27 +20,27 @@ public class PayloadStatusConsumer {
         String id = request.getPayloadId();
         try {
             switch (request.getEventType()) {
-                case WAITING_FOR_MISSION:
-                    missionControlService.storePayloadStatus(id, PayloadStatus.WAITING_FOR_MISSION);
-                    break;
                 case ON_MISSION:
                     missionControlService.storePayloadStatus(id, PayloadStatus.ON_MISSION);
+                    missionControlService.updateMissionFromPayloadState(id);
                     break;
                 case DESTROYED:
                     missionControlService.storePayloadStatus(id, PayloadStatus.DESTROYED);
+                    missionControlService.updateMissionFromPayloadState(id);
                     break;
                 case DELIVERED:
                     missionControlService.storePayloadStatus(id, PayloadStatus.DELIVERED);
+                    missionControlService.updateMissionFromPayloadState(id);
                     break;
                 case NOT_DELIVERED:
                     missionControlService.storePayloadStatus(id, PayloadStatus.NOT_DELIVERED);
+                    missionControlService.updateMissionFromPayloadState(id);
                     break;
                 default:
                     // DO NOT PROCEED NOT WANTED EVENTS
                     break;
             }
-            
-            missionControlService.updateMissionFromPayloadState(id);
+
         } catch (PayloadDoesNotExistException e) {
             // TODO : handle kafka exceptions
             e.printStackTrace();

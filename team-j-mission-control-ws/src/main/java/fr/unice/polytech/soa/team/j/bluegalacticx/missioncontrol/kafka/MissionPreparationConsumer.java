@@ -22,7 +22,7 @@ public class MissionPreparationConsumer {
 
     @KafkaListener(topics = "${kafka.topics.missionpreparation}", groupId = "${kafka.group.default}", containerFactory = "missionPreparationKafkaListenerContainerFactory")
     public void newMissionEvent(MissionPreparationRequest missionRequest) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
         Mission mission = new Mission().id(missionRequest.getId()).rocketId(missionRequest.getRocketId())
                 .boosterIds(new String[] { missionRequest.getBoosterId1(), missionRequest.getBoosterId2()})
                 .payloadId(missionRequest.getPayloadId()).date(formatter.parse(missionRequest.getDate()))

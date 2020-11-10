@@ -33,6 +33,7 @@ public class MissionPreparationService {
             throw new InvalidMissionException();
         mission.updateGoNogo(Department.MISSION, false);
         missions.add(mission);
+        missionPreparationProducer.notifyNewMission(mission);
         return mission;
     }
 
@@ -53,8 +54,6 @@ public class MissionPreparationService {
         Mission m = findMissionOrThrow(id);
         m.updateGoNogo(Department.MISSION, gonogo);
         departmentStatusProducer.notifyDepartmentStatus(m.getRocketId(), gonogo);
-        if (gonogo)
-            missionPreparationProducer.notifyNewMissionReady(m);
         return m.getGoNogos();
     }
 
