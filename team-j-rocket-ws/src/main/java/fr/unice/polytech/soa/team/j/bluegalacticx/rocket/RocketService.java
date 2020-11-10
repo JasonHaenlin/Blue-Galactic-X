@@ -53,7 +53,7 @@ public class RocketService {
                 } else if (!r.checkRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
                     r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
                     r.updateSpeed(SpeedChange.INCREASE);
-                    maxQProducer.sendInMaxQ(r.getBoosterId());
+                    maxQProducer.sendQuitMaxQ(r.getBoosterId());
                 }
 
                 if (st.getDistance() <= 0 && r.getStatus() != RocketStatus.ARRIVED) {

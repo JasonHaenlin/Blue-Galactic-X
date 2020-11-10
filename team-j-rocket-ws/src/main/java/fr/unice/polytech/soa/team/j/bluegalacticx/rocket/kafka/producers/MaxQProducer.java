@@ -24,7 +24,7 @@ public class MaxQProducer {
         kafkaTemplate.send(MaxQTopic0, req);
     }
 
-    public void sendNotInMaxQ(String boosterId) {
+    public void sendQuitMaxQ(String boosterId) {
         MaxQRequest req = MaxQRequest.newBuilder().setBoosterId(boosterId)
                 .setEventType(EventType.QUIT_MAXQ).build();
 
