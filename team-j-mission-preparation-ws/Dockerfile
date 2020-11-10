@@ -1,6 +1,6 @@
 FROM adoptopenjdk/openjdk11-openj9:alpine-slim
 
-COPY target/mission-ws.jar /usr/spring/mission-preparation-ws.jar
+COPY target/mission-preparation-ws.jar /usr/spring/mission-preparation-ws.jar
 
 ENV PAYLOAD_HOST="team-j-blue-galactic-payload"
 ENV PAYLOAD_PORT="8050"

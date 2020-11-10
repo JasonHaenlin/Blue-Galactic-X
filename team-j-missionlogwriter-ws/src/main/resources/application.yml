@@ -27,3 +27,4 @@ kafka:
     default: blue-origin-missionlogwriter
   topics:
     payloadstatus: teamj.payload-status.0
+    boosterlandingstep: teamj.booster-landing-step.0

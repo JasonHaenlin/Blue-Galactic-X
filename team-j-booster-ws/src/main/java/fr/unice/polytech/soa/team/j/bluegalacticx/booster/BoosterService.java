@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterLandingStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetryData;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterNotAvailableException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterLandingStepProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 
@@ -25,6 +27,9 @@ public class BoosterService {
 
     @Autowired
     private BoosterStatusProducer boosterStatusProducer;
+
+    @Autowired
+    private BoosterLandingStepProducer boosterLandingStepProducer;
 
     public void addNewBooster(Booster booster) throws CannotBeNullException {
         if (booster == null) {
@@ -64,7 +69,11 @@ public class BoosterService {
 
     public void updateAllBoostersState() {
         for (Booster b : boosters) {
+            BoosterLandingStep step = b.getLandingStep();
             b.updateState();
+            if(step != b.getLandingStep()){
+                boosterLandingStepProducer.notifyBoosterLandingStepChanged(b.getId(), b.getMissionId(), b.getLandingStep());
+            }
         }
     }
 
