@@ -21,7 +21,7 @@ public class MissionLog {
         this.missionId = missionId;
     }
 
-    public void addLog(String text){
+    public void addLog(String text) {
         this.logs.add(new Log(text));
     }
 
