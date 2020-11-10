@@ -9,9 +9,13 @@ option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto"
 
 service Booster {
   rpc initiateLandingSequence(BoosterRequest) returns (google.protobuf.Empty) {}
-  
   rpc initiateLaunchSequence(BoosterRequest) returns (google.protobuf.Empty) {}
+  rpc destructionOrderOnBooster(DestructionOrderRequest) returns (DesctructionOrderReply){}
 }
+
+message DestructionOrderRequest { string boosterId = 1; }
+
+message DesctructionOrderReply { string destructionBooster = 1; }
 
 message BoosterRequest {
   string boosterId = 1;

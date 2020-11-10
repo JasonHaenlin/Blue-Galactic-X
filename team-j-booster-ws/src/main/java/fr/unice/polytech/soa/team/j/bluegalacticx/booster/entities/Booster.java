@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities;
 
 import java.util.Objects;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDestroyedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,6 +202,13 @@ public class Booster {
     public Booster telemetry(BoosterTelemetry telemetry) {
         this.telemetry = telemetry;
         return this;
+    }
+
+    public void initiateTheSelfDestructSequence() throws BoosterDestroyedException {
+        if (status == BoosterStatus.DESTROYED) {
+            throw new BoosterDestroyedException();
+        }
+        this.status = BoosterStatus.DESTROYED;
     }
 
     @Override
