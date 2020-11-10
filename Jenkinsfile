@@ -14,33 +14,41 @@ pipeline{
         stage('Proceed with the modules') {
             steps {
                 script {
+                    echo "${env.GIT_COMMIT}"
+                    def baseRef = env.GIT_PREVIOUS_COMMIT
+                    if(baseRef == null) {
+                        baseRef = "origin/develop"
+                    }
                     def modules = sh(
-                        script: "git diff --name-only ${env.GIT_COMMIT} ${env.GIT_PREVIOUS_COMMIT} | grep 'team-j-.*-ws' | cut -d'/' -f1 | sort -u",
+                        script: "git diff --name-only ${env.GIT_COMMIT} ${baseRef} | grep 'team-j-.*-ws' | cut -d'/' -f1 | sort -u",
                         returnStdout: true).split('\n') as List
-                    for(int i=0; i < modules.size(); i++) {
-                        gate = "\n - Quality gate was not proceed due to build error"
-                        try {
-                            stage("Compile ${modules[i]}") {
-                                dir("./${modules[i]}") {
-                                    echo "Compile WebService"
-                                    sh "chmod +x ./mvnw"
-                                    sh "./mvnw clean compile -DskipTests"
+                    println modules
+                    if(modules.size() > 0 && modules[0] != "") {
+                        for(int i=0; i < modules.size(); i++) {
+                            gate = "\n - Quality gate was not proceed due to build error"
+                            try {
+                                stage("Compile ${modules[i]}") {
+                                    dir("./${modules[i]}") {
+                                        echo "Compile WebService"
+                                        sh "chmod +x ./mvnw"
+                                        sh "./mvnw clean compile -DskipTests"
+                                    }
                                 }
-                            }
-                            stage("Test ${modules[i]}") {
-                                dir("./${modules[i]}") {
-                                    echo "Test WebService"
-                                    sh "./mvnw test"
+                                stage("Test ${modules[i]}") {
+                                    dir("./${modules[i]}") {
+                                        echo "Test WebService"
+                                        sh "./mvnw test"
+                                    }
                                 }
-                            }
-                            stage('Result') {
+                                stage('Result') {
+                                    script {
+                                        results += "\n[${modules[i]}] : SUCCESS"
+                                    }
+                                }
+                            } catch(Exception e) {
                                 script {
-                                    results += "\n[${modules[i]}] : SUCCESS"
+                                    results += "\n[${modules[i]}] : FAILURE"
                                 }
-                            }
-                        } catch(Exception e) {
-                            script {
-                                results += "\n[${modules[i]}] : FAILURE"
                             }
                         }
                     }
