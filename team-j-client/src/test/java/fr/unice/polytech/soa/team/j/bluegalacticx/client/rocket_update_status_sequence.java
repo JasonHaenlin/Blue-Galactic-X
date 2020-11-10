@@ -13,10 +13,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.entities.Missio
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
-<<<<<<< HEAD
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.SpaceCoordinate;
-=======
->>>>>>> [#146] fix scripts
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
