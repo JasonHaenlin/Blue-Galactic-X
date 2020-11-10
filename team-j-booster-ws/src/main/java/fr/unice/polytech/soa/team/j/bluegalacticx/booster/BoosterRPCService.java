@@ -2,6 +2,10 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
 import com.google.protobuf.Empty;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDestroyedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DesctructionOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DestructionOrderRequest;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +67,24 @@ public class BoosterRPCService extends BoosterImplBase {
             responseObserver.onCompleted();
         } catch (BoosterDoesNotExistException e) {
             responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        }
+    }
+
+    @Override
+    public void destructionOrderOnBooster(DestructionOrderRequest request,
+                                          StreamObserver<DesctructionOrderReply> responseObserver) {
+        try {
+            Booster b = boosterService.retrieveBooster(request.getBoosterId());
+            b.initiateTheSelfDestructSequence();
+            responseObserver
+                    .onNext(DesctructionOrderReply.newBuilder().setDestructionBooster("DESTROYED! KNOCK-DOWNED! SHATTERED!").build());
+
+            boosterStatusProducer.destroyedBoosterEvent(b.getId());
+            responseObserver.onCompleted();
+        } catch (BoosterDoesNotExistException e) {
+            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
+        } catch (BoosterDestroyedException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         }
     }
 

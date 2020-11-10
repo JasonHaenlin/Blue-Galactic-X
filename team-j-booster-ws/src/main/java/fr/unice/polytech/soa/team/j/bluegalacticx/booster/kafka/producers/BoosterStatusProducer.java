@@ -31,6 +31,12 @@ public class BoosterStatusProducer {
         kafkaTemplate.send(statusTopic0, req);
     }
 
+    public void destroyedBoosterEvent(String boosterId) {
+        BoosterStatusRequest req = BoosterStatusRequest.newBuilder().setBoosterId(boosterId)
+                .setEventType(EventType.DESTROYED).build();
+        kafkaTemplate.send(statusTopic0, req);
+    }
+
     public void notifyBoosterReady(String boosterId) {
         BoosterStatusRequest req = BoosterStatusRequest.newBuilder().setBoosterId(boosterId)
                 .setEventType(EventType.READY).build();
