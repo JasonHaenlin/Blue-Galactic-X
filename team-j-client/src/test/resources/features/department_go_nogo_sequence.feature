@@ -1,7 +1,7 @@
 @functional @gonogo
 Feature: Department go nogo sequence
     Check the process of the go nogo
-sh
+
     Background: Given a mission and a rocket
         Given Gwynne create a rocket
         And Richard add a mission

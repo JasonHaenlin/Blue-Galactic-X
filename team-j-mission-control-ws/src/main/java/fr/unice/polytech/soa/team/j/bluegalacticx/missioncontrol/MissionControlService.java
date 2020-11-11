@@ -89,7 +89,7 @@ public class MissionControlService {
     }
 
     public Optional<Mission> findByBoosterId(String id) {
-        return missions.stream().filter(m -> m.retrieveBoosterId(id).equals(id)).findFirst();
+        return missions.stream().filter(m -> m.retrieveBoosterId(id) != null).findFirst();
     }
 
     public Optional<Mission> findByPayloadId(String id) {

@@ -8,6 +8,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.utils.RandomUtils;
 public class BoosterApi {
 
     BoosterTelemetry boosterTelemetry;
+
     public BoosterApi initTelemetry() {
         this.boosterTelemetry = new BoosterTelemetry().fuel(100).speed(0).distanceFromEarth(0);
         return this;
@@ -19,9 +20,9 @@ public class BoosterApi {
             gainedSpeed = RandomUtils.randomDouble(-40, -20);
         }
         if (b.getStatus() == BoosterStatus.RUNNING) {
-            gainedSpeed = RandomUtils.randomDouble(40, 20);
+            gainedSpeed = RandomUtils.randomDouble(20, 40);
         }
-        if(b.getStatus()== BoosterStatus.LANDED){
+        if (b.getStatus() == BoosterStatus.LANDED) {
             gainedSpeed = -b.getSpeed();
         }
         b.setSpeed(b.getSpeed() + gainedSpeed);

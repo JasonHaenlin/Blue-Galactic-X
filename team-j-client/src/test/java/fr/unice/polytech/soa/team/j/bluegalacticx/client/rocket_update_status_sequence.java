@@ -80,6 +80,10 @@ public class rocket_update_status_sequence implements En {
                     () -> ((fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.entities.Mission) ctx.missionCtrlREST
                             .retrieveMission(ctx.mission.getId())).getStatus());
         });
+        Then("the rocket status should be {string}", (String status) -> {
+            RocketStatus rs = ctx.rocketREST.getStatus(ctx.rocket.getId());
+            assertTrue(rs == RocketStatus.valueOf(status));
+        });
         When("Richard send a destruction order to the rocket", () -> {
             ctx.rocketRPC.destructionOrderOnRocket(ctx.rocket.getId());
         });

@@ -28,7 +28,7 @@ public class OrbitalPayloadService {
         Payload p = retrievePayload(id);
         p.setDeployed(true);
         p.setStatus(PayloadStatus.IN_ROLLOUT);
-        // shortcute for now
+        // shortcut for now
         payloadStatusProducer.notifyDeployedPayloadDelivered(p.getPayloadId(), p.getMissionId());
         p.setStatus(PayloadStatus.DELIVERED);
     }

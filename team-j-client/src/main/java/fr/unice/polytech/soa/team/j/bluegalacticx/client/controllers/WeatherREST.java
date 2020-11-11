@@ -18,7 +18,7 @@ public class WeatherREST extends RestAPI {
         return get("/", WeatherReport.class);
     }
 
-    public void setGoNoGo(GoNg gonogo) {
-        put("/", GoNg.class, gonogo);
+    public GoNg setGoNoGo(GoNg gonogo) {
+        return put("/", GoNg.class, gonogo);
     }
 }

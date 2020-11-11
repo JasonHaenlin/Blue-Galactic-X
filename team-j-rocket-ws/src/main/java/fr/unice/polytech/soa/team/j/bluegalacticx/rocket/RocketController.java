@@ -75,8 +75,8 @@ public class RocketController {
     }
 
     @PutMapping("/{rocketId}")
-    public void setGoNoGo(@PathVariable String rocketId, @RequestBody GoNg go) {
-        service.setRocketDepartmentStatus(rocketId, go.getGong());
+    public GoNg setGoNoGo(@PathVariable String rocketId, @RequestBody GoNg go) {
+        return service.setRocketDepartmentStatus(rocketId, go.getGong());
     }
 
     @GetMapping("/{rocketId}")

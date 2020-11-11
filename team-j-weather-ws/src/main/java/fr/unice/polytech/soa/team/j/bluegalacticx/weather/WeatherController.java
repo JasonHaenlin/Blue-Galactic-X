@@ -25,8 +25,8 @@ public class WeatherController {
     }
 
     @PutMapping
-    public void setGoNoGo(@RequestBody GoNg go) {
-        service.setWeatherDepartmentStatus(go.getGong());
+    public GoNg setGoNoGo(@RequestBody GoNg go) {
+        return service.setWeatherDepartmentStatus(go.getGong());
     }
 
     @GetMapping("/ping")

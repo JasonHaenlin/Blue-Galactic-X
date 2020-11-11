@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.GoNg;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
@@ -114,8 +115,9 @@ public class RocketService {
                 .orElseThrow(() -> new RocketDoesNotExistException(id));
     }
 
-    public void setRocketDepartmentStatus(String rocketId, boolean go) {
+    public GoNg setRocketDepartmentStatus(String rocketId, boolean go) {
         departmentStatusProducer.notifyDepartmentStatus(rocketId, go);
+        return new GoNg(go);
     }
 
     public Rocket retrieveRocket(String id) throws RocketDoesNotExistException {

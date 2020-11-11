@@ -37,8 +37,8 @@ public class RocketREST extends RestAPI {
         return get("/" + rocketId, RocketStatus.class);
     }
 
-    public void setGoNoGo(String rocketId, GoNg gonogo) {
-        put("/" + rocketId, GoNg.class, gonogo);
+    public GoNg setGoNoGo(String rocketId, GoNg gonogo) {
+        return put("/" + rocketId, GoNg.class, gonogo);
     }
 
 }
