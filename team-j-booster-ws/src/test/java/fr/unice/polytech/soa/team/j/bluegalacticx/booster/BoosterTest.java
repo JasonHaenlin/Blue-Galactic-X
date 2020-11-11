@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.google.protobuf.Empty;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -34,10 +36,9 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.Teleme
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterRequest;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DesctructionOrderReply;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DestructionOrderRequest;
+import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.internal.testing.StreamRecorder;
-import sun.invoke.empty.Empty;
-
 @SpringBootTest
 @ContextConfiguration(classes = { BoosterRPCService.class, BoosterService.class, TelemetryBoosterProducer.class,
         BoosterStatusProducer.class, BoosterLandingStepProducer.class })
