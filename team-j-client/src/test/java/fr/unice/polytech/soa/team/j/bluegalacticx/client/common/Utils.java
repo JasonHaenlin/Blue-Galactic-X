@@ -2,7 +2,13 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.client.common;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
+
 public class Utils {
+
+    public static void waitForSeconds(int nbSecond) throws InterruptedException {
+        Thread.sleep(1000 * nbSecond);
+    }
 
     public static void wait1s() throws InterruptedException {
         Thread.sleep(1000);

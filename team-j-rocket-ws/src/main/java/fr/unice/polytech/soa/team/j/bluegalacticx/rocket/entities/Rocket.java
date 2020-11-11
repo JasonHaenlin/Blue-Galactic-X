@@ -123,11 +123,11 @@ public class Rocket {
 
     private void handleLaunchTimer() {
         this.launchTimer++;
-        if (this.launchTimer > 59) {
+        if (this.launchTimer > 6) {
             setLaunchStep(RocketLaunchStep.LIFTOFF);
             LOG.info("Liftoff !");
             setStatus(RocketStatus.IN_SERVICE);
-        } else if (this.launchTimer > 56) {
+        } else if (this.launchTimer > 3) {
             setLaunchStep(RocketLaunchStep.MAIN_ENGINE_START);
             LOG.info("Main engine starting ...");
         }

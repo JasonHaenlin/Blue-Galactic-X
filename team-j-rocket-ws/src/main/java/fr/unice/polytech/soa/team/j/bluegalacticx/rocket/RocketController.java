@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.GoNg;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
@@ -59,6 +60,15 @@ public class RocketController {
     public RocketStatus getRocketStatus(@PathVariable String rocketId) {
         try {
             return service.getRocketStatus(rocketId);
+        } catch (RocketDoesNotExistException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/launchstep/{rocketId}")
+    public RocketLaunchStep getRocketLaunchStep(@PathVariable String rocketId) {
+        try {
+            return service.getRocketLaunchStep(rocketId);
         } catch (RocketDoesNotExistException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

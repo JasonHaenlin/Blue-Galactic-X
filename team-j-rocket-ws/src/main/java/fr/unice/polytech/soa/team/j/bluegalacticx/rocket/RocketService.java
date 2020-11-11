@@ -81,6 +81,10 @@ public class RocketService {
         return retrieveCorrespondingRocket(rocketId).getStatus();
     }
 
+    public RocketLaunchStep getRocketLaunchStep(String rocketId) throws RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(rocketId).getLaunchStep();
+    }
+
     public RocketStatus getRocketDepartmentStatus(String rocketId) throws RocketDoesNotExistException {
         return getRocketStatus(rocketId);
     }

@@ -30,7 +30,6 @@ public class BoosterLandingStepConsumer {
                 log = "Booster [ID = " + boosterId + "]. Landing sequence is now : " + status.name();
                 missionLogService.createMissionLogData(boosterId, log);
             }
-            missionLogService.createMissionLogData(missionId, log);
         } catch (MissionNotFoundException e) {
             // TODO : handle kafka exceptions
             e.printStackTrace();

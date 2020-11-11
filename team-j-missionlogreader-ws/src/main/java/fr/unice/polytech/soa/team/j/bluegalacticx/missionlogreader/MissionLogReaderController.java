@@ -31,7 +31,7 @@ public class MissionLogReaderController {
     }
     
     @GetMapping("/{id}")
-    public List<Log> getMissionLogById(@PathVariable String id) {
+    public MissionLog getMissionLogById(@PathVariable String id) {
         try {
             return missionLogReaderService.getLogsForMission(id);
         } catch (MissionNotFoundException e){

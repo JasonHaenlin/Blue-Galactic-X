@@ -97,22 +97,19 @@ public class RocketSchedulerTest {
 
     @Test
     @Order(1)
-    public void rocketSpeedVariationTest() throws InterruptedException, NoObjectiveSettedException {
+    public void rocketSpeedChangingTest() throws InterruptedException, NoObjectiveSettedException, 
+            RocketDestroyedException {
         rocket.getRocketApi().launchWhenReady(new SpaceCoordinate(1000, 2000, 3000), "1");
         List<Double> variationSpeed = new ArrayList<>();
-        for (int i = 0; i < numberIterations; i++) {
+        for (int i = 0; i < 100; i++) {
             rocket.getLastTelemetry();
-            await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
-                sch.scheduleRocket();
-            });
+            waitForSeconds(1);
             variationSpeed.add(rocket.getRocketApi().getCurrentTelemetry().getSpeed());
         }
 
         // the speed is generated randomly, so the variation of speed when it enter or
         // quit maxQ is between 15-20%
         double variationDecreasePourcentageSpeedChange = -0.15;
-        double variationIncreasePourcentageSpeedChange = 0.15;
-        boolean speedHasIncreased = false;
         boolean speedHasDecreased = false;
 
         for (int i = 0; i < variationSpeed.size() - 1; i++) {
@@ -120,13 +117,9 @@ public class RocketSchedulerTest {
             if (variation <= variationDecreasePourcentageSpeedChange) {
                 speedHasDecreased = true;
             }
-            if (variation >= variationIncreasePourcentageSpeedChange) {
-                speedHasIncreased = true;
-            }
         }
 
         assertTrue(speedHasDecreased);
-        assertTrue(speedHasIncreased);
 
     }
 
@@ -137,9 +130,9 @@ public class RocketSchedulerTest {
         rocket2.getRocketApi().launchWhenReady(new SpaceCoordinate(600, 600, 600), "5");
         rocket2.setStatus(RocketStatus.STARTING);
         rocket2.setLaunchStep(RocketLaunchStep.STARTUP);
-        waitForSeconds(40);
+        waitForSeconds(1);
         assertEquals(RocketLaunchStep.STARTUP, rocket2.getLaunchStep());
-        waitForSeconds(18);
+        waitForSeconds(3);
         assertEquals(RocketLaunchStep.MAIN_ENGINE_START, rocket2.getLaunchStep());
         waitForSeconds(3);
         assertEquals(RocketLaunchStep.LIFTOFF, rocket2.getLaunchStep());

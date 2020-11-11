@@ -76,7 +76,7 @@ public class RocketApi {
         newDistance -= mockDistStep;
         currentTelemetry = new SpaceTelemetry().heatShield(RandomUtils.randomDouble(5, currentTelemetry.getHeatShield()))
                 .distance(newDistance < 1 ? 0 : newDistance).totalDistance(currentTelemetry.getTotalDistance())
-                .speed(RandomUtils.randomDouble(4, currentTelemetry.getSpeed()))
+                .speed(currentTelemetry.getSpeed() + 20)
                 .irradiance(RandomUtils.randomInt(10, currentTelemetry.getIrradiance()))
                 .velocityVariation(RandomUtils.randomInt(10, currentTelemetry.getVelocityVariation()))
                 .temperature(RandomUtils.randomInt(50, currentTelemetry.getTemperature()))
