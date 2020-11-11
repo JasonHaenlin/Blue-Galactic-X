@@ -75,9 +75,9 @@ class RocketRPCServiceTest {
 	public void init() throws IOException, CannotBeNullException {
 		Mockito.lenient().when(restService.getCoordinatesFromMission(any(String.class)))
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
-		Mockito.lenient().when(restService.getAvailableRocketID()).thenReturn(Mono.just("1"));
+		Mockito.lenient().when(restService.getAvailableBoosterID()).thenReturn(Mono.just("1"));
 
-		rocketService.addNewRocket(new Rocket().id("1"));
+		rocketService.addNewRocket(new Rocket().id("1").spaceCoordinate(new SpaceCoordinate(600, 600, 600)));
 	}
 
 	@Test
@@ -126,7 +126,7 @@ class RocketRPCServiceTest {
 
 		assertNotNull(responseObserverAgain.getError());
 
-		assertEquals("ABORTED: Cannot trigger the same sequence twice : IN_SERVICE",
+		assertEquals("ABORTED: Cannot trigger the same sequence twice : STARTING",
 				responseObserverAgain.getError().getMessage());
 	}
 

@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +35,7 @@ public class RocketApiTest {
     }
 
     @Test
-    public void iterationsNotSupposedToChangeOnGroundTest() {
+    public void iterationsNotSupposedToChangeAsRocketNotLaunchedTest() {
         SpaceTelemetry ms = api.retrieveLastTelemetry();
         assertEquals(ms, api.retrieveLastTelemetry());
         assertEquals(ms, api.retrieveLastTelemetry());
@@ -42,32 +43,17 @@ public class RocketApiTest {
     }
 
     @Test
-    public void iterationsOnAirSupposedToChangeTest() throws NoObjectiveSettedException {
-        SpaceTelemetry ms = api.retrieveLastTelemetry();
-
-        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
-
-        double lDist;
-
-        for (int i = 0; i < 5; i++) {
-            lDist = api.getAirTelemetry().getDistance();
-            ms = api.retrieveLastTelemetry();
-            assertTrue(lDist > ms.getDistance());
-        }
-    }
-
-    @Test
-    public void shouldBeZeroOfDistanceAfterIterationsTest()
+    public void shouldNotBeZeroOfDistanceAfterIterationsTest()
             throws BoosterDestroyedException, NoObjectiveSettedException {
         SpaceTelemetry ms;
 
-        ms = api.launchWhenReady(new SpaceCoordinate(10, 10, 0), "1");
-
+        ms = api.launchWhenReady(new SpaceCoordinate(100, 100, 100), "1");
+        api.getCurrentTelemetry().setSpeed(2);
         for (int i = 0; i < numberIterations; i++) {
             ms = api.retrieveLastTelemetry();
         }
 
-        assertEquals(0.0, ms.getDistance(), 0.1);
+        assertNotEquals(0.0, ms.getDistance());
 
     }
 

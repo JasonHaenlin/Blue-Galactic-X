@@ -15,13 +15,10 @@ public class RocketApi {
     private SpaceCoordinate origin = new SpaceCoordinate(0, 0, 0);
     private double distance;
 
-    private SpaceTelemetry airTelemetry;
-    private SpaceTelemetry groundTelemetry;
+    private SpaceTelemetry currentTelemetry;
 
     public RocketApi withBasedTelemetry() {
-        airTelemetry = new SpaceTelemetry().heatShield(95).speed(950).distance(500).irradiance(10).velocityVariation(15)
-                .temperature(200).vibration(30).boosterRGA(30).midRocketRGA(35);
-        groundTelemetry = new SpaceTelemetry().heatShield(100).speed(0).distance(0).irradiance(10).velocityVariation(15)
+        currentTelemetry = new SpaceTelemetry().heatShield(100).speed(0).distance(0).irradiance(10).velocityVariation(15)
                 .temperature(50).vibration(40).boosterRGA(30).midRocketRGA(35);
         return this;
     }
@@ -43,11 +40,11 @@ public class RocketApi {
         }
         this.distance = computeDistance(origin, objectiveCoordinates);
         this.mockDistStep = mockDistStepFix;
-        return airTelemetry.totalDistance(distance).distance(distance);
+        return currentTelemetry.totalDistance(distance).distance(distance);
     }
 
     private boolean isRocketNotPassedMaxQ() {
-        if (airTelemetry.getDistance() >= airTelemetry.getTotalDistance() - MaxQ.MAX) {
+        if (currentTelemetry.getDistance() >= currentTelemetry.getTotalDistance() - MaxQ.MAX) {
             return true;
         }
         return false;
@@ -55,12 +52,12 @@ public class RocketApi {
 
     public SpaceTelemetry retrieveLastTelemetry() {
         if (this.mockDistStep == null) {
-            return groundTelemetry;
+            return currentTelemetry;
         }
         if (isRocketNotPassedMaxQ()) {
             this.mockDistStep = this.mockDistStepFix;
         } else {
-            this.mockDistStep = distance / this.iteration;
+            this.mockDistStep = currentTelemetry.getSpeed();
         }
         return nextTelemetry();
     }
@@ -75,23 +72,23 @@ public class RocketApi {
     }
 
     public SpaceTelemetry nextTelemetry() {
-        double newDistance = airTelemetry.getDistance();
+        double newDistance = currentTelemetry.getDistance();
         newDistance -= mockDistStep;
-        airTelemetry = new SpaceTelemetry().heatShield(RandomUtils.randomDouble(5, airTelemetry.getHeatShield()))
-                .distance(newDistance < 1 ? 0 : newDistance).totalDistance(airTelemetry.getTotalDistance())
-                .speed(RandomUtils.randomDouble(20, airTelemetry.getSpeed()))
-                .irradiance(RandomUtils.randomInt(10, airTelemetry.getIrradiance()))
-                .velocityVariation(RandomUtils.randomInt(10, airTelemetry.getVelocityVariation()))
-                .temperature(RandomUtils.randomInt(50, airTelemetry.getTemperature()))
-                .vibration(RandomUtils.randomInt(5, airTelemetry.getVibration()))
-                .boosterRGA(RandomUtils.randomInt(10, airTelemetry.getBoosterRGA()))
-                .midRocketRGA(RandomUtils.randomInt(10, airTelemetry.getMidRocketRGA()));
+        currentTelemetry = new SpaceTelemetry().heatShield(RandomUtils.randomDouble(5, currentTelemetry.getHeatShield()))
+                .distance(newDistance < 1 ? 0 : newDistance).totalDistance(currentTelemetry.getTotalDistance())
+                .speed(RandomUtils.randomDouble(4, currentTelemetry.getSpeed()))
+                .irradiance(RandomUtils.randomInt(10, currentTelemetry.getIrradiance()))
+                .velocityVariation(RandomUtils.randomInt(10, currentTelemetry.getVelocityVariation()))
+                .temperature(RandomUtils.randomInt(50, currentTelemetry.getTemperature()))
+                .vibration(RandomUtils.randomInt(5, currentTelemetry.getVibration()))
+                .boosterRGA(RandomUtils.randomInt(10, currentTelemetry.getBoosterRGA()))
+                .midRocketRGA(RandomUtils.randomInt(10, currentTelemetry.getMidRocketRGA()));
 
-        return this.airTelemetry;
+        return this.currentTelemetry;
     }
 
-    public SpaceTelemetry getAirTelemetry() {
-        return airTelemetry;
+    public SpaceTelemetry getCurrentTelemetry() {
+        return currentTelemetry;
     }
 
 }

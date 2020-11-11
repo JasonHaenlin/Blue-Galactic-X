@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpeedChange;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
@@ -30,6 +34,10 @@ public class RocketService {
 
     @Autowired 
     private MaxQProducer maxQProducer;
+
+    @Autowired
+    private BoosterRPCClient boosterRpcClient;
+
     private List<Rocket> rockets = new ArrayList<>();
 
     public void addNewRocket(Rocket rocket) throws CannotBeNullException {
@@ -42,26 +50,25 @@ public class RocketService {
 
     public void updateTelemetryToSend() throws RocketDestroyedException {
         for (Rocket r : rockets) {
-            if (r.getStatus() != RocketStatus.DESTROYED) {
-                SpaceTelemetry st = r.getLastTelemetry();
+            if (r.getStatus() == RocketStatus.IN_SERVICE) {
+                r.getLastTelemetry();
                 // telemetryRocketProducer.sendTelemetryRocketEvent(st);
-
-                if (r.checkRocketInMaxQ() && r.getStatus() != RocketStatus.ENTER_MAXQ) {
-                    r.changeRocketStatus(RocketStatus.ENTER_MAXQ);
-                    r.updateSpeed(SpeedChange.DECREASE);
-                    maxQProducer.sendInMaxQ(r.getBoosterId());
-                } else if (!r.checkRocketInMaxQ() && r.getStatus() == RocketStatus.ENTER_MAXQ) {
-                    r.changeRocketStatus(RocketStatus.QUIT_MAXQ);
-                    r.updateSpeed(SpeedChange.INCREASE);
-                    maxQProducer.sendQuitMaxQ(r.getBoosterId());
-                }
-
-                if (st.getDistance() <= 0 && r.getStatus() != RocketStatus.ARRIVED) {
-                    r.arrivedAtDestination();
-                    rocketProducer.donedRocketEvent(r.getId());
-                }
             }
 
+        }
+    }
+
+    public void updateLaunchProcedure() {
+        for (Rocket r : rockets) {
+            RocketLaunchStep launchStep = r.getLaunchStep();
+            r.updateState();
+
+            if (launchStep != r.getLaunchStep()) {
+                if(r.getLaunchStep() == RocketLaunchStep.STAGE_SEPARATION){
+                    boosterRpcClient.initiateLandingSequence(r.getBoosterId(), r.distanceFromEarth(), r.currentSpeed());
+                }
+                // Send Kafka event here to notificate launching step have changed
+            }
         }
     }
 
