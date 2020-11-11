@@ -11,10 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.protobuf.Empty;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DesctructionOrderReply;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DestructionOrderRequest;
-import io.grpc.Status;
-import io.grpc.StatusException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -38,6 +34,10 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.Booste
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.TelemetryBoosterProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DesctructionOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DestructionOrderRequest;
+import io.grpc.Status;
+import io.grpc.StatusException;
 import io.grpc.internal.testing.StreamRecorder;
 
 @SpringBootTest
@@ -67,7 +67,7 @@ public class BoosterTest {
 
     @BeforeAll
     public void init() throws CannotBeNullException {
-        boosterTest = new Booster().id("1").status(BoosterStatus.READY).fuelLevel(100);
+        boosterTest = new Booster().status(BoosterStatus.READY).fuelLevel(100);
         boosterService.addNewBooster(boosterTest);
 
     }
@@ -129,7 +129,7 @@ public class BoosterTest {
     @Test
     @Order(4)
     public void destroyRocketNotDestroyedIsOkTest() throws Exception {
-        DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setBoosterId("1").build();
+        DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setBoosterId(boosterTest.getId()).build();
         StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
         boosterRpcService.destructionOrderOnBooster(request, responseObserver);
 
@@ -146,7 +146,7 @@ public class BoosterTest {
     @Test
     @Order(5)
     public void destroyRocketAlreadyDestroyedIsKoTest() throws Exception {
-        DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setBoosterId("1").build();
+        DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setBoosterId(boosterTest.getId()).build();
         StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
         boosterRpcService.destructionOrderOnBooster(request, responseObserver);
 

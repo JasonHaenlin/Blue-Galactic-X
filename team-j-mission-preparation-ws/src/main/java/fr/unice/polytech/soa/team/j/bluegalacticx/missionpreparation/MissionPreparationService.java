@@ -85,4 +85,8 @@ public class MissionPreparationService {
         return missions.stream().filter(r -> r.getRocketId().equals(id)).findFirst();
     }
 
+    public final List<Mission> retrieveMissions() {
+        return missions;
+    }
+
 }

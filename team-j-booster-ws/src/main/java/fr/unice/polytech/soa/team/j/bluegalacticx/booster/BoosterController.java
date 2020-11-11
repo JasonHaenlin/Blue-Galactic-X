@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +46,11 @@ public class BoosterController {
         } catch (CannotBeNullException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    @GetMapping()
+    public List<Booster> getBoosters() {
+        return boosterService.retrieveBoosters();
     }
 
     @GetMapping("/{id}")

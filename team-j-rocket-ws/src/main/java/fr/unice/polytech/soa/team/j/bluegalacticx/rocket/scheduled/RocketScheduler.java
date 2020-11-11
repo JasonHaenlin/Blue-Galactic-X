@@ -10,13 +10,11 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.Roc
 @Component
 public class RocketScheduler {
 
-
     @Autowired
     private RocketService rocketService;
 
     @Scheduled(fixedDelay = 1000)
     public void scheduleRocket() throws RocketDestroyedException {
-        rocketService.updateTelemetryToSend();
         rocketService.updateLaunchProcedure();
     }
 }

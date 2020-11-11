@@ -54,4 +54,8 @@ public class OrbitalPayloadService {
         return payloads.stream().filter(r -> r.getPayloadId().equals(id)).findFirst();
     }
 
+    public List<Payload> retrievePayloads() {
+        return payloads;
+    }
+
 }

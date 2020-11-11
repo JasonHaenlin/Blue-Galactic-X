@@ -2,10 +2,6 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
 import com.google.protobuf.Empty;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDestroyedException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DesctructionOrderReply;
-import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DestructionOrderRequest;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDoesNotExistException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers.BoosterStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterGrpc.BoosterImplBase;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterRequest;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DesctructionOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DestructionOrderRequest;
 import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.stub.StreamObserver;

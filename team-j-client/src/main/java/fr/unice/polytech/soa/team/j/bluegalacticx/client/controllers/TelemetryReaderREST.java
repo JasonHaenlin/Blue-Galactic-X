@@ -7,8 +7,12 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.entities.TelemetryRo
 
 public class TelemetryReaderREST extends RestAPI {
 
-    public TelemetryReaderREST(String uri) {
-        super(uri);
+    public TelemetryReaderREST(String port) {
+        super("localhost", port, "telemetry");
+    }
+
+    public TelemetryReaderREST(String host, String port) {
+        super(host, port, "telemetry");
     }
 
     public TelemetryRocketData retrieveTelemetryRocketData(String rocketId) {

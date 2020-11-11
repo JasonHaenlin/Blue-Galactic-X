@@ -7,11 +7,12 @@ option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
 
 message RocketStatusRequest {
   enum EventType {
-    READY_FOR_LAUNCH= 0; IN_SERVICE = 1; DESTROYED = 2; AT_BASE = 3; IN_REPAIR = 4; DAMAGED = 5;
+    READY_FOR_LAUNCH = 0; IN_SERVICE = 1; DESTROYED = 2; AT_BASE = 3;
+    IN_REPAIR = 4;
+    DAMAGED = 5;
     DONE = 6;
   }
   EventType eventType = 1;
   string rocketId = 2;
-  string boosterId=3;
-
+  string boosterId = 3;
 }

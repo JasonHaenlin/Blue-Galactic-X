@@ -27,10 +27,17 @@
     <!-- Project Blue Galactic X -->
     <dependency>
       <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
-      <artifactId>teamj-mission</artifactId>
+      <artifactId>teamj-mission-preparation</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>${basedir}/src/libs/mission-ws.jar</systemPath>
+      <systemPath>${basedir}/src/libs/mission-preparation-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-mission-control</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/mission-control-ws.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
@@ -73,6 +80,34 @@
       <version>0.0.1-SNAPSHOT</version>
       <scope>system</scope>
       <systemPath>${basedir}/src/libs/telemetry-reader-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-missionlogreader</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/missionlogreader-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-missionlogwriter</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/missionlogwriter-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-telemetry-reader</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/module-destroyer-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-orbital-payload</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/orbital-payload-ws.jar</systemPath>
     </dependency>
     <!-- End project Blue Galactic X -->
 
@@ -151,19 +186,19 @@
       <version>${io.grpc.version}</version>
       <scope>test</scope>
     </dependency>
-        <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+    <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
     <dependency>
-        <groupId>com.googlecode.json-simple</groupId>
-        <artifactId>json-simple</artifactId>
-        <version>1.1.1</version>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
     </dependency>
 
     <dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.11</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.11</version>
     </dependency>
-    
+
     <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka -->
     <dependency>
       <groupId>org.apache.kafka</groupId>
@@ -174,21 +209,21 @@
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </exclusion>
-     </exclusions>
+      </exclusions>
     </dependency>
 
     <dependency>
-			<groupId>io.confluent</groupId>
-			<artifactId>kafka-protobuf-serializer</artifactId>
+      <groupId>io.confluent</groupId>
+      <artifactId>kafka-protobuf-serializer</artifactId>
       <version>5.5.1</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </exclusion>
-     </exclusions>
+      </exclusions>
     </dependency>
-    
+
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -200,10 +235,10 @@
 
   <repositories>
     <repository>
-        <id>confluent</id>
-        <name>confluent</name>
-        <url>https://packages.confluent.io/maven/</url>
+      <id>confluent</id>
+      <name>confluent</name>
+      <url>https://packages.confluent.io/maven/</url>
     </repository>
-</repositories>
+  </repositories>
 
 </project>

@@ -19,12 +19,11 @@ public class PayloadCreateProducer {
     private KafkaTemplate<String, PayloadRequest> kafkaTemplate;
 
     public void notifyNewPayload(Payload p) {
-        PayloadRequest req = PayloadRequest.newBuilder().setPayloadId(p.getId()).setMissionId(p.getMissionId())
-                .setPayloadStatus(p.getStatus()).setPosition(SpaceCoordinate.newBuilder().setX(p.getPosition().getX())
-                        .setY(p.getPosition().getY()).setZ(p.getPosition().getZ()).build())
+        PayloadRequest req = PayloadRequest.newBuilder().setPayloadId(p.getId()).setPayloadStatus(p.getStatus())
+                .setPosition(SpaceCoordinate.newBuilder().setX(p.getPosition().getX()).setY(p.getPosition().getY())
+                        .setZ(p.getPosition().getZ()).build())
                 .build();
 
         kafkaTemplate.send(statusTopic0, req);
     }
-
 }

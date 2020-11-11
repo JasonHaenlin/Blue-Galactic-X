@@ -65,4 +65,8 @@ public class PayloadService {
         return payloads.stream().filter(r -> r.getRocketId().equals(id)).findFirst();
     }
 
+    public List<Payload> getPayloads() {
+        return payloads;
+    }
+
 }

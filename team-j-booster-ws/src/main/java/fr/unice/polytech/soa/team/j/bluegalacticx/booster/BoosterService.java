@@ -90,4 +90,8 @@ public class BoosterService {
         throw new BoosterNotAvailableException();
     }
 
+    public List<Booster> retrieveBoosters() {
+        return boosters;
+    }
+
 }

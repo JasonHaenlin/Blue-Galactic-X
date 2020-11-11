@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.payload;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +31,11 @@ public class PayloadController {
         } catch (InvalidPayloadException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    @GetMapping()
+    public List<Payload> getPayloads() {
+        return payloadService.getPayloads();
     }
 
     @GetMapping("/{id}")

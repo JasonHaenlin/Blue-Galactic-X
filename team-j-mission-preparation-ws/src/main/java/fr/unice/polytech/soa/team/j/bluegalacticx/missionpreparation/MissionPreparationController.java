@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,11 @@ public class MissionPreparationController {
         } catch (InvalidMissionException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    @GetMapping()
+    public List<Mission> getMissions() {
+        return missionPreparationService.retrieveMissions();
     }
 
     @GetMapping("/destination/{missionId}")

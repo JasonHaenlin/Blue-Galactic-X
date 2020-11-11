@@ -2,7 +2,7 @@ FROM adoptopenjdk/openjdk11-openj9:alpine-slim
 
 COPY target/rocket-ws.jar /usr/spring/rocket-ws.jar
 
-ENV MISSION_HOST="team-j-blue-galactic-mission"
+ENV MISSION_HOST="team-j-blue-galactic-mission-preparation"
 ENV MISSION_PORT="8070"
 ENV MISSION_GRPC="8071"
 ENV BOOSTER_HOST="team-j-blue-galactic-booster"

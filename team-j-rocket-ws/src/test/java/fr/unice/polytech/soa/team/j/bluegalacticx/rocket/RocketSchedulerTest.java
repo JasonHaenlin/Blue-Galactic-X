@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,7 +39,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.RocketSchedul
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.scheduled.ScheduledConfig;
 
 @SpringJUnitConfig(value = { ScheduledConfig.class, RocketApi.class, RocketService.class, RestTemplate.class,
-        RocketStatusProducer.class, TelemetryRocketProducer.class, DepartmentStatusProducer.class,MaxQProducer.class })
+        RocketStatusProducer.class, TelemetryRocketProducer.class, DepartmentStatusProducer.class, MaxQProducer.class })
 @Tags(value = { @Tag("scheduler"), @Tag("scheduler-rocket") })
 @TestMethodOrder(OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
@@ -64,7 +63,7 @@ public class RocketSchedulerTest {
     @MockBean
     private RocketStatusProducer rocketStatusProducer;
 
-    @MockBean 
+    @MockBean
     private MaxQProducer maxQProducer;
 
     private int numberIterations = 10;
@@ -72,7 +71,6 @@ public class RocketSchedulerTest {
     private Rocket rocket2;
 
     private void fakeScheduler() throws RocketDestroyedException {
-        rocketService.updateTelemetryToSend();
         rocketService.updateLaunchProcedure();
     }
 
@@ -134,8 +132,8 @@ public class RocketSchedulerTest {
 
     @Test
     @Order(2)
-    public void rocketChangeLaunchStep() throws InterruptedException, NoObjectiveSettedException, CannotBeNullException, 
-            RocketDestroyedException {
+    public void rocketChangeLaunchStep()
+            throws InterruptedException, NoObjectiveSettedException, CannotBeNullException, RocketDestroyedException {
         rocket2.getRocketApi().launchWhenReady(new SpaceCoordinate(600, 600, 600), "5");
         rocket2.setStatus(RocketStatus.STARTING);
         rocket2.setLaunchStep(RocketLaunchStep.STARTUP);

@@ -37,7 +37,7 @@ public class RocketStatusConsumer {
                 case AT_BASE:
                     payloadService.updatePayloadFromRocketState(PayloadStatus.NOT_DELIVERED, id);
                     break;
-                case DONED:
+                case DONE:
                     payloadService.updatePayloadFromRocketState(PayloadStatus.IN_ROLLOUT, id);
                     break;
                 default:

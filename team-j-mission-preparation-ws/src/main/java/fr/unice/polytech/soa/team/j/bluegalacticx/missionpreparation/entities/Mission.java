@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public class Mission {
     private DepartmentGoNg goNg = new DepartmentGoNg();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date date;
+    private Date date = Calendar.getInstance().getTime();
 
     public Mission() {
     }
@@ -151,7 +152,7 @@ public class Mission {
     public String toString() {
         return "{" + " id='" + getId() + "'" + ", rocketId='" + getRocketId() + "'" + ", boosterId='" + getBoosterIds()
                 + "'" + ", payloadId='" + getPayloadId() + "'" + ", destination='" + getDestination() + "'" + ", goNg='"
-                + getGoNg() + "'" + ", date='" + getDate() + "'" + "}"; 
+                + getGoNg() + "'" + ", date='" + getDate() + "'" + "}";
     }
 
 }

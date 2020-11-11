@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.jvnet.staxex.StAxSOAPBody.Payload;
 import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.missioncontrol.entities.BoosterStatus;
@@ -45,7 +44,7 @@ public class MissionControlService {
         findMissionByRocketOrThrow(rocketId).addRocketStatusToRules(rocketStatus);
     }
 
-    public void storeBoosterStatus(String boosterId, BoosterStatus boosterStatus)  throws BoosterDoesNotExistException{
+    public void storeBoosterStatus(String boosterId, BoosterStatus boosterStatus) throws BoosterDoesNotExistException {
         findMissionByBoosterOrThrow(boosterId).addBoosterStatusToRules(boosterStatus);
     }
 

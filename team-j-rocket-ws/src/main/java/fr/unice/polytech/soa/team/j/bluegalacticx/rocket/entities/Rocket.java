@@ -44,18 +44,17 @@ public class Rocket {
         return this;
     }
 
-    public Rocket boosterId2(String boosterId2){
-        this.boosterId2=boosterId2;
+    public Rocket boosterId2(String boosterId2) {
+        this.boosterId2 = boosterId2;
         return this;
     }
 
-    public String getBoosterId2(){
+    public String getBoosterId2() {
         return boosterId2;
     }
 
-    
-    public void setBoosterId2(String boosterId2){
-        this.boosterId2 =  boosterId2;
+    public void setBoosterId2(String boosterId2) {
+        this.boosterId2 = boosterId2;
     }
 
     public String getId() {
@@ -83,15 +82,11 @@ public class Rocket {
         this.launchStep = rocketLaunchStep;
     }
 
-    public void setStatus(RocketStatus rocketStatus){
-        this.status=rocketStatus;
-    }
-
-    public void updateState(){
-        if(this.status == RocketStatus.STARTING){
+    public void updateState() {
+        if (this.status == RocketStatus.STARTING) {
             handleLaunchTimer();
-        } else if(this.status == RocketStatus.IN_SERVICE){
-            switch(this.launchStep){
+        } else if (this.status == RocketStatus.IN_SERVICE) {
+            switch (this.launchStep) {
                 case LIFTOFF:
                 case ENTER_MAXQ:
                     handleMaxQLaunchStep();
@@ -138,7 +133,7 @@ public class Rocket {
         }
     }
 
-    private void handleMaxQLaunchStep(){
+    private void handleMaxQLaunchStep() {
         if (checkRocketInMaxQ() && this.launchStep != RocketLaunchStep.ENTER_MAXQ) {
             setLaunchStep(RocketLaunchStep.ENTER_MAXQ);
             LOG.info("Entering MaxQ, decreasing speed");
@@ -195,6 +190,10 @@ public class Rocket {
         }
     }
 
+    public void setStatus(RocketStatus rocketStatus) {
+        this.status = rocketStatus;
+    }
+
     public boolean checkRocketInMaxQ() {
         SpaceTelemetry telemetry = rocketApi.getCurrentTelemetry();
         if (telemetry.getDistance() <= telemetry.getTotalDistance() - MaxQ.MIN
@@ -248,6 +247,18 @@ public class Rocket {
         this.status = status;
     }
 
+    public SpaceCoordinate getObjective() {
+        return objective;
+    }
+
+    public static double getSpeedUpdate() {
+        return MAXQ_SPEED_UPDATE;
+    }
+
+    public RocketReport getReport() {
+        return report;
+    }
+
     public String getBoosterId() {
         return this.boosterId;
     }
@@ -281,13 +292,15 @@ public class Rocket {
         this.status = RocketStatus.STARTING;
         setLaunchStep(RocketLaunchStep.STARTUP);
     }
+
     public void readyToLaunchActivated() throws NoSameStatusException {
         if (status == RocketStatus.READY_FOR_LAUNCH) {
             throw new NoSameStatusException(status.toString());
         }
-        
+
         this.status = RocketStatus.READY_FOR_LAUNCH;
     }
+
     public void initiateTheSelfDestructSequence() throws RocketDestroyedException {
         if (status == RocketStatus.DESTROYED) {
             throw new RocketDestroyedException();

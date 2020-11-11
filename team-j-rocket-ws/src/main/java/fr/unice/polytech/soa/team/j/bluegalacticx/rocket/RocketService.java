@@ -12,11 +12,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchSt
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpeedChange;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
@@ -51,24 +47,25 @@ public class RocketService {
         return rocket;
     }
 
-    public void updateTelemetryToSend() throws RocketDestroyedException {
+    public void updateLaunchProcedure() {
         for (Rocket r : rockets) {
             if (r.getStatus() == RocketStatus.IN_SERVICE) {
                 r.getLastTelemetry();
-                // telemetryRocketProducer.sendTelemetryRocketEvent(st);
             }
-
-        }
-    }
-
-    public void updateLaunchProcedure() {
-        for (Rocket r : rockets) {
             RocketLaunchStep launchStep = r.getLaunchStep();
             r.updateState();
-
             if (launchStep != r.getLaunchStep()) {
-                if(r.getLaunchStep() == RocketLaunchStep.STAGE_SEPARATION){
+                if (r.getLaunchStep() == RocketLaunchStep.STAGE_SEPARATION) {
                     boosterRpcClient.initiateLandingSequence(r.getBoosterId(), r.distanceFromEarth(), r.currentSpeed());
+                }
+                if (r.getLaunchStep() == RocketLaunchStep.ENTER_MAXQ) {
+                    maxQProducer.sendInMaxQ(r.getBoosterId());
+                }
+                if (r.getLaunchStep() == RocketLaunchStep.MAXQ_PASSED) {
+                    maxQProducer.sendQuitMaxQ(r.getBoosterId());
+                }
+                if (r.getLaunchStep() == RocketLaunchStep.FINISHED) {
+                    rocketProducer.donedRocketEvent(r.getId());
                 }
                 // Send Kafka event here to notificate launching step have changed
             }
@@ -119,5 +116,9 @@ public class RocketService {
 
     public Rocket retrieveRocket(String id) throws RocketDoesNotExistException {
         return retrieveCorrespondingRocket(id);
+    }
+
+    public List<Rocket> getRockets() {
+        return rockets;
     }
 }

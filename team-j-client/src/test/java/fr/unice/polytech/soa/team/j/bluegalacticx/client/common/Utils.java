@@ -30,12 +30,15 @@ public class Utils {
                 fail("FAILED : should be " + expect.toString() + " but was " + currentValue.toString());
             }
             Thread.sleep(delay);
+            curTry++;
             try {
                 currentValue = actual.method();
             } catch (Exception e) {
+                if (curTry > maxTry) {
+                    fail("FAILED : should be " + expect.toString() + " but was " + currentValue.toString(), e);
+                }
                 currentValue = null;
             }
-            curTry++;
         }
     }
 
@@ -52,7 +55,7 @@ public class Utils {
             return actual.method();
         } catch (Exception e) {
             if (retry <= 0) {
-                fail("FAILED : no success was encountered");
+                fail("FAILED : no success was encountered", e);
             }
             Thread.sleep(delay);
             return assertSuccessWithRetry(actual, --retry, delay);

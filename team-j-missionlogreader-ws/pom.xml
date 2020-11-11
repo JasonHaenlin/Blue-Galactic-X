@@ -8,7 +8,7 @@
 		<!-- lookup parent from repository -->
 	</parent>
 
-	<artifactId>missionlogreader</artifactId>
+	<artifactId>teamj-missionlogreader</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>

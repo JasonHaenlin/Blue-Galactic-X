@@ -6,8 +6,12 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.WeatherReport
 
 public class WeatherREST extends RestAPI {
 
-    public WeatherREST(String uri) {
-        super(uri);
+    public WeatherREST(String port) {
+        super("localhost", port, "weather");
+    }
+
+    public WeatherREST(String host, String port) {
+        super(host, port, "weather");
     }
 
     public WeatherReport getCurrentWeather() {

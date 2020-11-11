@@ -20,12 +20,12 @@ public class Payload {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
+
     public Payload() {
         this.missionId = "";
     }
 
-    public Payload(PayloadType type, String rocketId, String missionId, PayloadStatus status, SpaceCoordinate position, int weight,
-            String id, Date date) {
+    public Payload(PayloadType type, String rocketId, String missionId, PayloadStatus status, SpaceCoordinate position, int weight, String id, Date date) {
         this.type = type;
         this.rocketId = rocketId;
         if(missionId == null || missionId == ""){
@@ -114,6 +114,11 @@ public class Payload {
         return this;
     }
 
+    public Payload missionId(String missionId) {
+        this.missionId = missionId;
+        return this;
+    }
+
     public Payload status(PayloadStatus status) {
         this.status = status;
         return this;
@@ -147,10 +152,7 @@ public class Payload {
             return false;
         }
         Payload payload = (Payload) o;
-        return Objects.equals(type, payload.type) && Objects.equals(rocketId, payload.rocketId)
-                && Objects.equals(missionId, payload.missionId)
-                && Objects.equals(status, payload.status) && Objects.equals(position, payload.position)
-                && weight == payload.weight && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
+        return Objects.equals(type, payload.type) && Objects.equals(rocketId, payload.rocketId) && Objects.equals(missionId, payload.missionId) && Objects.equals(status, payload.status) && Objects.equals(position, payload.position) && weight == payload.weight && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
     }
 
     @Override
@@ -160,10 +162,17 @@ public class Payload {
 
     @Override
     public String toString() {
-        return "{" + " type='" + getType() + "'" + ", rocketId='" + getRocketId() + "'"+ ", missionId='" + getMissionId()
-                + "'" + ", status='" + getStatus()
-                + "'" + ", position='" + getPosition() + "'" + ", weight='" + getWeight() + "'" + ", id='" + getId()
-                + "'" + ", date='" + getDate() + "'" + "}";
+        return "{" +
+            " type='" + getType() + "'" +
+            ", rocketId='" + getRocketId() + "'" +
+            ", missionId='" + getMissionId() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", position='" + getPosition() + "'" +
+            ", weight='" + getWeight() + "'" +
+            ", id='" + getId() + "'" +
+            ", date='" + getDate() + "'" +
+            "}";
     }
+
 
 }

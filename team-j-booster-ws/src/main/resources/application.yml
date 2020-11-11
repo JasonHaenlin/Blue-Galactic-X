@@ -6,6 +6,10 @@ spring:
   application:
     name: Demo
 
+logging:
+  level:
+    kafka: OFF
+
 server:
   port: 8030
   error:

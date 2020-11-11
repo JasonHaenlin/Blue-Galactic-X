@@ -12,7 +12,7 @@ ENV SCHEMA_BROKER_HOST="schema-registry"
 ENV SCHEMA_BROKER_PORT="9090"
 
 HEALTHCHECK  --interval=5s --timeout=3s \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:8070/missionPreparation/ping/ || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8070/mission-preparation/ping/ || exit 1
 
 EXPOSE 8070
 

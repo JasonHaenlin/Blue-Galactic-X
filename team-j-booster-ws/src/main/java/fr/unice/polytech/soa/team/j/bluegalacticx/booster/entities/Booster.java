@@ -43,6 +43,7 @@ public class Booster {
 
     public void initStatus() {
         this.status = BoosterStatus.PENDING;
+        this.landingStep = BoosterLandingStep.NOT_LANDING;
     }
 
     public Booster initTelemetry() {

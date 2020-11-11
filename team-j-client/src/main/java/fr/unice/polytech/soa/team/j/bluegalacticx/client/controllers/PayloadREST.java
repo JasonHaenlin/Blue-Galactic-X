@@ -8,8 +8,12 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 
 public class PayloadREST extends RestAPI {
 
-    public PayloadREST(String uri) {
-        super(uri);
+    public PayloadREST(String port) {
+        super("localhost", port, "payload");
+    }
+
+    public PayloadREST(String host, String port) {
+        super(host, port, "payload");
     }
 
     public Payload createNewPayload(Payload payload) throws IOException, InterruptedException {

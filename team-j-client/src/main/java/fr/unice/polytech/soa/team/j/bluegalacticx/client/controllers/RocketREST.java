@@ -8,8 +8,12 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry
 
 public class RocketREST extends RestAPI {
 
-    public RocketREST(String uri) {
-        super(uri);
+    public RocketREST(String port) {
+        super("localhost", port, "rocket");
+    }
+
+    public RocketREST(String host, String port) {
+        super(host, port, "rocket");
     }
 
     public Rocket createRocket(Rocket rocket) {
