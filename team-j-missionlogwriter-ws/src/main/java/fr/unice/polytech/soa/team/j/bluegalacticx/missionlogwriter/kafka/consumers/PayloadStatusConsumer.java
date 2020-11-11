@@ -23,9 +23,15 @@ public class PayloadStatusConsumer {
         PayloadStatus status = request.getEventType();
         try {
             if (status == PayloadStatus.DELIVERED) {
-                String log = "Payload of ID " + payloadId + ", attached to rocket of ID " + rocketId
-                        + ", for mission of ID " + missionId + " have been successfully delivered";
-                missionLogService.createMissionLogData(missionId, log);
+                String log;
+                if (missionId != null && missionId != "") {
+                    log = "Payload of ID " + payloadId + ", attached to rocket of ID " + rocketId
+                            + ", for mission of ID " + missionId + " have been successfully delivered";
+                    missionLogService.createMissionLogData(missionId, log);
+                } else {
+                    log = "Payload of ID " + payloadId + ", attached to rocket of ID " + rocketId + " have been successfully delivered";
+                    missionLogService.createMissionLogData(payloadId, log);
+                }
             }
         } catch (MissionNotFoundException e) {
             // TODO : handle kafka exceptions

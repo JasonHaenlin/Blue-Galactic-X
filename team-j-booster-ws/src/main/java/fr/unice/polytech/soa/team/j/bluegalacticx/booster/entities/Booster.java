@@ -24,11 +24,17 @@ public class Booster {
         this.status = BoosterStatus.PENDING;
         this.landingStep = BoosterLandingStep.NOT_LANDING;
         this.telemetry = new BoosterTelemetry();
+        this.missionId = "";
     }
 
     public Booster(String id, String missionId, BoosterStatus status, int fuelLevel) {
         this.id = id;
         this.status = status;
+        if (missionId == null || missionId == "") {
+            this.missionId = "";
+        } else {
+            this.missionId = missionId;
+        }
         this.landingStep = BoosterLandingStep.NOT_LANDING;
         this.telemetry = new BoosterTelemetry();
         this.telemetry.setFuelLevel(fuelLevel);
