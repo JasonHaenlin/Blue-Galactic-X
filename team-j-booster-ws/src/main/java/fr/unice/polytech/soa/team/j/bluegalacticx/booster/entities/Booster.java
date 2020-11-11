@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities;
 
 import java.util.Objects;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.exceptions.BoosterDestroyedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +25,17 @@ public class Booster {
         this.status = BoosterStatus.PENDING;
         this.landingStep = BoosterLandingStep.NOT_LANDING;
         this.telemetry = new BoosterTelemetry();
+        this.missionId = "";
     }
 
     public Booster(String id, String missionId, BoosterStatus status, int fuelLevel) {
         this.id = id;
         this.status = status;
+        if (missionId == null || missionId == "") {
+            this.missionId = "";
+        } else {
+            this.missionId = missionId;
+        }
         this.landingStep = BoosterLandingStep.NOT_LANDING;
         this.telemetry = new BoosterTelemetry();
         this.telemetry.setFuelLevel(fuelLevel);
@@ -201,6 +208,13 @@ public class Booster {
     public Booster telemetry(BoosterTelemetry telemetry) {
         this.telemetry = telemetry;
         return this;
+    }
+
+    public void initiateTheSelfDestructSequence() throws BoosterDestroyedException {
+        if (status == BoosterStatus.DESTROYED) {
+            throw new BoosterDestroyedException();
+        }
+        this.status = BoosterStatus.DESTROYED;
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.BoosterDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoSameStatusException;
@@ -49,6 +50,7 @@ public class RocketRPCService extends RocketImplBase {
         try {
             Rocket r = rocketService.retrieveRocket(rId);
             r.readyToLaunchActivated();
+            r.prepareLaunch();
             service.getCoordinatesFromMission(request.getMissionId()).subscribe(coor -> {
                 r.setMissionObjective(coor);
             });
@@ -57,7 +59,7 @@ public class RocketRPCService extends RocketImplBase {
                 rocketProducer.readyToLaunchRocketEvent(r.getId(), r.getBoosterId());
 
             });
-            service.getAvailableRocketID().subscribe(id -> {
+            service.getAvailableBoosterID().subscribe(id -> {
                 r.setBoosterId2(id);
                 rocketProducer.readyToLaunchRocketEvent(r.getId(), r.getBoosterId2());
                 
@@ -66,6 +68,8 @@ public class RocketRPCService extends RocketImplBase {
             
             responseObserver.onNext(null);
             responseObserver.onCompleted();
+        } catch (NoObjectiveSettedException e) {
+            responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         } catch (RocketDoesNotExistException e) {
             responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
         } catch (NoSameStatusException e) {
@@ -98,10 +102,7 @@ public class RocketRPCService extends RocketImplBase {
             String message = "";
             if (request.getLaunchRocket()) {
                 r.launchSequenceActivated();
-                r.prepareLaunch();
                 message = "Launch approved !";
-                rocketProducer.launchRocketEvent(r.getId(), r.getBoosterId());
-                boosterRpcClient.initiateLaunchSequence(r.getBoosterId(),r.distanceFromEarth(), r.currentSpeed());
             }
             LaunchOrderReply launchOrderReply = LaunchOrderReply.newBuilder().setReply(message).build();
             responseObserver.onNext(launchOrderReply);
@@ -109,7 +110,7 @@ public class RocketRPCService extends RocketImplBase {
 
         } catch (RocketDoesNotExistException e) {
             responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription(e.getMessage())));
-        } catch (NoSameStatusException | BoosterDestroyedException | NoObjectiveSettedException e) {
+        } catch (NoSameStatusException | BoosterDestroyedException e) {
             responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
         }
 

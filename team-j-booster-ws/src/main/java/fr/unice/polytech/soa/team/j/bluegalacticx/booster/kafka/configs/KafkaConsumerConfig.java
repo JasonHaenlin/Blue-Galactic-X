@@ -3,6 +3,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.configs;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.moduledestroyer.proto.DestroyModuleRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +66,15 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> rocketStatusKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, RocketStatusRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerRocketStatusFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, DestroyModuleRequest> ModuleDestructionKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, DestroyModuleRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        Map<String, Object> props = baseConfig();
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, DestroyModuleRequest.class.getName());
+        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(props));
         return factory;
     }
 

@@ -26,10 +26,12 @@ import org.springframework.web.client.RestTemplate;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketApi;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.NoObjectiveSettedException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.MaxQProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
@@ -57,6 +59,9 @@ public class RocketSchedulerTest {
     private DepartmentStatusProducer departmentStatusProducedStatusProducer;
 
     @MockBean
+    private BoosterRPCClient boosterRpcClient;
+
+    @MockBean
     private RocketStatusProducer rocketStatusProducer;
 
     @MockBean 
@@ -64,6 +69,18 @@ public class RocketSchedulerTest {
 
     private int numberIterations = 10;
     private Rocket rocket;
+    private Rocket rocket2;
+
+    private void fakeScheduler() throws RocketDestroyedException {
+        rocketService.updateTelemetryToSend();
+        rocketService.updateLaunchProcedure();
+    }
+
+    private void waitForSeconds(int seconds) throws RocketDestroyedException {
+        for (int i = 0; i < seconds; i++) {
+            this.fakeScheduler();
+        }
+    }
 
     @BeforeEach
     public void init() throws CannotBeNullException {
@@ -73,26 +90,24 @@ public class RocketSchedulerTest {
         rocket = new Rocket().id("1").withRocketApi(api);
         rocketService.addNewRocket(rocket);
 
+        RocketApi api2 = new RocketApi().withNumberOfIteration(numberIterations)
+                .withOriginCoordinate(new SpaceCoordinate(0, 0, 0)).withBasedTelemetry();
+        rocket2 = new Rocket().id("5").withRocketApi(api2);
+        rocketService.addNewRocket(rocket2);
+
     }
 
     @Test
     @Order(1)
-    public void rocketChangeStatusTest() throws InterruptedException, NoObjectiveSettedException {
+    public void rocketSpeedVariationTest() throws InterruptedException, NoObjectiveSettedException {
         rocket.getRocketApi().launchWhenReady(new SpaceCoordinate(1000, 2000, 3000), "1");
         List<Double> variationSpeed = new ArrayList<>();
         for (int i = 0; i < numberIterations; i++) {
             rocket.getLastTelemetry();
             await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
-                sch.scheduleRocketTelemetryTask();
+                sch.scheduleRocket();
             });
-            variationSpeed.add(rocket.getRocketApi().getAirTelemetry().getSpeed());
-            if (rocket.checkRocketInMaxQ()) {
-                assertEquals(RocketStatus.ENTER_MAXQ, rocket.getStatus());
-            } else if (!rocket.checkRocketInMaxQ()
-                    && (rocket.getStatus() != RocketStatus.AT_BASE && rocket.getStatus() != RocketStatus.ARRIVED)) {
-                assertEquals(RocketStatus.QUIT_MAXQ, rocket.getStatus());
-            }
-
+            variationSpeed.add(rocket.getRocketApi().getCurrentTelemetry().getSpeed());
         }
 
         // the speed is generated randomly, so the variation of speed when it enter or
@@ -115,6 +130,27 @@ public class RocketSchedulerTest {
         assertTrue(speedHasDecreased);
         assertTrue(speedHasIncreased);
 
+    }
+
+    @Test
+    @Order(2)
+    public void rocketChangeLaunchStep() throws InterruptedException, NoObjectiveSettedException, CannotBeNullException, 
+            RocketDestroyedException {
+        rocket2.getRocketApi().launchWhenReady(new SpaceCoordinate(600, 600, 600), "5");
+        rocket2.setStatus(RocketStatus.STARTING);
+        rocket2.setLaunchStep(RocketLaunchStep.STARTUP);
+        waitForSeconds(40);
+        assertEquals(RocketLaunchStep.STARTUP, rocket2.getLaunchStep());
+        waitForSeconds(18);
+        assertEquals(RocketLaunchStep.MAIN_ENGINE_START, rocket2.getLaunchStep());
+        waitForSeconds(3);
+        assertEquals(RocketLaunchStep.LIFTOFF, rocket2.getLaunchStep());
+        waitForSeconds(5);
+        assertEquals(RocketLaunchStep.ENTER_MAXQ, rocket2.getLaunchStep());
+        waitForSeconds(5);
+        assertEquals(RocketLaunchStep.MAXQ_PASSED, rocket2.getLaunchStep());
+        waitForSeconds(100);
+        assertEquals(RocketLaunchStep.FINISHED, rocket2.getLaunchStep());
     }
 
 }

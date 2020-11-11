@@ -79,7 +79,7 @@ class RocketRPCServiceTest {
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
 		Mockito.lenient().when(restService.getAvailableBoosterID()).thenReturn(Mono.just("1"));
 
-		rocketId = rocketService.addNewRocket(new Rocket()).getId();
+		rocketId =  rocketService.addNewRocket(new Rocket().spaceCoordinate(new SpaceCoordinate(600, 600, 600))).getId();
 	}
 
 	@Test
@@ -129,7 +129,7 @@ class RocketRPCServiceTest {
 
 		assertNotNull(responseObserverAgain.getError());
 
-		assertEquals("ABORTED: Cannot trigger the same sequence twice : IN_SERVICE",
+		assertEquals("ABORTED: Cannot trigger the same sequence twice : STARTING",
 				responseObserverAgain.getError().getMessage());
 	}
 

@@ -49,7 +49,7 @@ public class BoosterRPCClient {
         };
         Context ctx = Context.current().fork();
         ctx.run(() -> {
-            stub.initiateLandingSequence(req, responseObserver);
+            stub.initiateLaunchSequence(req, responseObserver);
         });
     }
 

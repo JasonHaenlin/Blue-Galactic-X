@@ -1,14 +1,20 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.google.protobuf.Empty;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DesctructionOrderReply;
+import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.DestructionOrderRequest;
+import io.grpc.Status;
+import io.grpc.StatusException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -119,4 +125,38 @@ public class BoosterTest {
         assertTrue(boosterService.retrieveBooster(boosterTest.getId()).getStatus() == BoosterStatus.READY);
 
     }
+
+    @Test
+    @Order(4)
+    public void destroyRocketNotDestroyedIsOkTest() throws Exception {
+        DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setBoosterId("1").build();
+        StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
+        boosterRpcService.destructionOrderOnBooster(request, responseObserver);
+
+        if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
+            fail("The call did not terminate in time");
+        }
+        assertNull(responseObserver.getError());
+
+        List<DesctructionOrderReply> results = responseObserver.getValues();
+        DesctructionOrderReply response = results.get(0);
+        assertEquals("DESTROYED! KNOCK-DOWNED! SHATTERED!", response.getDestructionBooster());
+    }
+
+    @Test
+    @Order(5)
+    public void destroyRocketAlreadyDestroyedIsKoTest() throws Exception {
+        DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setBoosterId("1").build();
+        StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
+        boosterRpcService.destructionOrderOnBooster(request, responseObserver);
+
+        if (!responseObserver.awaitCompletion(5, TimeUnit.SECONDS)) {
+            fail("The call did not terminate in time");
+        }
+        assertNotNull(responseObserver.getError());
+
+        StatusException t = (StatusException) responseObserver.getError();
+        assertEquals(Status.ABORTED.getCode(), t.getStatus().getCode());
+    }
+
 }

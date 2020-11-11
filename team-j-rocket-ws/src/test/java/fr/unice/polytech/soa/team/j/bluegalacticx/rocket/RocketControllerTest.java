@@ -41,6 +41,9 @@ public class RocketControllerTest {
     @MockBean 
     private MaxQProducer maxQProducer;
 
+    @MockBean
+    private BoosterRPCClient boosterRpcClient;
+
     @Test
     @Order(1)
     public void getRocketStatusShouldNotOkTest() throws Exception {

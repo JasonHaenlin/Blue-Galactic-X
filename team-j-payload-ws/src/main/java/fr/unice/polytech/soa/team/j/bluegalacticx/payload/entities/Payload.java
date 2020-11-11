@@ -21,13 +21,18 @@ public class Payload {
     private Date date;
 
     public Payload() {
+        this.missionId = "";
     }
 
     public Payload(PayloadType type, String rocketId, String missionId, PayloadStatus status, SpaceCoordinate position, int weight,
             String id, Date date) {
         this.type = type;
         this.rocketId = rocketId;
-        this.missionId = missionId;
+        if(missionId == null || missionId == ""){
+            this.missionId = "";
+        } else {
+            this.missionId = missionId;
+        }
         this.status = status;
         this.position = position;
         this.weight = weight;
