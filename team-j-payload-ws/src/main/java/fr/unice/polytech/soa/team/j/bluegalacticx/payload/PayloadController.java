@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.InvalidPayloadException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.PayloadNotFoundException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 
 @RestController
 @RequestMapping("/payload")
@@ -21,7 +22,7 @@ public class PayloadController {
     @Autowired
     private PayloadService payloadService;
 
-    @PostMapping()
+    @PostMapping("")
     public Payload createNewPayload(@RequestBody Payload payload) {
         try {
             return payloadService.createPayload(payload);
