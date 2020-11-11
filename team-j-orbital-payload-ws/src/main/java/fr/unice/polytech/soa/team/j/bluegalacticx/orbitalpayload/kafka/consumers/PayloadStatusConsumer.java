@@ -36,8 +36,8 @@ public class PayloadStatusConsumer {
 
     @KafkaListener(topics = "${kafka.topics.newpayload}", groupId = "${kafka.group.default}", containerFactory = "payloadKafkaListenerContainerFactory")
     public void newPayloadEvent(PayloadRequest req) {
-        Payload p = new Payload().payloadId(req.getPayloadId()).missionId(req.getMissionId())
-                .position(req.getPosition()).status(req.getPayloadStatus());
+        Payload p = new Payload().payloadId(req.getPayloadId()).position(req.getPosition())
+                .status(req.getPayloadStatus());
         payloadService.addPayload(p);
 
     }

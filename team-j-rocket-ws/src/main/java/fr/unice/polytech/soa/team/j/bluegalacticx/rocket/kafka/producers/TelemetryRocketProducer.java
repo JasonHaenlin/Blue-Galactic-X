@@ -19,6 +19,9 @@ public class TelemetryRocketProducer {
 
     public void sendTelemetryRocketEvent(SpaceTelemetry st, String rocketId) {
         // @formatter:off
+        if(st == null){
+            return;
+        }
         TelemetryRocketRequest req = TelemetryRocketRequest.newBuilder()
                                             .setRocketId(rocketId)
                                             .setIrradiance(st.getIrradiance())

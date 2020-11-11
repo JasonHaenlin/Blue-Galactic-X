@@ -293,11 +293,7 @@ public class Rocket {
         setLaunchStep(RocketLaunchStep.STARTUP);
     }
 
-    public void readyToLaunchActivated() throws NoSameStatusException {
-        if (status == RocketStatus.READY_FOR_LAUNCH) {
-            throw new NoSameStatusException(status.toString());
-        }
-
+    public void readyToLaunchActivated() {
         this.status = RocketStatus.READY_FOR_LAUNCH;
     }
 

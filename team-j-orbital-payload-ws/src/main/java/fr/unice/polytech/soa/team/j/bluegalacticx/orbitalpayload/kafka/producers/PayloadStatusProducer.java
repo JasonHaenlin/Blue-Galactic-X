@@ -18,14 +18,14 @@ public class PayloadStatusProducer {
     private KafkaTemplate<String, PayloadStatusRequest> kafkaTemplate;
 
     public void notifyDeployedPayloadDelivered(String payloadId, String missionId) {
-        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setMissionId(missionId)
+        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId)
                 .setEventType(PayloadStatus.DELIVERED).build();
 
         kafkaTemplate.send(statusTopic0, req);
     }
 
     public void notifyDeployedPayloadNotDelivered(String payloadId, String missionId) {
-        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId).setMissionId(missionId)
+        PayloadStatusRequest req = PayloadStatusRequest.newBuilder().setPayloadId(payloadId)
                 .setEventType(PayloadStatus.NOT_DELIVERED).build();
 
         kafkaTemplate.send(statusTopic0, req);

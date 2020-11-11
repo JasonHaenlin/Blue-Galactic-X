@@ -1,23 +1,19 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.client;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.common.Context;
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.common.Utils;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionlogreader.entities.Log;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities.Mission;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.SpaceCoordinate;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.SpaceCoordinate;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
 import io.cucumber.java8.En;
 
 public class launch_sequence implements En {
@@ -139,5 +135,6 @@ public class launch_sequence implements En {
                 System.out.println(log.getText());
             }
         });
+
     }
 }

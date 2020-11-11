@@ -24,12 +24,12 @@ public class RocketStatusConsumer {
     public void rocketStatusEvent(RocketStatusRequest request) {
         String id = request.getRocketId();
         try {
+            Payload p;
             switch (request.getEventType()) {
                 case IN_SERVICE:
                     payloadService.updatePayloadFromRocketState(PayloadStatus.ON_MISSION, id);
-                    Payload p = payloadService.retrievePayloadByRocketId(id);
+                    p = payloadService.retrievePayloadByRocketId(id);
                     payloadStatusProducer.notifyOnMissionPayloadEvent(p.getId(), p.getMissionId());
-
                     break;
                 case DESTROYED:
                     payloadService.updatePayloadFromRocketState(PayloadStatus.DESTROYED, id);
@@ -39,6 +39,8 @@ public class RocketStatusConsumer {
                     break;
                 case DONE:
                     payloadService.updatePayloadFromRocketState(PayloadStatus.IN_ROLLOUT, id);
+                    p = payloadService.retrievePayloadByRocketId(id);
+                    payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), p.getMissionId());
                     break;
                 default:
                     // DO NOT PROCEED NOT WANTED EVENTS

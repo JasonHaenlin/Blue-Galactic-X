@@ -13,11 +13,11 @@ public class MissionLogService {
     @Autowired
     private MissionLogRepository missionLogRepository;
 
-    public void createMissionLogData(String missionId, String log) throws MissionNotFoundException {
-        if (missionId == null) {
+    public void createMissionLogData(String id, String log) throws MissionNotFoundException {
+        if (id == null) {
             throw new MissionNotFoundException();
         }
-        MissionLog missionLogsData = missionLogRepository.findById(missionId).orElse(new MissionLog(missionId));
+        MissionLog missionLogsData = missionLogRepository.findById(id).orElse(new MissionLog(id));
         missionLogsData.addLog(log);
         missionLogRepository.save(missionLogsData);
     }

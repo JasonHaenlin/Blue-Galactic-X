@@ -11,3 +11,4 @@ cd "team-j-client"
 printf "${cyn}Start demo scenario${end}\n"
 sh mvnw clean test -Dcucumber.filter.tags="@integration"
 cd ..
+printf "${cyn}To remove the container : 'docker-compose down'${end}\n"

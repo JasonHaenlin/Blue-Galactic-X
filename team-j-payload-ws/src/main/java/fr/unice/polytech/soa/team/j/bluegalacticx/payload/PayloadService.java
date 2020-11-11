@@ -42,7 +42,6 @@ public class PayloadService {
     public void updatePayloadFromRocketState(PayloadStatus status, String id) throws PayloadNotFoundException {
         Payload p = retrievePayloadByRocketId(id);
         p.setStatus(status);
-        payloadStatusProducer.notifyDeployedPayloadEvent(p.getId(), p.getMissionId());
     }
 
     public Payload retrievePayloadFromRocket(String id) throws PayloadNotFoundException {

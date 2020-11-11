@@ -53,13 +53,9 @@ public class RocketRPCService extends RocketImplBase {
                 rocketProducer.readyToLaunchRocketEvent(r.getId(), r.getBoosterId());
                 try {
                     r.readyToLaunchActivated();
-                } catch (NoSameStatusException e) {
-                    responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
-                }
-                try {
                     r.prepareLaunch();
                 } catch (NoObjectiveSettedException e) {
-                    responseObserver.onError(new StatusException(Status.ABORTED.withDescription(e.getMessage())));
+                    e.printStackTrace();
                 }
             });
 

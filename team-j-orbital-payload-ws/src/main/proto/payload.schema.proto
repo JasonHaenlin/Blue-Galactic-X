@@ -27,6 +27,5 @@ message PayloadRequest {
   }
   PayloadStatus payloadStatus = 1;
   string payloadId = 2;
-  string missionId = 3;
-  SpaceCoordinate position = 4;
+  SpaceCoordinate position = 3;
 }

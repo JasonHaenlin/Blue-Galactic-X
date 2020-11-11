@@ -20,6 +20,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNot
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.MaxQProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 
 @Service
 public class RocketService {
@@ -36,6 +37,9 @@ public class RocketService {
     @Autowired
     private BoosterRPCClient boosterRpcClient;
 
+    @Autowired
+    private TelemetryRocketProducer telemetryRocketProducer;
+
     private List<Rocket> rockets = new ArrayList<>();
 
     public Rocket addNewRocket(Rocket rocket) throws CannotBeNullException {
@@ -49,9 +53,10 @@ public class RocketService {
     }
 
     public void updateLaunchProcedure() {
+        SpaceTelemetry st = null;
         for (Rocket r : rockets) {
             if (r.getStatus() == RocketStatus.IN_SERVICE) {
-                r.getLastTelemetry();
+                st = r.getLastTelemetry();
             }
             RocketLaunchStep launchStep = r.getLaunchStep();
             r.updateState();
@@ -70,6 +75,7 @@ public class RocketService {
                 }
                 // Send Kafka event here to notificate launching step have changed
             }
+            telemetryRocketProducer.sendTelemetryRocketEvent(st, r.getId());
         }
     }
 

@@ -23,7 +23,6 @@ public class TelemetryPayloadProducer {
         // @formatter:off
         TelemetryPayloadRequest req = TelemetryPayloadRequest.newBuilder()
                                 .setPayloadId(p.getPayloadId())
-                                .setMissionId(p.getMissionId())
                                 .setPayloadStatus(p.getStatus().toString())
                                 .setPosition(SpaceCoordinate.newBuilder()
                                     .setX(p.getX())
