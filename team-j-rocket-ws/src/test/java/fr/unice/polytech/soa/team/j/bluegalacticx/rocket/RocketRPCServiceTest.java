@@ -79,7 +79,8 @@ class RocketRPCServiceTest {
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
 		Mockito.lenient().when(restService.getAvailableBoosterID()).thenReturn(Mono.just("1"));
 
-		rocketId = rocketService.addNewRocket(new Rocket().spaceCoordinate(new SpaceCoordinate(600, 600, 600)));
+
+		rocketId =  rocketService.addNewRocket(new Rocket().spaceCoordinate(new SpaceCoordinate(600, 600, 600))).getId();
 	}
 
 	@Test
