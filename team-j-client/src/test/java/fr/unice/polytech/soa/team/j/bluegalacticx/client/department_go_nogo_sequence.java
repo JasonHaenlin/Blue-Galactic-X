@@ -23,28 +23,23 @@ public class department_go_nogo_sequence implements En {
     Context ctx = new Context();
 
     public department_go_nogo_sequence() {
-        Given("Gwynne create a rocket with id {string}", (String rocketId) -> {
-            ctx.rocketId = rocketId;
-            ctx.rocket = new Rocket().id(rocketId);
-            ctx.rocketREST.createRocket(ctx.rocket);
+        Given("Gwynne create a rocket", () -> {
+            ctx.rocket = ctx.rocketREST.createRocket(new Rocket());
         });
-        Given("Richard add a mission with mission id {string} and rocket id {string}",
-                (String missionId, String rocketId) -> {
-                    ctx.missionId = missionId;
-                    ctx.mission = new Mission().id(missionId).rocketId(rocketId).destination(
-                            new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate(100, 100,
-                                    100));
-                    ctx.missionREST.createNewMission(ctx.mission);
-                });
+        Given("Richard add a mission", () -> {
+            ctx.mission = new Mission().rocketId(ctx.rocket.getId()).destination(
+                    new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate(100, 100, 100));
+            ctx.missionREST.createNewMission(ctx.mission);
+        });
         When("Richard has the weather and rocket department not ready", () -> {
-            Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.missionId).getDepartments();
+            Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.mission.getId()).getDepartments();
             // Only mission is set to false at initialization
             assertEquals(1, status.size());
         });
         Then("Richard make a no go for the mission department with id", () -> {
-            ctx.missionREST.updateMissionGoNg(ctx.missionId,
+            ctx.missionREST.updateMissionGoNg(ctx.mission.getId(),
                     new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.GoNg(false));
-            Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.missionId).getDepartments();
+            Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.mission.getId()).getDepartments();
             assertFalse(status.get(Department.MISSION));
         });
         When("Tory see the weather is good", () -> {
@@ -55,16 +50,17 @@ public class department_go_nogo_sequence implements En {
             ctx.weatherREST.setGoNoGo(new fr.unice.polytech.soa.team.j.bluegalacticx.weather.entities.GoNg(true));
         });
         When("Elon see the rocket is ready", () -> {
-            SpaceTelemetry rm = ctx.rocketREST.getRocketTelemetry(ctx.rocketId);
+            SpaceTelemetry rm = ctx.rocketREST.getRocketTelemetry(ctx.rocket.getId());
             assertNotNull(rm);
         });
         Then("Elon set the rocket department to go with id", () -> {
-            ctx.rocketREST.setGoNoGo(ctx.rocketId, new GoNg(true));
+            ctx.rocketREST.setGoNoGo(ctx.rocket.getId(), new GoNg(true));
         });
         When("Richard has the weather and rocket department ready for mission", () -> {
             Utils.assertEqualsWithRetry(2, () -> {
                 try {
-                    Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.missionId).getDepartments();
+                    Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.mission.getId())
+                            .getDepartments();
                     int goCounter = 0;
                     if (status.get(Department.ROCKET)) {
                         goCounter++;
@@ -80,11 +76,11 @@ public class department_go_nogo_sequence implements En {
             });
         });
         Then("Richard make a go for the mission department", () -> {
-            ctx.missionREST.updateMissionGoNg(ctx.missionId,
+            ctx.missionREST.updateMissionGoNg(ctx.mission.getId(),
                     new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.GoNg(true));
         });
         Then("Elon should see the corresponding validation on the rocket department", () -> {
-            RocketStatus rs = ctx.rocketREST.getGoNoGo(ctx.rocketId);
+            RocketStatus rs = ctx.rocketREST.getGoNoGo(ctx.rocket.getId());
             assertEquals(RocketStatus.READY_FOR_LAUNCH, rs);
         });
     }

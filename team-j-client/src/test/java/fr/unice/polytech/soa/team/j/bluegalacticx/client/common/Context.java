@@ -18,7 +18,7 @@ import fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.rocket.proto.Telemet
 public class Context {
 
     public WeatherREST weatherREST = new WeatherREST("http://localhost:8060/weather");
-    public MissionREST missionREST = new MissionREST("http://localhost:8070/mission");
+    public MissionREST missionREST = new MissionREST("http://localhost:8070/missionPreparation");
     public RocketREST rocketREST = new RocketREST("http://localhost:8080/rocket");
     public PayloadREST payloadREST = new PayloadREST("http://localhost:8050/payload");
     public BoosterREST boosterREST = new BoosterREST("http://localhost:8030/booster");
@@ -29,10 +29,6 @@ public class Context {
     public Mission mission;
     public Payload payload;
     public Rocket rocket;
-
-    public String payloadId;
-    public String missionId;
-    public String rocketId;
 
     public KafkaProducerClient<TelemetryBoosterRequest> kPBoosterTelemetry;
     public KafkaProducerClient<TelemetryRocketRequest> kPRocketTelemetry;

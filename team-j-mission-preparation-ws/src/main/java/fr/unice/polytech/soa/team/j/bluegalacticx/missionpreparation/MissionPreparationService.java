@@ -3,6 +3,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class MissionPreparationService {
         if (invalidMission(mission))
             throw new InvalidMissionException();
         mission.updateGoNogo(Department.MISSION, false);
+        mission.setId(UUID.randomUUID().toString());
         missions.add(mission);
         missionPreparationProducer.notifyNewMission(mission);
         return mission;
@@ -47,14 +49,14 @@ public class MissionPreparationService {
     }
 
     public DepartmentGoNg retrieveGoNogoStatus(String id) throws MissionDoesNotExistException {
-        return findMissionOrThrow(id).getGoNogos();
+        return findMissionOrThrow(id).getGoNg();
     }
 
     public DepartmentGoNg makeGoNogo(Boolean gonogo, String id) throws MissionDoesNotExistException {
         Mission m = findMissionOrThrow(id);
         m.updateGoNogo(Department.MISSION, gonogo);
         departmentStatusProducer.notifyDepartmentStatus(m.getRocketId(), gonogo);
-        return m.getGoNogos();
+        return m.getGoNg();
     }
 
     public void updateMissionGoNogo(Department department, boolean status, String id)

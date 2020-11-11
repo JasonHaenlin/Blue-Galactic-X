@@ -71,19 +71,21 @@ class RocketRPCServiceTest {
 	@MockBean
 	private BoosterRPCClient boosterRPCClient;
 
+	String rocketId;
+
 	@BeforeAll
 	public void init() throws IOException, CannotBeNullException {
 		Mockito.lenient().when(restService.getCoordinatesFromMission(any(String.class)))
 				.thenReturn(Mono.just(new SpaceCoordinate(20, 20, 0)));
 		Mockito.lenient().when(restService.getAvailableBoosterID()).thenReturn(Mono.just("1"));
 
-		rocketService.addNewRocket(new Rocket().id("1").spaceCoordinate(new SpaceCoordinate(600, 600, 600)));
+		rocketId =  rocketService.addNewRocket(new Rocket().spaceCoordinate(new SpaceCoordinate(600, 600, 600))).getId();
 	}
 
 	@Test
 	@Order(1)
 	public void setReadyToLaunchTest() throws Exception {
-		MissionRequest request = MissionRequest.newBuilder().setMissionId("1").setRocketId("1").build();
+		MissionRequest request = MissionRequest.newBuilder().setMissionId("1").setRocketId(rocketId).build();
 
 		StreamRecorder<Empty> responseObserver = StreamRecorder.create();
 		rocketRpcService.setReadyToLaunch(request, responseObserver);
@@ -99,7 +101,8 @@ class RocketRPCServiceTest {
 	@Test
 	@Order(2)
 	public void launchRocketTest() throws Exception {
-		LaunchOrderRequest request = LaunchOrderRequest.newBuilder().setRocketId("1").setLaunchRocket(true).build();
+		LaunchOrderRequest request = LaunchOrderRequest.newBuilder().setRocketId(rocketId).setLaunchRocket(true)
+				.build();
 
 		StreamRecorder<LaunchOrderReply> responseObserver = StreamRecorder.create();
 		rocketRpcService.launchOrderRocket(request, responseObserver);
@@ -114,7 +117,7 @@ class RocketRPCServiceTest {
 		assertEquals("Launch approved !", response.getReply());
 
 		// Launch a rocket already launched
-		LaunchOrderRequest requestAgain = LaunchOrderRequest.newBuilder().setRocketId("1").setLaunchRocket(true)
+		LaunchOrderRequest requestAgain = LaunchOrderRequest.newBuilder().setRocketId(rocketId).setLaunchRocket(true)
 				.build();
 
 		StreamRecorder<LaunchOrderReply> responseObserverAgain = StreamRecorder.create();
@@ -152,7 +155,7 @@ class RocketRPCServiceTest {
 	@Test
 	@Order(5)
 	public void destroyRocketNotDestroyedIsOkTest() throws Exception {
-		DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setRocketId("1").build();
+		DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setRocketId(rocketId).build();
 		StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
 		rocketRpcService.destructionOrderOnRocket(request, responseObserver);
 
@@ -169,7 +172,7 @@ class RocketRPCServiceTest {
 	@Test
 	@Order(6)
 	public void destroyRocketAlreadyDestroyedIsKoTest() throws Exception {
-		DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setRocketId("1").build();
+		DestructionOrderRequest request = DestructionOrderRequest.newBuilder().setRocketId(rocketId).build();
 		StreamRecorder<DesctructionOrderReply> responseObserver = StreamRecorder.create();
 		rocketRpcService.destructionOrderOnRocket(request, responseObserver);
 
@@ -185,7 +188,7 @@ class RocketRPCServiceTest {
 	@Test
 	@Order(7)
 	public void goToNextStageTest() throws Exception {
-		NextStageRequest request = NextStageRequest.newBuilder().setRocketId("1").build();
+		NextStageRequest request = NextStageRequest.newBuilder().setRocketId(rocketId).build();
 		StreamRecorder<NextStageReply> responseObserver = StreamRecorder.create();
 		rocketRpcService.nextStage(request, responseObserver);
 

@@ -9,8 +9,8 @@ public class BoosterREST extends RestAPI {
         super(uri);
     }
 
-    public void createBooster(Booster booster) {
-        post("/booster", Booster.class, booster);
+    public Booster createBooster(Booster booster) {
+        return post("/booster", Booster.class, booster);
     }
 
 }

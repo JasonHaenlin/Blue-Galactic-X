@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class PayloadService {
         }
         payload.setStatus(PayloadStatus.WAITING_FOR_MISSION);
         payload.setDate(new Date());
-
+        payload.setId(UUID.randomUUID().toString());
         payloads.add(payload);
         payloadProducer.notifyNewPayload(payload);
         return payload;

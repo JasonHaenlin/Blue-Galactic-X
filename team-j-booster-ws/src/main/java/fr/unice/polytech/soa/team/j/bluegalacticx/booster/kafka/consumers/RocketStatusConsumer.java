@@ -1,6 +1,5 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.consumers;
 
-import org.apache.kafka.clients.consumer.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

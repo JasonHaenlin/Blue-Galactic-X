@@ -1,9 +1,9 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster.kafka.producers;
 
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterLandingStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.proto.BoosterLandingStepRequest;
@@ -24,5 +24,5 @@ public class BoosterLandingStepProducer {
 
        kafkaTemplate.send(landingStepTopic0, req);
     }
-    
+
 }

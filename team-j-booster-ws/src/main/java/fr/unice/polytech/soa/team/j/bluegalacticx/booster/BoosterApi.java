@@ -1,13 +1,10 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.booster;
 
-import org.springframework.stereotype.Service;
-
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.Booster;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.entities.BoosterTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.booster.utils.RandomUtils;
 
-@Service
 public class BoosterApi {
 
     BoosterTelemetry boosterTelemetry;

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.client.RestAPI;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 
 public class PayloadREST extends RestAPI {
 

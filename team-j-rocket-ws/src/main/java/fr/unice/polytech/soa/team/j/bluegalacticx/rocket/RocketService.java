@@ -2,6 +2,7 @@ package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class RocketService {
     @Autowired
     private RocketStatusProducer rocketProducer;
 
-    @Autowired 
+    @Autowired
     private MaxQProducer maxQProducer;
 
     @Autowired
@@ -40,12 +41,14 @@ public class RocketService {
 
     private List<Rocket> rockets = new ArrayList<>();
 
-    public void addNewRocket(Rocket rocket) throws CannotBeNullException {
+    public Rocket addNewRocket(Rocket rocket) throws CannotBeNullException {
         if (rocket == null) {
             throw new CannotBeNullException("rocket");
         }
         rocket.withBaseTelemetry().initStatus();
+        rocket.setId(UUID.randomUUID().toString());
         rockets.add(rocket);
+        return rocket;
     }
 
     public void updateTelemetryToSend() throws RocketDestroyedException {

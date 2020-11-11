@@ -50,7 +50,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, BoosterLandingStepRequest> kafkaTemplateLandingStepBooster() {
+    public KafkaTemplate<String, BoosterLandingStepRequest> kafkaTemplateBoosterLandingStep() {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(insertBaseConfig()));
     }
 
