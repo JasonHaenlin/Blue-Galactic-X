@@ -28,7 +28,6 @@ public class department_go_nogo_sequence implements En {
             ctx.rocket = ctx.rocketREST.createRocket(new Rocket());
         });
         Given("Richard add a mission", () -> {
-<<<<<<< HEAD
             ctx.mission = new Mission().rocketId(ctx.rocket.getId()).payloadId("1")
                     .date(Calendar.getInstance().getTime())
                     .destination(
@@ -39,27 +38,13 @@ public class department_go_nogo_sequence implements En {
         });
         When("Richard has the weather and rocket department not ready", () -> {
             Map<Department, Boolean> status = ctx.missionPrepREST.getMissionGoNg(ctx.mission.getId()).getDepartments();
-=======
-            ctx.mission = new Mission().rocketId(ctx.rocket.getId()).destination(
-                    new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.SpaceCoordinate(100, 100, 100));
-            ctx.missionREST.createNewMission(ctx.mission);
-        });
-        When("Richard has the weather and rocket department not ready", () -> {
-            Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.mission.getId()).getDepartments();
->>>>>>> [#146] fix scripts
             // Only mission is set to false at initialization
             assertEquals(1, status.size());
         });
         Then("Richard make a no go for the mission department with id", () -> {
-<<<<<<< HEAD
             ctx.missionPrepREST.updateMissionGoNg(ctx.mission.getId(),
                     new fr.unice.polytech.soa.team.j.bluegalacticx.missionpreparation.entities.GoNg(false));
             Map<Department, Boolean> status = ctx.missionPrepREST.getMissionGoNg(ctx.mission.getId()).getDepartments();
-=======
-            ctx.missionREST.updateMissionGoNg(ctx.mission.getId(),
-                    new fr.unice.polytech.soa.team.j.bluegalacticx.mission.entities.GoNg(false));
-            Map<Department, Boolean> status = ctx.missionREST.getMissionGoNg(ctx.mission.getId()).getDepartments();
->>>>>>> [#146] fix scripts
             assertFalse(status.get(Department.MISSION));
         });
         When("Tory see the weather is good", () -> {

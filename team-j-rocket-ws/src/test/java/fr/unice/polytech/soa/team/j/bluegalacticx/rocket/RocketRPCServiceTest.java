@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.google.protobuf.Empty;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -45,6 +43,7 @@ import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.internal.testing.StreamRecorder;
 import reactor.core.publisher.Mono;
+import com.google.protobuf.Empty;
 
 @SpringBootTest
 @Tags(value = { @Tag("grpc"), @Tag("grpc-rocket") })
