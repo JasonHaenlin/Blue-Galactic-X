@@ -14,11 +14,16 @@ public class Payload {
     private boolean deployed = false;
 
     public Payload() {
+        this.missionId = "";
     }
 
     public Payload(String payloadId, String missionId, PayloadStatus status, PayloadAPI api, boolean deployed) {
         this.payloadId = payloadId;
-        this.missionId = missionId;
+        if (missionId == null || missionId == "") {
+            this.missionId = "";
+        } else {
+            this.missionId = missionId;
+        }
         this.status = status;
         this.api = api;
         this.deployed = deployed;

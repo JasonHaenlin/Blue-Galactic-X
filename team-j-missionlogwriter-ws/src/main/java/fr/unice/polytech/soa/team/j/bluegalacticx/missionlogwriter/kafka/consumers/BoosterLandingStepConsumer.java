@@ -21,8 +21,15 @@ public class BoosterLandingStepConsumer {
         String missionId = request.getMissionId();
         EventType status = request.getEventType();
         try {
-            String log = "Booster [ID = " + boosterId + "]. On mission [ID = " + missionId
+            String log;
+            if(missionId != null && missionId != ""){
+                log = "Booster [ID = " + boosterId + "]. On mission [ID = " + missionId
                     + "]. Landing sequence is now : " + status.name();
+                missionLogService.createMissionLogData(missionId, log);
+            } else {
+                log = "Booster [ID = " + boosterId + "]. Landing sequence is now : " + status.name();
+                missionLogService.createMissionLogData(boosterId, log);
+            }
             missionLogService.createMissionLogData(missionId, log);
         } catch (MissionNotFoundException e) {
             // TODO : handle kafka exceptions
