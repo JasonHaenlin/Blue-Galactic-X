@@ -5,9 +5,13 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
+
 public class Payload {
 
     private PayloadType type;
+    private String rocketId;
+    private String missionId;
     private PayloadStatus status;
     private SpaceCoordinate position;
     private int weight; // kg
@@ -16,11 +20,19 @@ public class Payload {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
+
     public Payload() {
+        this.missionId = "";
     }
 
-    public Payload(PayloadType type, PayloadStatus status, SpaceCoordinate position, int weight, String id, Date date) {
+    public Payload(PayloadType type, String rocketId, String missionId, PayloadStatus status, SpaceCoordinate position, int weight, String id, Date date) {
         this.type = type;
+        this.rocketId = rocketId;
+        if(missionId == null || missionId == ""){
+            this.missionId = "";
+        } else {
+            this.missionId = missionId;
+        }
         this.status = status;
         this.position = position;
         this.weight = weight;
@@ -34,6 +46,22 @@ public class Payload {
 
     public void setType(PayloadType type) {
         this.type = type;
+    }
+
+    public String getRocketId() {
+        return this.rocketId;
+    }
+
+    public void setRocketId(String rocketId) {
+        this.rocketId = rocketId;
+    }
+
+    public String getMissionId() {
+        return this.missionId;
+    }
+
+    public void setMissionId(String missionId) {
+        this.missionId = missionId;
     }
 
     public PayloadStatus getStatus() {
@@ -81,6 +109,16 @@ public class Payload {
         return this;
     }
 
+    public Payload rocketId(String rocketId) {
+        this.rocketId = rocketId;
+        return this;
+    }
+
+    public Payload missionId(String missionId) {
+        this.missionId = missionId;
+        return this;
+    }
+
     public Payload status(PayloadStatus status) {
         this.status = status;
         return this;
@@ -114,21 +152,27 @@ public class Payload {
             return false;
         }
         Payload payload = (Payload) o;
-        return Objects.equals(type, payload.type) && Objects.equals(status, payload.status)
-                && Objects.equals(position, payload.position) && weight == payload.weight
-                && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
+        return Objects.equals(type, payload.type) && Objects.equals(rocketId, payload.rocketId) && Objects.equals(missionId, payload.missionId) && Objects.equals(status, payload.status) && Objects.equals(position, payload.position) && weight == payload.weight && Objects.equals(id, payload.id) && Objects.equals(date, payload.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, status, position, weight, id, date);
+        return Objects.hash(type, rocketId, missionId, status, position, weight, id, date);
     }
 
     @Override
     public String toString() {
-        return "{" + " type='" + getType() + "'" + ", status='" + getStatus() + "'" + ", position='" + getPosition()
-                + "'" + ", weight='" + getWeight() + "'" + ", id='" + getId() + "'" + ", date='" + getDate() + "'"
-                + "}";
+        return "{" +
+            " type='" + getType() + "'" +
+            ", rocketId='" + getRocketId() + "'" +
+            ", missionId='" + getMissionId() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", position='" + getPosition() + "'" +
+            ", weight='" + getWeight() + "'" +
+            ", id='" + getId() + "'" +
+            ", date='" + getDate() + "'" +
+            "}";
     }
+
 
 }

@@ -24,6 +24,97 @@
             "name": "api.mission.grpc",
             "type": "java.lang.String",
             "description": "A description for 'api.mission.grpc'"
+        },
+        {
+            "name": "kafka.broker.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.broker.host'"
+        },
+        {
+            "name": "kafka.broker.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.broker.port'"
+        },
+        {
+            "name": "kafka.schema.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.schema.host'"
+        },
+        {
+            "name": "kafka.schema.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.schema.port'"
+        },
+        {
+            "name": "api.booster.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.booster.host'"
+        },
+        {
+            "name": "api.booster.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.booster.port'"
+        },
+        {
+            "name": "api.booster.grpc",
+            "type": "java.lang.String",
+            "description": "A description for 'api.booster.grpc'"
+        },
+        {
+            "name": "api.telemetry.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.telemetry.host'"
+        },
+        {
+            "name": "kafka.broker.host",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.broker.host'"
+        },
+        {
+            "name": "kafka.broker.port",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.broker.port'"
+        },
+        {
+            "name": "kafka.schema.host",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.schema.host'"
+        },
+        {
+            "name": "kafka.schema.port",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.schema.port'"
+        },
+        {
+            "name": "kafka.topics.rocketstatus",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.rocketstatus'"
+        },
+        {
+            "name": "kafka.topics.departmentstatus",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.departmentstatus'"
+        },
+        {
+            "name": "kafka.group.default",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.group.default'"
+        },
+        {
+            "name": "kafka.topics.telemetryrocket",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.telemetryrocket'"
+        },
+        
+        {
+            "name": "kafka.topics.maxq",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.maxq'"
+        },
+        {
+            "name": "kafka.topics.moduledestruction",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.moduledestruction'"
         }
     ]
 }

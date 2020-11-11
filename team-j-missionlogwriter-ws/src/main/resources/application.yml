@@ -1,0 +1,30 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jmx:
+    enabled: false
+  application:
+    name: Demo
+
+server:
+  port: 8010
+  error:
+    include-stacktrace: never
+
+api:
+  mongodb:
+    host: ${MONGODB_HOST:localhost}
+    port: ${MONGODB_PORT:27017}
+
+kafka:
+  broker:
+    host: ${KAFKA_BROKER_HOST:localhost}
+    port: ${KAFKA_BROKER_PORT:19092}
+  schema:
+    host: ${SCHEMA_BROKER_HOST:localhost}
+    port: ${SCHEMA_BROKER_PORT:9090}
+  group:
+    default: blue-origin-missionlogwriter
+  topics:
+    payloadstatus: teamj.payload-status.0
+    boosterlandingstep: teamj.booster-landing-step.0

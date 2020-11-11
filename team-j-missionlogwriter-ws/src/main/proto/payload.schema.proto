@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter;
+
+option java_multiple_files = true;
+option java_package =
+    "fr.unice.polytech.soa.team.j.bluegalacticx.missionlogwriter.proto";
+
+enum PayloadStatus {
+  WAITING_FOR_MISSION = 0; ON_MISSION = 1; DESTROYED = 2; DELIVERED = 3;
+  NOT_DELIVERED = 4;
+  IN_ROLLOUT = 5;
+}
+
+message PayloadStatusRequest {
+  PayloadStatus eventType = 1;
+  string payloadId = 2;
+  string missionId = 3;
+  string rocketId = 4;
+}

@@ -1,0 +1,74 @@
+{
+    "properties": [
+        {
+            "name": "api.mongodb.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.mongodb.host'"
+        },
+        {
+            "name": "api.mongodb.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.mongodb.port'"
+        },
+        {
+            "name": "kafka.broker.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.broker.host'"
+        },
+        {
+            "name": "kafka.broker.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.broker.port'"
+        },
+        {
+            "name": "kafka.schema.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.schema.host'"
+        },
+        {
+            "name": "kafka.schema.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.kafka.schema.port'"
+        },
+        {
+            "name": "kafka.group.default",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.group.default'"
+        },
+        {
+            "name": "kafka.topics.rocketstatus",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.rocketstatus'"
+        },
+        {
+            "name": "kafka.topics.telemetryrocket",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.telemetryrocket'"
+        },
+        {
+            "name": "kafka.topics.telemetrybooster",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.telemetrybooster'"
+        },
+        {
+            "name": "kafka.topics.telemetrypayload",
+            "type": "java.lang.String",
+            "description": "A description for 'kafka.topics.telemetrypayload'"
+        },
+        {
+            "name": "data.mongodb.host",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.host'"
+        },
+        {
+            "name": "data.mongodb.port",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.port'"
+        },
+        {
+            "name": "data.mongodb.database",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.database'"
+        }
+    ]
+}

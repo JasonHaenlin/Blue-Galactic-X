@@ -1,46 +1,61 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.payload;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.hamcrest.text.MatchesPattern;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadType;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.kafka.producers.PayloadCreateProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.kafka.producers.PayloadStatusProducer;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.utils.JsonUtil;
 
 @AutoConfigureMockMvc
 @WebMvcTest
-@ContextConfiguration(classes = { PayloadController.class, PayloadService.class })
+@ContextConfiguration(classes = { PayloadController.class, PayloadService.class, PayloadStatusProducer.class,
+        PayloadCreateProducer.class })
 @Tags(value = { @Tag("mvc"), @Tag("mvc-payload") })
+@TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class PayloadControllerTests {
 
     @Autowired
     private MockMvc mvc;
 
-    private static String createdPayloadid;
+    @MockBean
+    private PayloadStatusProducer payloadStatusProducer;
+
+    @MockBean
+    private PayloadCreateProducer payloadCreateProducer;
+
+    private Payload payload;
 
     @Test
     @Order(1)
     public void getNotExistingPayloadShouldFailTest() throws Exception {
-        mvc.perform(get("/payload/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+        mvc.perform(get("/payload/5").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
     }
 
     @Test
@@ -52,36 +67,21 @@ class PayloadControllerTests {
     @Test
     @Order(3)
     public void createValidPayloadShouldSuccessTest() throws Exception {
-        createdPayloadid = JsonUtil.getIdFromPayloadString(mvc
+        MvcResult resp = mvc
                 .perform(post("/payload").contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(JsonUtil.toJson(new Payload().type(PayloadType.SPACECRAFT).weight(10000))))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.status", is("WAITING_FOR_MISSION")))
-                .andExpect(jsonPath("$.id", MatchesPattern.matchesPattern("^\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$")))
-                .andExpect(jsonPath("$.date",
-                        MatchesPattern.matchesPattern("^\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}$")))
-                .andReturn().getResponse().getContentAsString());
+                        .content(JsonUtil.toJson(new Payload().id("42").type(PayloadType.SPACECRAFT).weight(10000))))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.status", is("WAITING_FOR_MISSION"))).andReturn();
+
+        String json = resp.getResponse().getContentAsString();
+        payload = new ObjectMapper().readValue(json, Payload.class);
+
+        assertNotNull(payload.getId());
     }
 
     @Test
     @Order(4)
     public void getExistingPayloadShoulSuccessTest() throws Exception {
-        mvc.perform(get("/payload/" + createdPayloadid).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/payload/" + payload.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
-    @Test
-    @Order(5)
-    public void setPayloadStatusShouldSuccessTest() throws Exception {
-        mvc.perform(post("/payload/" + createdPayloadid).contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(JsonUtil.toJson(PayloadStatus.DELIVERED))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", is("DELIVERED")));
-    }
-
-    @Test
-    @Order(5)
-    public void setPayloadStatusShouldFailTest() throws Exception {
-        mvc.perform(post("/payload/wrong_id").contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(JsonUtil.toJson(PayloadStatus.DELIVERED))).andExpect(status().isNotFound());
-    }
-
 }

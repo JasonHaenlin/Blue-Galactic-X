@@ -1,4 +1,5 @@
 #!/bin/bash
 
-./prepare.sh
-./run.sh
+sh prepare.sh
+sh run.sh
+docker-compose down

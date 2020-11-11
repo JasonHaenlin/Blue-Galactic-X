@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.payload;
+
+option java_multiple_files = true;
+option java_package =
+    "fr.unice.polytech.soa.team.j.bluegalacticx.telemetry.payload.proto";
+
+message TelemetryPayloadRequest {
+  message SpaceCoordinate {
+    uint32 x = 1;
+    uint32 y = 2;
+    uint32 z = 3;
+  }
+  string payloadId = 1;
+  string payloadType = 2;
+  string payloadStatus = 3;
+  SpaceCoordinate position = 4;
+  int32 weight = 5; // kg
+}

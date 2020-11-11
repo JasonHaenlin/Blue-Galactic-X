@@ -1,0 +1,25 @@
+spring:
+  data:
+    mongodb:
+      host:
+      port: 0
+      database: test
+      username:
+      password:
+
+server:
+  port: 8092
+
+kafka:
+  broker:
+    host: ${KAFKA_BROKER_HOST:localhost}
+    port: ${KAFKA_BROKER_PORT:19092}
+  schema:
+    host: ${SCHEMA_BROKER_HOST:localhost}
+    port: ${SCHEMA_BROKER_PORT:9090}
+  group:
+    default: blue-origin-telemetry-writer
+  topics:
+    telemetryrocket: teamj.telemetry-rocket.0
+    telemetrybooster: teamj.telemetry-booster.0
+    telemetrypayload: teamj.telemetry-payload.0

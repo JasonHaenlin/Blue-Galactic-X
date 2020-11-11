@@ -1,0 +1,29 @@
+{
+    "properties": [
+        {
+            "name": "api.mongodb.host",
+            "type": "java.lang.String",
+            "description": "A description for 'api.mongodb.host'"
+        },
+        {
+            "name": "api.mongodb.port",
+            "type": "java.lang.String",
+            "description": "A description for 'api.mongodb.port'"
+        },
+        {
+            "name": "data.mongodb.host",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.host'"
+        },
+        {
+            "name": "data.mongodb.port",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.port'"
+        },
+        {
+            "name": "data.mongodb.database",
+            "type": "java.lang.String",
+            "description": "A description for 'data.mongodb.database'"
+        }
+    ]
+}

@@ -1,30 +1,110 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.GoNg;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketMetrics;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.mocks.RocketsMocked;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.DepartmentStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.MaxQProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.RocketStatusProducer;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.kafka.producers.TelemetryRocketProducer;
 
 @Service
 public class RocketService {
 
-    private List<Rocket> rockets = RocketsMocked.rockets;
+    @Autowired
+    private DepartmentStatusProducer departmentStatusProducer;
 
-    public RocketMetrics getLastMetrics(String rocketId) throws RocketDestroyedException, RocketDoesNotExistException {
-        return retrieveCorrespondingRocket(rocketId).retrieveLastMetrics();
+    @Autowired
+    private RocketStatusProducer rocketProducer;
+
+    @Autowired
+    private MaxQProducer maxQProducer;
+
+    @Autowired
+    private BoosterRPCClient boosterRpcClient;
+
+    @Autowired
+    private TelemetryRocketProducer telemetryRocketProducer;
+
+    private List<Rocket> rockets = new ArrayList<>();
+
+    public Rocket addNewRocket(Rocket rocket) throws CannotBeNullException {
+        if (rocket == null) {
+            throw new CannotBeNullException("rocket");
+        }
+        rocket.withBaseTelemetry().initStatus();
+        rocket.setId(UUID.randomUUID().toString());
+        rockets.add(rocket);
+        return rocket;
+    }
+
+    public void updateLaunchProcedure() {
+        SpaceTelemetry st = null;
+        for (Rocket r : rockets) {
+            if (r.getStatus() == RocketStatus.IN_SERVICE) {
+                st = r.getLastTelemetry();
+            }
+            RocketLaunchStep launchStep = r.getLaunchStep();
+            r.updateState();
+            if (launchStep != r.getLaunchStep()) {
+                if (r.getLaunchStep() == RocketLaunchStep.STAGE_SEPARATION) {
+                    boosterRpcClient.initiateLandingSequence(r.getBoosterId(), r.distanceFromEarth(), r.currentSpeed());
+                }
+                if (r.getLaunchStep() == RocketLaunchStep.ENTER_MAXQ) {
+                    maxQProducer.sendInMaxQ(r.getBoosterId());
+                }
+                if (r.getLaunchStep() == RocketLaunchStep.MAXQ_PASSED) {
+                    maxQProducer.sendQuitMaxQ(r.getBoosterId());
+                }
+                if (r.getLaunchStep() == RocketLaunchStep.FINISHED) {
+                    rocketProducer.donedRocketEvent(r.getId());
+                }
+                // Send Kafka event here to notificate launching step have changed
+            }
+            telemetryRocketProducer.sendTelemetryRocketEvent(st, r.getId());
+        }
+    }
+
+    public SpaceTelemetry getLastTelemetry(String rocketId)
+            throws RocketDestroyedException, RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(rocketId).getLastTelemetry();
+    }
+
+    public RocketStatus getRocketStatus(String rocketId) throws RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(rocketId).getStatus();
+    }
+
+    public RocketLaunchStep getRocketLaunchStep(String rocketId) throws RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(rocketId).getLaunchStep();
+    }
+
+    public RocketStatus getRocketDepartmentStatus(String rocketId) throws RocketDoesNotExistException {
+        return getRocketStatus(rocketId);
     }
 
     public void submitNewReport(String rocketId, RocketReport rocketReport)
             throws RocketDoesNotExistException, CannotBeNullException {
         retrieveCorrespondingRocket(rocketId).replaceWithNewReport(rocketReport);
+    }
+
+    public void updateGoNogoForRocket(String idValue, boolean status)
+            throws RocketDestroyedException, RocketDoesNotExistException {
+        retrieveCorrespondingRocket(idValue)
+                .status(status ? RocketStatus.READY_FOR_LAUNCH : RocketStatus.NOT_READY_FOR_LAUNCH);
     }
 
     public RocketReport retrieveLastReport(String rocketId)
@@ -39,5 +119,18 @@ public class RocketService {
     private Rocket retrieveCorrespondingRocket(String id) throws RocketDoesNotExistException {
         return rockets.stream().filter(r -> r.getId().equals(id)).findFirst()
                 .orElseThrow(() -> new RocketDoesNotExistException(id));
+    }
+
+    public GoNg setRocketDepartmentStatus(String rocketId, boolean go) {
+        departmentStatusProducer.notifyDepartmentStatus(rocketId, go);
+        return new GoNg(go);
+    }
+
+    public Rocket retrieveRocket(String id) throws RocketDoesNotExistException {
+        return retrieveCorrespondingRocket(id);
+    }
+
+    public List<Rocket> getRockets() {
+        return rockets;
     }
 }

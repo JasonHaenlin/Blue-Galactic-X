@@ -1,0 +1,89 @@
+{
+  "properties": [
+    {
+      "name": "api.payload.host",
+      "type": "java.lang.String",
+      "description": "A description for 'api.payload.host'"
+    },
+    {
+      "name": "api.payload.port",
+      "type": "java.lang.String",
+      "description": "A description for 'api.payload.port'"
+    },
+    {
+      "name": "api.rocket.host",
+      "type": "java.lang.String",
+      "description": "A description for 'api.rocket.host'"
+    },
+    {
+      "name": "api.rocket.port",
+      "type": "java.lang.String",
+      "description": "A description for 'api.rocket.port'"
+    },
+    {
+      "name": "kafka.broker.url",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.broker.url'"
+    },
+    {
+      "name": "kafka.schema.url",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.schema.url'"
+    },
+    {
+      "name": "kafka.broker.host",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.broker.host'"
+    },
+    {
+      "name": "kafka.broker.port",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.broker.port'"
+    },
+    {
+      "name": "kafka.schema.host",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.schema.host'"
+    },
+    {
+      "name": "kafka.schema.port",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.schema.port'"
+    },
+    {
+      "name": "kafka.schema.group.mission-control",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.schema.group.mission-control"
+    },
+    {
+      "name": "kafka.group.default",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.group.default'"
+    },
+    {
+      "name": "kafka.topics.rocketstatus",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.rocketstatus'"
+    },
+    {
+      "name": "kafka.group.payloadstatus",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.group.payloadstatus'"
+    },
+    {
+      "name": "kafka.topics.boosterstatus",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.boosterstatus'"
+    },
+    {
+      "name": "kafka.topics.missionpreparation",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.missionpreparation'"
+    },
+    {
+      "name": "kafka.topics.payloadstatus",
+      "type": "java.lang.String",
+      "description": "A description for 'kafka.topics.payloadstatus'"
+    }
+  ]
+}

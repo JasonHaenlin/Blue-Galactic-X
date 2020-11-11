@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceCoordinate;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceMetrics;
 import reactor.core.publisher.Mono;
 
 /**
@@ -14,18 +13,18 @@ import reactor.core.publisher.Mono;
 @Service
 public class RestService {
 
-    WebClient webClientTelemetry;
     WebClient webClientMission;
+    WebClient webClientBooster;
 
     // @formatter:off
     public RestService(
-            @Value("${api.telemetry.host}") String hostTelemetry,
-            @Value("${api.telemetry.port}") String portTelemetry,
             @Value("${api.mission.host}") String hostMission,
-            @Value("${api.mission.port}") String portMission
+            @Value("${api.mission.port}") String portMission,
+            @Value("${api.booster.host}") String hostBooster,
+            @Value("${api.booster.port}") String portBooster
             ) {
-        webClientTelemetry = WebClient.create("http://" + hostTelemetry + ":" + portTelemetry + "/telemetry/");
-        webClientMission = WebClient.create("http://" + hostMission + ":" + portMission + "/mission/");
+        webClientMission = WebClient.create("http://" + hostMission + ":" + portMission + "/mission-preparation/");
+        webClientBooster = WebClient.create("http://" + hostBooster + ":" + portBooster + "/booster/");
     }
      // @formatter:on
 
@@ -33,13 +32,7 @@ public class RestService {
         return webClientMission.get().uri("/destination/" + id).retrieve().bodyToMono(SpaceCoordinate.class);
     }
 
-    public void postMissionStatus(SpaceMetrics telemetry) {
-        webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class).retrieve()
-                .bodyToMono(Void.class).subscribe();
-    }
-
-    public void postTelemetry(SpaceMetrics telemetry) {
-        webClientTelemetry.post().uri("/rocket").body(Mono.just(telemetry), SpaceMetrics.class).retrieve()
-                .bodyToMono(Void.class).subscribe();
+    public Mono<String> getAvailableBoosterID() {
+        return webClientBooster.get().uri("/available").retrieve().bodyToMono(String.class);
     }
 }

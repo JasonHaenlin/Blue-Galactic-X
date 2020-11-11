@@ -16,7 +16,6 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <cucumber.version>6.7.0</cucumber.version>
     <junit.jupiter.version>5.7.0</junit.jupiter.version>
-    <!-- GRPC -->
     <grpc.version>4.0.0</grpc.version>
     <io.grpc.version>1.32.1</io.grpc.version>
     <os-maven-plugin.version>1.6.2</os-maven-plugin.version>
@@ -25,17 +24,98 @@
 
   <dependencies>
 
+    <!-- Project Blue Galactic X -->
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-mission-preparation</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/mission-preparation-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-mission-control</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/mission-control-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-payload</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/payload-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-booster</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/booster-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-rocket</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/rocket-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-weather</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/weather-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-telemetry-writer</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/telemetry-writer-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-telemetry-reader</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/telemetry-reader-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-missionlogreader</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/missionlogreader-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-missionlogwriter</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/missionlogwriter-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-telemetry-reader</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/module-destroyer-ws.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>fr.unice.polytech.soa.team.j.bluegalacticx</groupId>
+      <artifactId>teamj-orbital-payload</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/libs/orbital-payload-ws.jar</systemPath>
+    </dependency>
+    <!-- End project Blue Galactic X -->
+
     <dependency>
       <groupId>io.cucumber</groupId>
       <artifactId>cucumber-java8</artifactId>
       <version>${cucumber.version}</version>
       <scope>test</scope>
-    </dependency>
-
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        <version>2.3.4.RELEASE</version>
     </dependency>
 
     <dependency>
@@ -53,6 +133,20 @@
     </dependency>
 
     <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>${junit.vintage.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>
       <version>${junit.jupiter.version}</version>
@@ -64,7 +158,6 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.10.2</version>
     </dependency>
-
 
     <!-- gRPC -->
     <dependency>
@@ -93,50 +186,59 @@
       <version>${io.grpc.version}</version>
       <scope>test</scope>
     </dependency>
-        <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+    <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
     <dependency>
-        <groupId>com.googlecode.json-simple</groupId>
-        <artifactId>json-simple</artifactId>
-        <version>1.1.1</version>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
     </dependency>
 
     <dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.11</version>
-		</dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.11</version>
+    </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka -->
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka_2.13</artifactId>
+      <version>2.6.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>io.confluent</groupId>
+      <artifactId>kafka-protobuf-serializer</artifactId>
+      <version>5.5.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.11.3</version>
+    </dependency>
 
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.xolstice.maven.plugins</groupId>
-        <artifactId>protobuf-maven-plugin</artifactId>
-        <version>${protobuf-maven-plugin.version}</version>
-        <configuration>
-          <protocArtifact>com.google.protobuf:protoc:3.13.0:exe:${os.detected.classifier}</protocArtifact>
-          <pluginId>grpc-java</pluginId>
-          <pluginArtifact>
-          io.grpc:protoc-gen-grpc-java:1.32.1:exe:${os.detected.classifier}</pluginArtifact>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>compile-custom</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-    <extensions>
-      <extension>
-        <groupId>kr.motd.maven</groupId>
-        <artifactId>os-maven-plugin</artifactId>
-        <version>${os-maven-plugin.version}</version>
-      </extension>
-    </extensions>
-  </build>
+  <repositories>
+    <repository>
+      <id>confluent</id>
+      <name>confluent</name>
+      <url>https://packages.confluent.io/maven/</url>
+    </repository>
+  </repositories>
+
 </project>

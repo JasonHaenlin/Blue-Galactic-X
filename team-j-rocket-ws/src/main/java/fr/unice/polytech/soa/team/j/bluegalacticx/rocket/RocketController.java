@@ -1,21 +1,26 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketMetrics;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketReport;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.GoNg;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.Rocket;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketLaunchStep;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.RocketStatus;
+import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.SpaceTelemetry;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.CannotBeNullException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.entities.exceptions.RocketDestroyedException;
-import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.ReportNotFoundException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.rocket.exception.RocketDoesNotExistException;
 
 @RestController
@@ -26,10 +31,10 @@ public class RocketController {
     @Autowired
     private RocketService service;
 
-    @GetMapping("/status/{rocketId}")
-    public RocketMetrics getRocketStatus(@PathVariable String rocketId) {
+    @GetMapping("/telemetry/{rocketId}")
+    public SpaceTelemetry getRocketTelemetry(@PathVariable String rocketId) {
         try {
-            return service.getLastMetrics(rocketId);
+            return service.getLastTelemetry(rocketId);
         } catch (RocketDestroyedException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (RocketDoesNotExistException e) {
@@ -37,26 +42,49 @@ public class RocketController {
         }
     }
 
+    @GetMapping()
+    public List<Rocket> getRockets() {
+        return service.getRockets();
+    }
 
-    @PostMapping("/report/{rocketId}")
-    public void postRocketReport(@PathVariable String rocketId, @RequestBody RocketReport report) {
+    @PostMapping()
+    public Rocket createRocket(@RequestBody Rocket rocket) {
         try {
-            service.submitNewReport(rocketId, report);
-        } catch (RocketDoesNotExistException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            return service.addNewRocket(rocket);
         } catch (CannotBeNullException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    @GetMapping("/report/{rocketId}")
-    public RocketReport getRocketReport(@PathVariable String rocketId) {
+    @GetMapping("/telemetry/{rocketId}/status")
+    public RocketStatus getRocketStatus(@PathVariable String rocketId) {
         try {
-            return service.retrieveLastReport(rocketId);
-        } catch (ReportNotFoundException | RocketDoesNotExistException e) {
+            return service.getRocketStatus(rocketId);
+        } catch (RocketDoesNotExistException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (RocketDestroyedException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/launchstep/{rocketId}")
+    public RocketLaunchStep getRocketLaunchStep(@PathVariable String rocketId) {
+        try {
+            return service.getRocketLaunchStep(rocketId);
+        } catch (RocketDoesNotExistException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{rocketId}")
+    public GoNg setGoNoGo(@PathVariable String rocketId, @RequestBody GoNg go) {
+        return service.setRocketDepartmentStatus(rocketId, go.getGong());
+    }
+
+    @GetMapping("/{rocketId}")
+    public RocketStatus getGoNoGo(@PathVariable String rocketId) {
+        try {
+            return service.getRocketDepartmentStatus(rocketId);
+        } catch (RocketDoesNotExistException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

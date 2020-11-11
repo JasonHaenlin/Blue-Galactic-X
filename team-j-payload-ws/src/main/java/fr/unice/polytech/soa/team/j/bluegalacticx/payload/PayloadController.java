@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa.team.j.bluegalacticx.payload;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.Payload;
-import fr.unice.polytech.soa.team.j.bluegalacticx.payload.entities.PayloadStatus;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.InvalidPayloadException;
 import fr.unice.polytech.soa.team.j.bluegalacticx.payload.exceptions.PayloadNotFoundException;
+import fr.unice.polytech.soa.team.j.bluegalacticx.payload.proto.PayloadStatus;
 
 @RestController
 @RequestMapping("/payload")
@@ -22,7 +24,7 @@ public class PayloadController {
     @Autowired
     private PayloadService payloadService;
 
-    @PostMapping()
+    @PostMapping("")
     public Payload createNewPayload(@RequestBody Payload payload) {
         try {
             return payloadService.createPayload(payload);
@@ -31,13 +33,9 @@ public class PayloadController {
         }
     }
 
-    @PostMapping("/{id}")
-    public Payload postPayloadStatus(@RequestBody PayloadStatus status, @PathVariable String id) {
-        try {
-            return payloadService.updateStatus(status, id);
-        } catch (PayloadNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+    @GetMapping()
+    public List<Payload> getPayloads() {
+        return payloadService.getPayloads();
     }
 
     @GetMapping("/{id}")

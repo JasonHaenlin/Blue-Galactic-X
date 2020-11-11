@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package fr.unice.polytech.soa.team.j.bluegalacticx.rocket;
+
+option java_multiple_files = true;
+option java_package = "fr.unice.polytech.soa.team.j.bluegalacticx.rocket.proto";
+
+message MaxQRequest {
+  enum EventType {
+    ENTER_MAXQ = 0; QUIT_MAXQ = 1;
+  }
+  EventType eventType = 1;
+  string boosterId = 2;
+}

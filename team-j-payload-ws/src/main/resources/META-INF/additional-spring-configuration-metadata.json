@@ -1,0 +1,52 @@
+{"properties": [
+  {
+    "name": "kafka.broker.host",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.broker.host'"
+  },
+  {
+    "name": "kafka.broker.port",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.broker.port'"
+  },
+  {
+    "name": "kafka.schema.host",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.schema.host'"
+  },
+  {
+    "name": "kafka.schema.port",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.schema.port'"
+  },
+  {
+    "name": "kafka.schema.group.payload",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.schema.group.payload'"
+  },
+  {
+    "name": "kafka.group.default",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.group.default'"
+  },
+  {
+    "name": "kafka.topics.rocketstatus",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.topics.rocketstatus'"
+  },
+  {
+    "name": "kafka.topics.payloadstatus",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.topics.payloadstatus'"
+  },
+  {
+    "name": "kafka.topics.telemetrypayload",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.topics.telemetrypayload'"
+  },
+  {
+    "name": "kafka.topics.newpayload",
+    "type": "java.lang.String",
+    "description": "A description for 'kafka.topics.newpayload'"
+  }
+]}
