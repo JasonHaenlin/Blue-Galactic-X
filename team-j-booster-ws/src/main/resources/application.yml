@@ -31,3 +31,4 @@ kafka:
     rocketstatus: teamj.rocket-status.0
     boosterlandingstep: teamj.booster-landing-step.0
     moduledestruction: teamj.module-destruction.0
+    boosterlandingstep: teamj.booster-landing-step.0
